@@ -7,13 +7,13 @@
 #include "Editor/ProjectInfo.h"
 #include "Editor/Scripting/ScriptsBuilder.h"
 #include "Engine/Engine/Globals.h"
-
-#if PLATFORM_WINDOWS
-
 #include "Engine/Core/Collections/Sorting.h"
 #include "Engine/Platform/File.h"
-#include "Engine/Platform/Win32/IncludeWindowsHeaders.h"
 #include "Engine/Serialization/Json.h"
+
+#if PLATFORM_WINDOWS
+#include "Engine/Platform/Win32/IncludeWindowsHeaders.h"
+#endif
 
 namespace
 {
@@ -28,6 +28,7 @@ namespace
         }
     };
 
+#if PLATFORM_WINDOWS
     bool FindRegistryKeyItems(HKEY hKey, Array<String>& results)
     {
         Char nameBuffer[256];
@@ -41,43 +42,6 @@ namespace
             results.Add(nameBuffer);
         }
         return true;
-    }
-
-    void SearchDirectory(Array<RiderInstallation*>* installations, const String& directory)
-    {
-        if (!FileSystem::DirectoryExists(directory))
-            return;
-
-        // Load product info
-        Array<byte> productInfoData;
-        const String productInfoPath = directory / TEXT("product-info.json");
-        if (File::ReadAllBytes(productInfoPath, productInfoData))
-            return;
-        rapidjson_flax::Document document;
-        document.Parse((char*)productInfoData.Get(), productInfoData.Count());
-        if (document.HasParseError())
-            return;
-
-        // Find version
-        auto versionMember = document.FindMember("version");
-        if (versionMember == document.MemberEnd())
-            return;
-
-        // Find executable file path
-        auto launchMember = document.FindMember("launch");
-        if (launchMember == document.MemberEnd() || !launchMember->value.IsArray() || launchMember->value.Size() == 0)
-            return;
-
-        auto launcherPathMember = launchMember->value[0].FindMember("launcherPath");
-        if (launcherPathMember == launchMember->value[0].MemberEnd())
-            return;
-
-        auto launcherPath = launcherPathMember->value.GetText();
-        auto exePath = directory / launcherPath;
-        if (!launcherPath.HasChars() || !FileSystem::FileExists(exePath))
-            return;
-
-        installations->Add(New<RiderInstallation>(exePath, versionMember->value.GetText()));
     }
 
     void SearchRegistry(Array<RiderInstallation*>* installations, HKEY root, const Char* key, const Char* valueName = TEXT(""))
@@ -123,6 +87,44 @@ namespace
 
         RegCloseKey(keyH);
     }
+#endif
+
+    void SearchDirectory(Array<RiderInstallation*>* installations, const String& directory)
+    {
+        if (!FileSystem::DirectoryExists(directory))
+            return;
+
+        // Load product info
+        Array<byte> productInfoData;
+        const String productInfoPath = directory / TEXT("product-info.json");
+        if (File::ReadAllBytes(productInfoPath, productInfoData))
+            return;
+        rapidjson_flax::Document document;
+        document.Parse((char*)productInfoData.Get(), productInfoData.Count());
+        if (document.HasParseError())
+            return;
+
+        // Find version
+        auto versionMember = document.FindMember("version");
+        if (versionMember == document.MemberEnd())
+            return;
+
+        // Find executable file path
+        auto launchMember = document.FindMember("launch");
+        if (launchMember == document.MemberEnd() || !launchMember->value.IsArray() || launchMember->value.Size() == 0)
+            return;
+
+        auto launcherPathMember = launchMember->value[0].FindMember("launcherPath");
+        if (launcherPathMember == launchMember->value[0].MemberEnd())
+            return;
+
+        auto launcherPath = launcherPathMember->value.GetText();
+        auto exePath = directory / launcherPath;
+        if (!launcherPath.HasChars() || !FileSystem::FileExists(exePath))
+            return;
+
+        installations->Add(New<RiderInstallation>(exePath, versionMember->value.GetText()));
+    }
 }
 
 bool sortInstallations(RiderInstallation* const& i1, RiderInstallation* const& i2)
@@ -155,8 +157,6 @@ bool sortInstallations(RiderInstallation* const& i1, RiderInstallation* const& i
     return version1[0] > version2[0];
 }
 
-#endif
-
 RiderCodeEditor::RiderCodeEditor(const String& execPath)
     : _execPath(execPath)
     , _solutionPath(Globals::ProjectFolder / Editor::Project->Name + TEXT(".sln"))
@@ -165,17 +165,13 @@ RiderCodeEditor::RiderCodeEditor(const String& execPath)
 
 void RiderCodeEditor::FindEditors(Array<CodeEditor*>* output)
 {
-#if PLATFORM_WINDOWS
     Array<RiderInstallation*> installations;
-
-    // Versions installed via JetBrains Toolbox
-    String localAppDataPath;
     Array<String> subDirectories;
-    FileSystem::GetSpecialFolderPath(SpecialFolder::LocalAppData, localAppDataPath);
-    FileSystem::GetChildDirectories(subDirectories, localAppDataPath / TEXT("JetBrains\\Toolbox\\apps\\Rider\\ch-0\\"));
-    for (auto directory : subDirectories)
-        SearchDirectory(&installations, directory);
 
+    String localAppDataPath;
+    FileSystem::GetSpecialFolderPath(SpecialFolder::LocalAppData, localAppDataPath);
+    
+#if PLATFORM_WINDOWS
     // Rider for Unreal Engine
     SearchRegistry(&installations, HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\WOW6432Node\\JetBrains\\Rider for Unreal Engine"));
 
@@ -186,6 +182,28 @@ void RiderCodeEditor::FindEditors(Array<CodeEditor*>* output)
     SearchRegistry(&installations, HKEY_CURRENT_USER, TEXT("SOFTWARE\\WOW6432Node\\JetBrains\\JetBrains Rider"));
     SearchRegistry(&installations, HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\WOW6432Node\\JetBrains\\JetBrains Rider"));
 
+    // Versions installed via JetBrains Toolbox
+    FileSystem::GetChildDirectories(subDirectories, localAppDataPath / TEXT("JetBrains\\Toolbox\\apps\\Rider\\ch-0\\"));
+    FileSystem::GetChildDirectories(subDirectories, localAppDataPath / TEXT("JetBrains\\Toolbox\\apps\\Rider\\ch-1\\")); // Beta versions
+#endif
+#if PLATFORM_LINUX
+    // TODO: detect Snap installations
+    // TODO: detect Flatpak installations
+    // TODO: detect by reading the jetbrains-rider.desktop file from ~/.local/share/applications and /usr/share/applications?
+
+    FileSystem::GetChildDirectories(subDirectories, TEXT("/usr/share/rider"));
+
+    // Default suggested location for standalone installations
+    FileSystem::GetChildDirectories(subDirectories, TEXT("/opt/"));
+    
+    // Versions installed via JetBrains Toolbox
+    FileSystem::GetChildDirectories(subDirectories, localAppDataPath / TEXT(".local/share/JetBrains/Toolbox/apps/Rider/ch-0"));
+    FileSystem::GetChildDirectories(subDirectories, localAppDataPath / TEXT(".local/share/JetBrains/Toolbox/apps/Rider/ch-1")); // Beta versions
+#endif
+
+    for (auto directory : subDirectories)
+        SearchDirectory(&installations, directory);
+
     // Sort found installations by version number
     Sorting::QuickSort(installations.Get(), installations.Count(), &sortInstallations);
 
@@ -194,7 +212,6 @@ void RiderCodeEditor::FindEditors(Array<CodeEditor*>* output)
         output->Add(New<RiderCodeEditor>(installation->path));
         Delete(installation);
     }
-#endif
 }
 
 CodeEditorTypes RiderCodeEditor::GetType() const
