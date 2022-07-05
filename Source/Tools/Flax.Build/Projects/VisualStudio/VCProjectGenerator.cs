@@ -103,6 +103,7 @@ namespace Flax.Build.Projects.VisualStudio
             vcProjectFileContent.AppendLine("    <TargetRuntime>Native</TargetRuntime>");
             vcProjectFileContent.AppendLine("    <CharacterSet>Unicode</CharacterSet>");
             vcProjectFileContent.AppendLine("    <Keyword>MakeFileProj</Keyword>");
+            vcProjectFileContent.AppendLine("    <VCTargetsPath Condition=\"$(Configuration.Contains('Linux'))\">./</VCTargetsPath>");
             vcProjectFileContent.AppendLine("  </PropertyGroup>");
 
             // Default properties
@@ -340,6 +341,32 @@ namespace Flax.Build.Projects.VisualStudio
             vcFiltersFileContent.AppendLine("</Project>");
 
             vcUserFileContent.AppendLine("</Project>");
+
+            if (platforms.Any(x => x.Target == TargetPlatform.Linux))
+            {
+                // Override MSBuild .targets file with one that runs NMake commands (workaround for Rider on Linux)
+                var cppTargetsFileContent = new StringBuilder();
+                cppTargetsFileContent.AppendLine("<Project xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\" TreatAsLocalProperty=\"Platform\">");
+                cppTargetsFileContent.AppendLine("  <Target Name=\"Build\">");
+                cppTargetsFileContent.AppendLine("    <Exec Command='$(NMakeBuildCommandLine)'/>");
+                cppTargetsFileContent.AppendLine("  </Target>");
+                cppTargetsFileContent.AppendLine("  <Target Name=\"Rebuild\">");
+                cppTargetsFileContent.AppendLine("    <Exec Command='$(NMakeReBuildCommandLine)'/>");
+                cppTargetsFileContent.AppendLine("  </Target>");
+                cppTargetsFileContent.AppendLine("  <Target Name=\"Clean\">");
+                cppTargetsFileContent.AppendLine("    <Exec Command='$(NMakeCleanCommandLine)'/>");
+                cppTargetsFileContent.AppendLine("  </Target>");
+                cppTargetsFileContent.AppendLine("  <PropertyGroup>");
+                cppTargetsFileContent.AppendLine("    <TargetExt></TargetExt>");
+                cppTargetsFileContent.AppendLine("    <TargetName>$(RootNamespace)$(Configuration.Split('.')[0])</TargetName>");
+                cppTargetsFileContent.AppendLine("    <TargetPath>$(OutDir)/$(TargetName)$(TargetExt)</TargetPath>");
+                cppTargetsFileContent.AppendLine("  </PropertyGroup>");
+                cppTargetsFileContent.AppendLine("</Project>");
+
+                Utilities.WriteFileIfChanged(Path.Combine(projectDirectory, "Microsoft.Cpp.targets"), cppTargetsFileContent.ToString());
+                Utilities.WriteFileIfChanged(Path.Combine(projectDirectory, "Microsoft.Cpp.Default.props"), vcUserFileContent.ToString());
+                Utilities.WriteFileIfChanged(Path.Combine(projectDirectory, "Microsoft.Cpp.props"), vcUserFileContent.ToString());
+            }
 
             // Save the files
             Utilities.WriteFileIfChanged(project.Path, vcProjectFileContent.ToString());
