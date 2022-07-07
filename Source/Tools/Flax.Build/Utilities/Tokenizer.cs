@@ -488,26 +488,26 @@ namespace Flax.Build
 
         private IEnumerable<Token> TokenizeInternal(string input)
         {
-            var matches = RegexTokenizer.Matches(input);
-            foreach (Match match in matches)
+            var match = RegexTokenizer.Match(input);
+            do
             {
                 var i = 0;
                 foreach (Group group in match.Groups)
                 {
-                    var matchValue = group.Value;
-
                     if (group.Success && i > 1)
                     {
                         yield return new Token
                         {
                             Type = (TokenType)(i - 2),
-                            Value = matchValue
+                            Value = group.Value
                         };
+                        break;
                     }
 
                     i++;
                 }
-            }
+                match = match.NextMatch();
+            } while (match != Match.Empty);
         }
 
         private int CountLines(Token token)
