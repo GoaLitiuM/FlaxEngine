@@ -89,7 +89,7 @@ namespace
     }
 #endif
 
-    void SearchDirectory(Array<RiderInstallation*>* installations, const String& directory)
+    void SearchDirectory(Array<RiderInstallation*>* installations, const String& directory, String launchOverridePath = String::Empty)
     {
         if (!FileSystem::DirectoryExists(directory))
             return;
@@ -123,7 +123,10 @@ namespace
         if (!launcherPath.HasChars() || !FileSystem::FileExists(exePath))
             return;
 
-        installations->Add(New<RiderInstallation>(exePath, versionMember->value.GetText()));
+        if (launchOverridePath != String::Empty)
+            installations->Add(New<RiderInstallation>(launchOverridePath, versionMember->value.GetText()));
+        else
+            installations->Add(New<RiderInstallation>(exePath, versionMember->value.GetText()));
     }
 }
 
@@ -188,7 +191,6 @@ void RiderCodeEditor::FindEditors(Array<CodeEditor*>* output)
 #endif
 #if PLATFORM_LINUX
     // TODO: detect Snap installations
-    // TODO: detect Flatpak installations
     // TODO: detect by reading the jetbrains-rider.desktop file from ~/.local/share/applications and /usr/share/applications?
 
     FileSystem::GetChildDirectories(subDirectories, TEXT("/usr/share/rider"));
@@ -199,6 +201,11 @@ void RiderCodeEditor::FindEditors(Array<CodeEditor*>* output)
     // Versions installed via JetBrains Toolbox
     FileSystem::GetChildDirectories(subDirectories, localAppDataPath / TEXT(".local/share/JetBrains/Toolbox/apps/Rider/ch-0"));
     FileSystem::GetChildDirectories(subDirectories, localAppDataPath / TEXT(".local/share/JetBrains/Toolbox/apps/Rider/ch-1")); // Beta versions
+
+    // Detect Flatpak installations
+    SearchDirectory(&installations,
+        TEXT("/var/lib/flatpak/app/com.jetbrains.Rider/current/active/files/extra/rider/"),
+        TEXT("flatpak run com.jetbrains.Rider"));
 #endif
 
     for (auto directory : subDirectories)
