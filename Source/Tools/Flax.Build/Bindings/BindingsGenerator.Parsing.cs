@@ -378,6 +378,9 @@ namespace Flax.Build.Bindings
                         case "defaultvalue":
                             currentParam.DefaultValue = tag.Value;
                             break;
+                        case "dynamicarray":
+                            currentParam.MarshalAsDynamicArray = true;
+                            break;
                         default:
                             bool valid = false;
                             ParseFunctionParameterTag?.Invoke(ref valid, tag, ref currentParam);

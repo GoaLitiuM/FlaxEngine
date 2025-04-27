@@ -686,6 +686,8 @@ namespace Flax.Build.Bindings
                     parameterMarshalType = "MarshalUsing(typeof(FlaxEngine.Interop.SystemArrayMarshaller))";
                 else if (nativeType == "object[]")
                     parameterMarshalType = "MarshalUsing(typeof(FlaxEngine.Interop.SystemObjectArrayMarshaller))";
+                else if (parameterInfo.Type.Type == "Array" && parameterInfo.MarshalAsDynamicArray)
+                    parameterMarshalType = $"MarshalUsing(typeof(FlaxEngine.Interop.ListMarshaller<,>), CountElementName = \"__{parameterInfo.Name}Count\")";
                 else if (parameterInfo.Type.Type == "Array" && parameterInfo.Type.GenericArgs.Count > 0 && parameterInfo.Type.GenericArgs[0].Type == "bool")
                     parameterMarshalType = $"MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = {(!functionInfo.IsStatic ? 1 : 0) + functionInfo.Parameters.Count + (functionInfo.Glue.CustomParameters.FindIndex(x => x.Name == $"__{parameterInfo.Name}Count"))})";
                 else if (parameterInfo.Type.Type == "Array" || parameterInfo.Type.Type == "Span" || parameterInfo.Type.Type == "DataContainer" || parameterInfo.Type.Type == "BytesContainer" || nativeType == "Array")
@@ -716,6 +718,11 @@ namespace Flax.Build.Bindings
                 // Out parameters that need additional converting will be converted at the native side (eg. object reference)
                 if (parameterInfo.IsOut && !string.IsNullOrEmpty(GenerateCSharpManagedToNativeConverter(buildData, parameterInfo.Type, caller)))
                     nativeType = parameterInfo.Type.Type;
+                if (parameterInfo.Type.Type == "Array" && parameterInfo.MarshalAsDynamicArray)
+                {
+                    var dynamicArrayType = TypeInfo.FromString($"List<{parameterInfo.Type.GenericArgs[0].Type}>");
+                    nativeType = "System.Collections.Generic." + GenerateCSharpManagedToNativeType(buildData, dynamicArrayType, caller, true);
+                }
 
                 contents.Append(nativeType);
                 contents.Append(' ');
@@ -736,7 +743,9 @@ namespace Flax.Build.Bindings
                 if (parameterInfo.IsOut && parameterInfo.DefaultValue == "var __resultAsRef")
                 {
                     // TODO: make this code shared with MarshalUsing selection from the above
-                    if (parameterInfo.Type.Type == "Array" || parameterInfo.Type.Type == "Span" || parameterInfo.Type.Type == "DataContainer" || parameterInfo.Type.Type == "BytesContainer")
+                    if (parameterInfo.Type.Type == "Array" && parameterInfo.MarshalAsDynamicArray)
+                        parameterMarshalType = $"MarshalUsing(typeof(FlaxEngine.Interop.ListMarshaller<,>), CountElementName = \"{parameterInfo.Name}Count\")";
+                    else if (parameterInfo.Type.Type == "Array" || parameterInfo.Type.Type == "Span" || parameterInfo.Type.Type == "DataContainer" || parameterInfo.Type.Type == "BytesContainer")
                         parameterMarshalType = $"MarshalUsing(typeof(FlaxEngine.Interop.ArrayMarshaller<,>), CountElementName = \"{parameterInfo.Name}Count\")";
                     else if (parameterInfo.Type.Type == "Dictionary")
                         parameterMarshalType = "MarshalUsing(typeof(FlaxEngine.Interop.DictionaryMarshaller<,>), ConstantElementCount = 0)";
@@ -772,7 +781,12 @@ namespace Flax.Build.Bindings
                 if (parameterInfo.Type.IsArray || parameterInfo.Type.Type == "Array" || parameterInfo.Type.Type == "Span" || parameterInfo.Type.Type == "BytesContainer" || parameterInfo.Type.Type == "DataContainer" || parameterInfo.Type.Type == "BitArray")
                 {
                     if (!parameterInfo.IsOut)
-                        contents.Append($"var __{parameterInfo.Name}Count = {(isSetter ? "value" : parameterInfo.Name)}?.Length ?? 0; ");
+                    {
+                        if (parameterInfo.Type.Type == "Array" && parameterInfo.MarshalAsDynamicArray)
+                            contents.Append($"var __{parameterInfo.Name}Count = {(isSetter ? "value" : parameterInfo.Name)}?.Count ?? 0; ");
+                        else
+                            contents.Append($"var __{parameterInfo.Name}Count = {(isSetter ? "value" : parameterInfo.Name)}?.Length ?? 0; ");
+                    }
                 }
             }
 #endif
@@ -1366,6 +1380,13 @@ namespace Flax.Build.Bindings
                             contents.Append('[').Append(parameterInfo.Attributes).Append(']').Append(' ');
 
                         var managedType = GenerateCSharpNativeToManaged(buildData, parameterInfo.Type, classInfo);
+                        if (parameterInfo.Type.Type == "Array" && parameterInfo.MarshalAsDynamicArray)
+                        {
+                            var dynamicArrayType = TypeInfo.FromString($"List<{parameterInfo.Type.GenericArgs[0].Type}>");
+                            managedType = GenerateCSharpNativeToManaged(buildData, dynamicArrayType, classInfo);
+                            managedType = $"System.Collections.Generic.{managedType}";
+                        }
+
                         if (parameterInfo.IsOut)
                             contents.Append("out ");
                         else if (parameterInfo.IsRef)

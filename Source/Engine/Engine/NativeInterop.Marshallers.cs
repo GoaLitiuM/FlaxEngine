@@ -661,6 +661,217 @@ namespace FlaxEngine.Interop
 #if FLAX_EDITOR
     [HideInEditor]
 #endif
+    [CustomMarshaller(typeof(List<>), MarshalMode.ManagedToUnmanagedIn, typeof(ListMarshaller<,>.ManagedToNative))]
+    [CustomMarshaller(typeof(List<>), MarshalMode.UnmanagedToManagedOut, typeof(ListMarshaller<,>.ManagedToNative))]
+    [CustomMarshaller(typeof(List<>), MarshalMode.ManagedToUnmanagedOut, typeof(ListMarshaller<,>.NativeToManaged))]
+    [CustomMarshaller(typeof(List<>), MarshalMode.UnmanagedToManagedIn, typeof(ListMarshaller<,>.NativeToManaged))]
+    [CustomMarshaller(typeof(List<>), MarshalMode.ElementOut, typeof(ListMarshaller<,>.NativeToManaged))]
+    [CustomMarshaller(typeof(List<>), MarshalMode.ManagedToUnmanagedRef, typeof(ListMarshaller<,>.Bidirectional))]
+    [CustomMarshaller(typeof(List<>), MarshalMode.UnmanagedToManagedRef, typeof(ListMarshaller<,>.Bidirectional))]
+    [CustomMarshaller(typeof(List<>), MarshalMode.ElementRef, typeof(ListMarshaller<,>))]
+    [ContiguousCollectionMarshaller]
+    public static unsafe class ListMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged
+    {
+#if FLAX_EDITOR
+        [HideInEditor]
+#endif
+        public static class NativeToManaged
+        {
+            public static List<T> AllocateContainerForManagedElements(TUnmanagedElement* unmanaged, int numElements)
+            {
+                if (unmanaged is null)
+                    return null;
+                return new List<T>(numElements);
+            }
+
+            public static TUnmanagedElement* AllocateContainerForUnmanagedElements(List<T> managed, out int numElements)
+            {
+                if (managed is null)
+                {
+                    numElements = 0;
+                    return null;
+                }
+                numElements = managed.Count;
+                (ManagedHandle managedArrayHandle, _) = ManagedArray.AllocatePooledArray<TUnmanagedElement>(managed.Count);
+                return (TUnmanagedElement*)ManagedHandle.ToIntPtr(managedArrayHandle);
+            }
+
+            public static ReadOnlySpan<T> GetManagedValuesSource(List<T> managed) => CollectionsMarshal.AsSpan(managed);
+
+            public static Span<TUnmanagedElement> GetUnmanagedValuesDestination(TUnmanagedElement* unmanaged)
+            {
+                if (unmanaged == null)
+                    return Span<TUnmanagedElement>.Empty;
+                ManagedArray managedArray = Unsafe.As<ManagedArray>(ManagedHandle.FromIntPtr(new IntPtr(unmanaged)).Target);
+                return managedArray.ToSpan<TUnmanagedElement>();
+            }
+
+            public static Span<T> GetManagedValuesDestination(List<T> managed) => CollectionsMarshal.AsSpan(managed);
+
+            public static ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(TUnmanagedElement* unmanaged, int numElements)
+            {
+                if (unmanaged == null)
+                    return ReadOnlySpan<TUnmanagedElement>.Empty;
+                ManagedArray managedArray = Unsafe.As<ManagedArray>(ManagedHandle.FromIntPtr(new IntPtr(unmanaged)).Target);
+                return managedArray.ToSpan<TUnmanagedElement>();
+            }
+
+            public static void Free(TUnmanagedElement* unmanaged)
+            {
+                if (unmanaged == null)
+                    return;
+                ManagedHandle handle = ManagedHandle.FromIntPtr(new IntPtr(unmanaged));
+                (Unsafe.As<ManagedArray>(handle.Target)).Free();
+                handle.Free();
+            }
+
+            public static Span<TUnmanagedElement> GetUnmanagedValuesDestination(TUnmanagedElement* unmanaged, int numElements)
+            {
+                if (unmanaged == null)
+                    return Span<TUnmanagedElement>.Empty;
+                ManagedArray managedArray = Unsafe.As<ManagedArray>(ManagedHandle.FromIntPtr(new IntPtr(unmanaged)).Target);
+                return managedArray.ToSpan<TUnmanagedElement>();
+            }
+        }
+
+#if FLAX_EDITOR
+        [HideInEditor]
+#endif
+        public ref struct ManagedToNative
+        {
+            List<T> sourceArray;
+            ManagedArray managedArray;
+            ManagedHandle managedHandle;
+
+            public void FromManaged(List<T> managed)
+            {
+                if (managed is null)
+                    return;
+                sourceArray = managed;
+                (managedHandle, managedArray) = ManagedArray.AllocatePooledArray<TUnmanagedElement>(managed.Count);
+            }
+
+            public ReadOnlySpan<T> GetManagedValuesSource() => CollectionsMarshal.AsSpan(sourceArray);
+
+            public Span<TUnmanagedElement> GetUnmanagedValuesDestination() => managedArray != null ? managedArray.ToSpan<TUnmanagedElement>() : Span<TUnmanagedElement>.Empty;
+
+            public TUnmanagedElement* ToUnmanaged() => (TUnmanagedElement*)ManagedHandle.ToIntPtr(managedHandle);
+
+            public void Free() => managedArray?.FreePooled();
+        }
+
+#if FLAX_EDITOR
+        [HideInEditor]
+#endif
+        public struct Bidirectional
+        {
+            List<T> sourceArray;
+            ManagedArray managedArray;
+            ManagedHandle handle; // Valid only for pooled array
+
+            public void FromManaged(List<T> managed)
+            {
+                if (managed == null)
+                    return;
+                sourceArray = managed;
+                (handle, managedArray) = ManagedArray.AllocatePooledArray<TUnmanagedElement>(managed.Count);
+            }
+
+            public ReadOnlySpan<T> GetManagedValuesSource() => CollectionsMarshal.AsSpan(sourceArray);
+
+            public Span<TUnmanagedElement> GetUnmanagedValuesDestination()
+            {
+                if (managedArray == null)
+                    return Span<TUnmanagedElement>.Empty;
+                return managedArray.ToSpan<TUnmanagedElement>();
+            }
+
+            public TUnmanagedElement* ToUnmanaged() => (TUnmanagedElement*)ManagedHandle.ToIntPtr(handle);
+
+            public void FromUnmanaged(TUnmanagedElement* unmanaged)
+            {
+                ManagedArray arr = Unsafe.As<ManagedArray>(ManagedHandle.FromIntPtr(new IntPtr(unmanaged)).Target);
+                if (sourceArray == null || sourceArray.Count != arr.Length)
+                {
+                    // Array was resized when returned from native code (as ref parameter)
+                    managedArray.FreePooled();
+                    if (sourceArray.Capacity < arr.Length)
+                        sourceArray.Capacity = arr.Length;
+                    for (int i = sourceArray.Count - 1; i > arr.Length; i--)
+                        sourceArray.RemoveAt(i);
+                    for (int i = sourceArray.Count; i < arr.Length; i++)
+                        sourceArray.Add(default);
+                    if (sourceArray.Count != arr.Length)
+                        throw new Exception();
+                    managedArray = arr;
+                    handle = new ManagedHandle(); // Invalidate as it's not pooled array anymore
+                }
+            }
+
+            public ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(int numElements)
+            {
+                if (managedArray == null)
+                    return ReadOnlySpan<TUnmanagedElement>.Empty;
+                return managedArray.ToSpan<TUnmanagedElement>();
+            }
+
+            public Span<T> GetManagedValuesDestination(int numElements) => CollectionsMarshal.AsSpan(sourceArray);
+
+            public List<T> ToManaged() => sourceArray;
+
+            public void Free()
+            {
+                if (handle.IsAllocated)
+                    managedArray.FreePooled();
+            }
+        }
+
+        public static TUnmanagedElement* AllocateContainerForUnmanagedElements(List<T> managed, out int numElements)
+        {
+            if (managed is null)
+            {
+                numElements = 0;
+                return null;
+            }
+            numElements = managed.Count;
+            (ManagedHandle managedArrayHandle, _) = ManagedArray.AllocatePooledArray<TUnmanagedElement>(managed.Count);
+            return (TUnmanagedElement*)ManagedHandle.ToIntPtr(managedArrayHandle);
+        }
+
+        public static ReadOnlySpan<T> GetManagedValuesSource(List<T> managed) => CollectionsMarshal.AsSpan(managed);
+
+        public static Span<TUnmanagedElement> GetUnmanagedValuesDestination(TUnmanagedElement* unmanaged, int numElements)
+        {
+            if (unmanaged == null)
+                return Span<TUnmanagedElement>.Empty;
+            ManagedArray unmanagedArray = Unsafe.As<ManagedArray>(ManagedHandle.FromIntPtr(new IntPtr(unmanaged)).Target);
+            return unmanagedArray.ToSpan<TUnmanagedElement>();
+        }
+
+        public static List<T> AllocateContainerForManagedElements(TUnmanagedElement* unmanaged, int numElements) => unmanaged is null ? null : new List<T>(numElements);
+
+        public static Span<T> GetManagedValuesDestination(List<T> managed) => CollectionsMarshal.AsSpan(managed);
+
+        public static ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(TUnmanagedElement* unmanaged, int numElements)
+        {
+            if (unmanaged == null)
+                return ReadOnlySpan<TUnmanagedElement>.Empty;
+            ManagedArray array = Unsafe.As<ManagedArray>(ManagedHandle.FromIntPtr(new IntPtr(unmanaged)).Target);
+            return array.ToSpan<TUnmanagedElement>();
+        }
+
+        public static void Free(TUnmanagedElement* unmanaged)
+        {
+            if (unmanaged == null)
+                return;
+            ManagedHandle handle = ManagedHandle.FromIntPtr(new IntPtr(unmanaged));
+            Unsafe.As<ManagedArray>(handle.Target).FreePooled();
+        }
+    }
+
+#if FLAX_EDITOR
+    [HideInEditor]
+#endif
     [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedIn, typeof(StringMarshaller.ManagedToNative))]
     [CustomMarshaller(typeof(string), MarshalMode.UnmanagedToManagedOut, typeof(StringMarshaller.ManagedToNative))]
     [CustomMarshaller(typeof(string), MarshalMode.ElementIn, typeof(StringMarshaller.ManagedToNative))]

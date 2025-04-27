@@ -16,6 +16,7 @@ namespace Flax.Build.Bindings
             public TypeInfo Type;
             public string DefaultValue;
             public string Attributes;
+            public bool MarshalAsDynamicArray;
             public bool IsRef;
             public bool IsOut;
             public bool IsThis;
@@ -35,6 +36,7 @@ namespace Flax.Build.Bindings
                 BindingsGenerator.Write(writer, DefaultValue);
                 BindingsGenerator.Write(writer, Attributes);
                 // TODO: convert into flags
+                writer.Write(MarshalAsDynamicArray);
                 writer.Write(IsRef);
                 writer.Write(IsOut);
                 writer.Write(IsThis);
@@ -48,6 +50,7 @@ namespace Flax.Build.Bindings
                 DefaultValue = BindingsGenerator.Read(reader, DefaultValue);
                 Attributes = BindingsGenerator.Read(reader, Attributes);
                 // TODO: convert into flags
+                MarshalAsDynamicArray = reader.ReadBoolean();
                 IsRef = reader.ReadBoolean();
                 IsOut = reader.ReadBoolean();
                 IsThis = reader.ReadBoolean();
