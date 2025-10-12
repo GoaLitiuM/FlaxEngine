@@ -50,6 +50,7 @@ namespace Flax.Deps.Dependencies
         {
             var root = options.IntermediateFolder;
             var version = "1.23.1";
+            var cmakeArgs = "-DCMAKE_POLICY_VERSION_MINIMUM=3.5";
             var dstIncludePath = Path.Combine(options.ThirdPartyFolder, "OpenAL");
 
             foreach (var platform in options.Platforms)
@@ -77,7 +78,7 @@ namespace Flax.Deps.Dependencies
                         var buildDir = Path.Combine(root, "build-" + architecture.ToString());
                         var solutionPath = Path.Combine(buildDir, "OpenAL.sln");
 
-                        RunCmake(root, platform, architecture, $"-B\"{buildDir}\" -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS=\"/D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR /EHsc\" -DCMAKE_CXX_FLAGS=\"/D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR /EHsc\"");
+                        RunCmake(root, platform, architecture, $"-B\"{buildDir}\" -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS=\"/D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR /EHsc\" -DCMAKE_CXX_FLAGS=\"/D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR /EHsc\" " + cmakeArgs);
                         Deploy.VCEnvironment.BuildSolution(solutionPath, configuration, architecture.ToString());
                         var depsFolder = GetThirdPartyFolder(options, platform, architecture);
                         foreach (var file in binariesToCopy)
@@ -124,7 +125,7 @@ namespace Flax.Deps.Dependencies
                         { "CC", "clang-7" },
                         { "CC_FOR_BUILD", "clang-7" }
                     };
-                    var config = "-DALSOFT_REQUIRE_ALSA=ON -DALSOFT_REQUIRE_OSS=ON -DALSOFT_REQUIRE_PORTAUDIO=ON -DALSOFT_REQUIRE_PULSEAUDIO=ON -DALSOFT_REQUIRE_JACK=ON -DALSOFT_EMBED_HRTF_DATA=YES";
+                    var config = "-DALSOFT_REQUIRE_ALSA=ON -DALSOFT_REQUIRE_OSS=ON -DALSOFT_REQUIRE_PORTAUDIO=ON -DALSOFT_REQUIRE_PULSEAUDIO=ON -DALSOFT_REQUIRE_JACK=ON -DALSOFT_EMBED_HRTF_DATA=YES " + cmakeArgs;
 
                     // Get the source
                     var packagePath = Path.Combine(root, "package.zip");
@@ -151,7 +152,7 @@ namespace Flax.Deps.Dependencies
                     {
                         "libopenal.a",
                     };
-                    var config = "-DALSOFT_REQUIRE_OBOE=OFF -DALSOFT_REQUIRE_OPENSL=ON -DALSOFT_EMBED_HRTF_DATA=YES";
+                    var config = "-DALSOFT_REQUIRE_OBOE=OFF -DALSOFT_REQUIRE_OPENSL=ON -DALSOFT_EMBED_HRTF_DATA=YES " + cmakeArgs;
 
                     // Get the source
                     var packagePath = Path.Combine(root, "package.zip");
@@ -187,7 +188,7 @@ namespace Flax.Deps.Dependencies
                     {
                         "libopenal.a",
                     };
-                    var config = "-DALSOFT_REQUIRE_COREAUDIO=ON -DALSOFT_EMBED_HRTF_DATA=YES";
+                    var config = "-DALSOFT_REQUIRE_COREAUDIO=ON -DALSOFT_EMBED_HRTF_DATA=YES " + cmakeArgs;
 
                     // Get the source
                     var packagePath = Path.Combine(root, "package.zip");
@@ -217,7 +218,7 @@ namespace Flax.Deps.Dependencies
                     {
                         "libopenal.a",
                     };
-                    var config = "-DALSOFT_REQUIRE_COREAUDIO=ON -DALSOFT_EMBED_HRTF_DATA=YES";
+                    var config = "-DALSOFT_REQUIRE_COREAUDIO=ON -DALSOFT_EMBED_HRTF_DATA=YES " + cmakeArgs;
 
                     // Get the source
                     var packagePath = Path.Combine(root, "package.zip");
