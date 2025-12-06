@@ -2078,7 +2078,7 @@ namespace FlaxEditor.GUI.Timeline
             if (button == MouseButton.Right && _isRightMouseButtonDown)
             {
                 _isRightMouseButtonDown = false;
-                if (Float2.Distance(ref location, ref _rightMouseButtonDownPos) < 4.0f)
+                if (Float2.Distance(location, _rightMouseButtonDownPos) < 4.0f)
                     ShowContextMenu(location);
             }
 
@@ -2243,7 +2243,7 @@ namespace FlaxEditor.GUI.Timeline
 
                 foreach (var media in _tracks[i].Media)
                 {
-                    if (media.Bounds.Intersects(ref mediaRect))
+                    if (media.Bounds.Intersects(mediaRect))
                     {
                         SelectedMedia.Add(media);
                         selectionChanged = true;

@@ -199,7 +199,7 @@ namespace FlaxEngine
         /// <inheritdoc />
         public override bool Equals(object value)
         {
-            return value is Color other && Equals(ref other);
+            return value is Color other && Equals(in other);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Color" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Color" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref Color other)
+        public bool Equals(in Color other)
         {
             return R == other.R && G == other.G && B == other.B && A == other.A;
         }
@@ -628,7 +628,7 @@ namespace FlaxEngine
         /// <param name="b">Color b</param>
         /// <param name="t">Float for combining a and b</param>
         /// <param name="result">The result.</param>
-        public static void Lerp(ref Color a, ref Color b, float t, out Color result)
+        public static void Lerp(in Color a, in Color b, float t, out Color result)
         {
             result = new Color(a.R + (b.R - a.R) * t, a.G + (b.G - a.G) * t, a.B + (b.B - a.B) * t, a.A + (b.A - a.A) * t);
         }
@@ -663,7 +663,7 @@ namespace FlaxEngine
         /// <returns>True if colors are equal, otherwise false.</returns>
         public static bool operator ==(Color left, Color right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -674,7 +674,7 @@ namespace FlaxEngine
         /// <returns>True if colors are not equal, otherwise false.</returns>
         public static bool operator !=(Color left, Color right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -910,7 +910,7 @@ namespace FlaxEngine
         /// <param name="value">The color whose contrast is to be adjusted.</param>
         /// <param name="contrast">The amount by which to adjust the contrast.</param>
         /// <param name="result">When the method completes, contains the adjusted color.</param>
-        public static void AdjustContrast(ref Color value, float contrast, out Color result)
+        public static void AdjustContrast(in Color value, float contrast, out Color result)
         {
             result.A = value.A;
             result.R = 0.5f + contrast * (value.R - 0.5f);
@@ -939,7 +939,7 @@ namespace FlaxEngine
         /// <param name="value">The color whose saturation is to be adjusted.</param>
         /// <param name="saturation">The amount by which to adjust the saturation.</param>
         /// <param name="result">When the method completes, contains the adjusted color.</param>
-        public static void AdjustSaturation(ref Color value, float saturation, out Color result)
+        public static void AdjustSaturation(in Color value, float saturation, out Color result)
         {
             float grey = value.R * 0.2125f + value.G * 0.7154f + value.B * 0.0721f;
 
@@ -982,7 +982,7 @@ namespace FlaxEngine
         /// <param name="left">The first source color.</param>
         /// <param name="right">The second source color.</param>
         /// <param name="result">When the method completes, contains an new color composed of the largest components of the source colors.</param>
-        public static void Max(ref Color left, ref Color right, out Color result)
+        public static void Max(in Color left, in Color right, out Color result)
         {
             result = new Color(
                                Mathf.Max(left.R, right.R),
@@ -1000,7 +1000,7 @@ namespace FlaxEngine
         /// <returns>A color containing the largest components of the source colors.</returns>
         public static Color Max(Color left, Color right)
         {
-            Max(ref left, ref right, out var result);
+            Max(in left, in right, out var result);
             return result;
         }
 
@@ -1010,7 +1010,7 @@ namespace FlaxEngine
         /// <param name="left">The first source color.</param>
         /// <param name="right">The second source color.</param>
         /// <param name="result">When the method completes, contains an new color composed of the smallest components of the source colors.</param>
-        public static void Min(ref Color left, ref Color right, out Color result)
+        public static void Min(in Color left, in Color right, out Color result)
         {
             result = new Color(
                                Mathf.Min(left.R, right.R),
@@ -1028,7 +1028,7 @@ namespace FlaxEngine
         /// <returns>A color containing the smallest components of the source colors.</returns>
         public static Color Min(Color left, Color right)
         {
-            Min(ref left, ref right, out var result);
+            Min(in left, in right, out var result);
             return result;
         }
 
@@ -1039,7 +1039,7 @@ namespace FlaxEngine
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         /// <param name="result">When the method completes, contains the clamped value.</param>
-        public static void Clamp(ref Color value, ref Color min, ref Color max, out Color result)
+        public static void Clamp(in Color value, in Color min, in Color max, out Color result)
         {
             result = new Color(
                                Mathf.Clamp(value.R, min.R, max.R),
@@ -1058,7 +1058,7 @@ namespace FlaxEngine
         /// <returns>The clamped value.</returns>
         public static Color Clamp(Color value, Color min, Color max)
         {
-            Clamp(ref value, ref min, ref max, out Color result);
+            Clamp(in value, in min, in max, out Color result);
             return result;
         }
 

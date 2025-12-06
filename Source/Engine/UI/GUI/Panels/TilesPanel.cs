@@ -43,7 +43,7 @@ namespace FlaxEngine.GUI
             {
                 if (value.MinValue <= 0.0f)
                     throw new ArgumentException("Tiles cannot have negative size.");
-                if (!Float2.Equals(ref _tileSize, ref value))
+                if (!Float2.Equals(_tileSize, value))
                 {
                     _tileSize = value;
                     PerformLayout();

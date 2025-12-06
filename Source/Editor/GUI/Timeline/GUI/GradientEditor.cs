@@ -115,7 +115,7 @@ namespace FlaxEditor.GUI.Timeline.GUI
             /// <inheritdoc />
             public override void OnMouseMove(Float2 location)
             {
-                if (_isMoving && Float2.DistanceSquared(ref location, ref _startMovePos) > 25.0f)
+                if (_isMoving && Float2.DistanceSquared(location, _startMovePos) > 25.0f)
                 {
                     _startMovePos = Float2.Minimum;
                     var x = PointToParent(location).X;

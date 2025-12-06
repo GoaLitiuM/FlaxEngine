@@ -156,7 +156,7 @@ namespace FlaxEditor.Surface.Elements
                 Bezier(ref offsetStart, ref control1, ref control2, ref offsetEnd, t, out p);
 
                 // Maybe it would be reasonable to return the point?
-                CollisionsHelper.ClosestPointPointLine(ref point, ref oldp, ref p, out var result);
+                CollisionsHelper.ClosestPointPointLine(point, oldp, p, out var result);
                 if (Float2.DistanceSquared(point, result) <= squaredDistance)
                 {
                     return true;
@@ -167,12 +167,12 @@ namespace FlaxEditor.Surface.Elements
 
         private static void Bezier(ref Float2 p0, ref Float2 p1, ref Float2 p2, ref Float2 p3, float alpha, out Float2 result)
         {
-            Float2.Lerp(ref p0, ref p1, alpha, out var p01);
-            Float2.Lerp(ref p1, ref p2, alpha, out var p12);
-            Float2.Lerp(ref p2, ref p3, alpha, out var p23);
-            Float2.Lerp(ref p01, ref p12, alpha, out var p012);
-            Float2.Lerp(ref p12, ref p23, alpha, out var p123);
-            Float2.Lerp(ref p012, ref p123, alpha, out result);
+            Float2.Lerp(p0, p1, alpha, out var p01);
+            Float2.Lerp(p1, p2, alpha, out var p12);
+            Float2.Lerp(p2, p3, alpha, out var p23);
+            Float2.Lerp(p01, p12, alpha, out var p012);
+            Float2.Lerp(p12, p23, alpha, out var p123);
+            Float2.Lerp(p012, p123, alpha, out result);
         }
 
         /// <summary>

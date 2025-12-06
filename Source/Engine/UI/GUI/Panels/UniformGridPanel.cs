@@ -72,7 +72,7 @@ namespace FlaxEngine.GUI
             get => _slotSpacing;
             set
             {
-                if (!Float2.NearEqual(ref _slotSpacing, ref value))
+                if (!Float2.NearEqual(_slotSpacing, value))
                 {
                     _slotSpacing = value;
                     PerformLayout();

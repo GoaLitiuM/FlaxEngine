@@ -50,7 +50,7 @@ namespace FlaxEditor.GUI.Timeline.GUI
             var color = (_timeline.IsMovingPositionHandle ? style.SelectionBorder : style.Foreground).AlphaMultiplied(0.6f);
             Matrix3x3.RotationZ(Mathf.PiOverTwo, out var m1);
             var m2 = Matrix3x3.Translation2D(0, timeAxisHeaderOffset);
-            Matrix3x3.Multiply(ref m1, ref m2, out var m3);
+            Matrix3x3.Multiply(m1, m2, out var m3);
             Render2D.PushTransform(ref m3);
             // TODO: Convert to its own sprite or 9 slice
             Render2D.DrawSprite(icon, new Rectangle(new Float2(10, -icon.Size.X * 0.5f - 1), Size + new Float2(0, 1)), color);

@@ -201,9 +201,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="point">The point to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public PlaneIntersectionType Intersects(ref Vector3 point)
+        public PlaneIntersectionType Intersects(in Vector3 point)
         {
-            return CollisionsHelper.PlaneIntersectsPoint(ref this, ref point);
+            return CollisionsHelper.PlaneIntersectsPoint(this, point);
         }
 
         /// <summary>
@@ -211,9 +211,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="ray">The ray to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray)
+        public bool Intersects(in Ray ray)
         {
-            return CollisionsHelper.RayIntersectsPlane(ref ray, ref this, out Real _);
+            return CollisionsHelper.RayIntersectsPlane(ray, this, out Real _);
         }
 
         /// <summary>
@@ -222,9 +222,9 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Real distance)
+        public bool Intersects(in Ray ray, out Real distance)
         {
-            return CollisionsHelper.RayIntersectsPlane(ref ray, ref this, out distance);
+            return CollisionsHelper.RayIntersectsPlane(ray, this, out distance);
         }
 
         /// <summary>
@@ -233,9 +233,9 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Vector3 point)
+        public bool Intersects(in Ray ray, out Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsPlane(ref ray, ref this, out point);
+            return CollisionsHelper.RayIntersectsPlane(ray, this, out point);
         }
 
         /// <summary>
@@ -243,9 +243,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="plane">The plane to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Plane plane)
+        public bool Intersects(in Plane plane)
         {
-            return CollisionsHelper.PlaneIntersectsPlane(ref this, ref plane);
+            return CollisionsHelper.PlaneIntersectsPlane(this, plane);
         }
 
         /// <summary>
@@ -254,9 +254,9 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="line">When the method completes, contains the line of intersection as a <see cref="Ray" />, or a zero ray if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Plane plane, out Ray line)
+        public bool Intersects(in Plane plane, out Ray line)
         {
-            return CollisionsHelper.PlaneIntersectsPlane(ref this, ref plane, out line);
+            return CollisionsHelper.PlaneIntersectsPlane(this, plane, out line);
         }
 
         /// <summary>
@@ -266,9 +266,9 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public PlaneIntersectionType Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public PlaneIntersectionType Intersects(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
-            return CollisionsHelper.PlaneIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
+            return CollisionsHelper.PlaneIntersectsTriangle(this, vertex1, vertex2, vertex3);
         }
 
         /// <summary>
@@ -276,9 +276,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public PlaneIntersectionType Intersects(ref BoundingBox box)
+        public PlaneIntersectionType Intersects(in BoundingBox box)
         {
-            return CollisionsHelper.PlaneIntersectsBox(ref this, ref box);
+            return CollisionsHelper.PlaneIntersectsBox(this, box);
         }
 
         /// <summary>
@@ -286,9 +286,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public PlaneIntersectionType Intersects(ref BoundingSphere sphere)
+        public PlaneIntersectionType Intersects(in BoundingSphere sphere)
         {
-            return CollisionsHelper.PlaneIntersectsSphere(ref this, ref sphere);
+            return CollisionsHelper.PlaneIntersectsSphere(this, sphere);
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace FlaxEngine
         /// <param name="value">The plane to scale.</param>
         /// <param name="scale">The amount by which to scale the plane.</param>
         /// <param name="result">When the method completes, contains the scaled plane.</param>
-        public static void Multiply(ref Plane value, Real scale, out Plane result)
+        public static void Multiply(in Plane value, Real scale, out Plane result)
         {
             result.Normal.X = value.Normal.X * scale;
             result.Normal.Y = value.Normal.Y * scale;
@@ -322,7 +322,7 @@ namespace FlaxEngine
         /// <param name="left">The source plane.</param>
         /// <param name="right">The source vector.</param>
         /// <param name="result">When the method completes, contains the dot product of the specified plane and vector.</param>
-        public static void Dot(ref Plane left, ref Vector4 right, out Real result)
+        public static void Dot(in Plane left, in Vector4 right, out Real result)
         {
             result = left.Normal.X * right.X + left.Normal.Y * right.Y + left.Normal.Z * right.Z + left.D * right.W;
         }
@@ -344,7 +344,7 @@ namespace FlaxEngine
         /// <param name="left">The source plane.</param>
         /// <param name="right">The source vector.</param>
         /// <param name="result">When the method completes, contains the dot product of a specified vector and the normal of the Plane plus the distance value of the plane.</param>
-        public static void DotCoordinate(ref Plane left, ref Vector3 right, out Real result)
+        public static void DotCoordinate(in Plane left, in Vector3 right, out Real result)
         {
             result = left.Normal.X * right.X + left.Normal.Y * right.Y + left.Normal.Z * right.Z + left.D;
         }
@@ -366,7 +366,7 @@ namespace FlaxEngine
         /// <param name="left">The source plane.</param>
         /// <param name="right">The source vector.</param>
         /// <param name="result">When the method completes, contains the dot product of the specified vector and the normal of the plane.</param>
-        public static void DotNormal(ref Plane left, ref Vector3 right, out Real result)
+        public static void DotNormal(in Plane left, in Vector3 right, out Real result)
         {
             result = left.Normal.X * right.X + left.Normal.Y * right.Y + left.Normal.Z * right.Z;
         }
@@ -387,7 +387,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="plane">The source plane.</param>
         /// <param name="result">When the method completes, contains the normalized plane.</param>
-        public static void Normalize(ref Plane plane, out Plane result)
+        public static void Normalize(in Plane plane, out Plane result)
         {
             Real magnitude = 1.0f / (Real)Math.Sqrt(plane.Normal.X * plane.Normal.X + plane.Normal.Y * plane.Normal.Y + plane.Normal.Z * plane.Normal.Z);
             result.Normal.X = plane.Normal.X * magnitude;
@@ -413,7 +413,7 @@ namespace FlaxEngine
         /// <param name="plane">The normalized source plane.</param>
         /// <param name="rotation">The quaternion rotation.</param>
         /// <param name="result">When the method completes, contains the transformed plane.</param>
-        public static void Transform(ref Plane plane, ref Quaternion rotation, out Plane result)
+        public static void Transform(in Plane plane, in Quaternion rotation, out Plane result)
         {
             Real x2 = rotation.X + rotation.X;
             Real y2 = rotation.Y + rotation.Y;
@@ -446,7 +446,7 @@ namespace FlaxEngine
         /// <returns>The transformed plane.</returns>
         public static Plane Transform(Plane plane, Quaternion rotation)
         {
-            Transform(ref plane, ref rotation, out var result);
+            Transform(in plane, in rotation, out var result);
             return result;
         }
 
@@ -456,13 +456,13 @@ namespace FlaxEngine
         /// <param name="plane">The normalized source plane.</param>
         /// <param name="transformation">The transformation matrix.</param>
         /// <param name="result">When the method completes, contains the transformed plane.</param>
-        public static void Transform(ref Plane plane, ref Matrix transformation, out Plane result)
+        public static void Transform(in Plane plane, in Matrix transformation, out Plane result)
         {
             Real x = plane.Normal.X;
             Real y = plane.Normal.Y;
             Real z = plane.Normal.Z;
             Real d = plane.D;
-            Matrix.Invert(ref transformation, out Matrix inverse);
+            Matrix.Invert(transformation, out Matrix inverse);
             result.Normal.X = x * inverse.M11 + y * inverse.M12 + z * inverse.M13 + d * inverse.M14;
             result.Normal.Y = x * inverse.M21 + y * inverse.M22 + z * inverse.M23 + d * inverse.M24;
             result.Normal.Z = x * inverse.M31 + y * inverse.M32 + z * inverse.M33 + d * inverse.M34;
@@ -477,7 +477,7 @@ namespace FlaxEngine
         /// <returns>When the method completes, contains the transformed plane.</returns>
         public static Plane Transform(Plane plane, Matrix transformation)
         {
-            Transform(ref plane, ref transformation, out var result);
+            Transform(in plane, in transformation, out var result);
             return result;
         }
 
@@ -512,7 +512,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Plane left, Plane right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -524,7 +524,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Plane left, Plane right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -585,7 +585,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Vector4" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Vector4" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref Plane other)
+        public bool Equals(in Plane other)
         {
             return Normal == other.Normal && D == other.D;
         }
@@ -598,7 +598,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Plane other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -608,7 +608,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Plane other && Equals(ref other);
+            return value is Plane other && Equals(in other);
         }
     }
 }

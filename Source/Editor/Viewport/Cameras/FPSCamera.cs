@@ -177,7 +177,7 @@ namespace FlaxEditor.Viewport.Cameras
             // Dolly
             if (input.IsPanning || input.IsMoving || input.IsRotating)
             {
-                Vector3.Transform(ref moveDelta, ref rotation, out Vector3 move);
+                Vector3.Transform(moveDelta, rotation, out Vector3 move);
                 position += move;
             }
 
@@ -239,7 +239,7 @@ namespace FlaxEditor.Viewport.Cameras
             Viewport.Pitch = pitch;
             if (input.IsOrbiting)
             {
-                float orbitRadius = Mathf.Max((float)Vector3.Distance(ref position, ref TargetPoint), 0.0001f);
+                float orbitRadius = Mathf.Max((float)Vector3.Distance(position, TargetPoint), 0.0001f);
                 Vector3 localPosition = Viewport.ViewDirection * (-1 * orbitRadius);
                 Viewport.ViewPosition = TargetPoint + localPosition;
             }

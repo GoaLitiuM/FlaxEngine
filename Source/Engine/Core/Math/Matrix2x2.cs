@@ -292,7 +292,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="scale">The scale vector.</param>
         /// <param name="result">The result.</param>
-        public static void Scale(ref Float2 scale, out Matrix2x2 result)
+        public static void Scale(in Float2 scale, out Matrix2x2 result)
         {
             result = new Matrix2x2(scale.X, 0, 0, scale.Y);
         }
@@ -304,7 +304,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="shearAngles">The shear angles.</param>
         /// <param name="result">The result.</param>
-        public static void Shear(ref Float2 shearAngles, out Matrix2x2 result)
+        public static void Shear(in Float2 shearAngles, out Matrix2x2 result)
         {
             float shearX = shearAngles.X == 0 ? 0 : (1.0f / Mathf.Tan(Mathf.DegreesToRadians * (90 - Mathf.Clamp(shearAngles.X, -89.0f, 89.0f))));
             float shearY = shearAngles.Y == 0 ? 0 : (1.0f / Mathf.Tan(Mathf.DegreesToRadians * (90 - Mathf.Clamp(shearAngles.Y, -89.0f, 89.0f))));
@@ -329,7 +329,7 @@ namespace FlaxEngine
         /// <param name="vector">The vector.</param>
         /// <param name="matrix">The matrix.</param>
         /// <param name="result">The result.</param>
-        public static void Transform(ref Float2 vector, ref Matrix2x2 matrix, out Float2 result)
+        public static void Transform(in Float2 vector, in Matrix2x2 matrix, out Float2 result)
         {
             result = new Float2(vector.X * matrix.M11 + vector.Y * matrix.M21, vector.X * matrix.M12 + vector.Y * matrix.M22);
         }
@@ -340,7 +340,7 @@ namespace FlaxEngine
         /// <param name="left">The first Matrix2x2 to multiply.</param>
         /// <param name="right">The second Matrix2x2 to multiply.</param>
         /// <param name="result">The product of the two matrices.</param>
-        public static void Multiply(ref Matrix2x2 left, ref Matrix2x2 right, out Matrix2x2 result)
+        public static void Multiply(in Matrix2x2 left, in Matrix2x2 right, out Matrix2x2 result)
         {
             result = new Matrix2x2((left.M11 * right.M11) + (left.M12 * right.M21), (left.M11 * right.M12) + (left.M12 * right.M22), (left.M21 * right.M11) + (left.M22 * right.M21), (left.M21 * right.M12) + (left.M22 * right.M22));
         }
@@ -350,7 +350,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The Matrix2x2 whose inverse is to be calculated.</param>
         /// <param name="result">When the method completes, contains the inverse of the specified Matrix2x2.</param>
-        public static void Invert(ref Matrix2x2 value, out Matrix2x2 result)
+        public static void Invert(in Matrix2x2 value, out Matrix2x2 result)
         {
             float invDet = value.InverseDeterminant();
             result = new Matrix2x2(value.M22 * invDet, -value.M12 * invDet, -value.M21 * invDet, value.M11 * invDet);
@@ -365,7 +365,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Matrix2x2 left, Matrix2x2 right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Matrix2x2 left, Matrix2x2 right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -481,7 +481,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="other">The <see cref="Matrix2x2"/> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Matrix2x2"/> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(ref Matrix2x2 other)
+        public bool Equals(in Matrix2x2 other)
         {
             return M11 == other.M11 && M12 == other.M12 && M21 == other.M21 && M22 == other.M22;
         }
@@ -494,15 +494,15 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Matrix2x2 other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
         /// Determines whether the specified <see cref="Matrix2x2"/> are equal.
         /// </summary>
-        public static bool Equals(ref Matrix2x2 a, ref Matrix2x2 b)
+        public static bool Equals(in Matrix2x2 a, in Matrix2x2 b)
         {
-            return a.Equals(ref b);
+            return a.Equals(in b);
         }
 
         /// <summary>
@@ -512,7 +512,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Matrix2x2 other && Equals(ref other);
+            return value is Matrix2x2 other && Equals(in other);
         }
     }
 }

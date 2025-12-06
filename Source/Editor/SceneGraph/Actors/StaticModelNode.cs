@@ -96,7 +96,7 @@ namespace FlaxEditor.SceneGraph.Actors
                         for (int i = 0; i < verts.Length; i++)
                         {
                             ref var v = ref verts[i];
-                            var distance = Float3.DistanceSquared(ref pointLocal, ref v);
+                            var distance = Float3.DistanceSquared(pointLocal, v);
                             if (distance <= minDistance)
                             {
                                 hit = true;

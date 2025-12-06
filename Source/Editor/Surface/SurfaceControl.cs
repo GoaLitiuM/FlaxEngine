@@ -93,7 +93,7 @@ namespace FlaxEditor.Surface
         /// <returns><c>true</c> if the selection rectangle is intersecting with the selectable parts of the control ; otherwise, <c>false</c>.</returns>
         public virtual bool IsSelectionIntersecting(ref Rectangle selectionRect)
         {
-            return Bounds.Intersects(ref selectionRect);
+            return Bounds.Intersects(selectionRect);
         }
 
         /// <summary>

@@ -253,7 +253,7 @@ namespace FlaxEngine.GUI
         /// <inheritdoc />
         public override bool OnTestTooltipOverControl(ref Float2 location)
         {
-            return HeaderRectangle.Contains(ref location);
+            return HeaderRectangle.Contains(location);
         }
 
         /// <summary>
@@ -449,9 +449,9 @@ namespace FlaxEngine.GUI
                         var child = _children[i];
                         if (child.IsScrollable && child.Visible)
                         {
-                            Matrix3x3.Multiply(ref child._cachedTransform, ref globalTransform, out var globalChildTransform);
+                            Matrix3x3.Multiply(child._cachedTransform, globalTransform, out var globalChildTransform);
                             var childGlobalRect = new Rectangle(globalChildTransform.M31, globalChildTransform.M32, child.Width * globalChildTransform.M11, child.Height * globalChildTransform.M22);
-                            if (globalClipping.Intersects(ref childGlobalRect))
+                            if (globalClipping.Intersects(childGlobalRect))
                             {
                                 Render2D.PushTransform(ref child._cachedTransform);
                                 child.Draw();

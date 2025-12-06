@@ -56,7 +56,7 @@ namespace FlaxEngine.GUI
             get => _anchorMin;
             set
             {
-                if (!_anchorMin.Equals(ref value))
+                if (!_anchorMin.Equals(value))
                 {
                     var bounds = Bounds;
                     _anchorMin = value;
@@ -75,7 +75,7 @@ namespace FlaxEngine.GUI
             get => _anchorMax;
             set
             {
-                if (!_anchorMax.Equals(ref value))
+                if (!_anchorMax.Equals(value))
                 {
                     var bounds = Bounds;
                     _anchorMax = value;
@@ -94,7 +94,7 @@ namespace FlaxEngine.GUI
             get => _offsets;
             set
             {
-                if (!_offsets.Equals(ref value))
+                if (!_offsets.Equals(value))
                 {
                     _offsets = value;
                     UpdateBounds();
@@ -153,7 +153,7 @@ namespace FlaxEngine.GUI
             get => _bounds.Location;
             set
             {
-                if (_bounds.Location.Equals(ref value))
+                if (_bounds.Location.Equals(value))
                     return;
                 var bounds = new Rectangle(value, _bounds.Size);
                 SetBounds(ref bounds);
@@ -231,7 +231,7 @@ namespace FlaxEngine.GUI
             get => _bounds.Size;
             set
             {
-                if (_bounds.Size.Equals(ref value))
+                if (_bounds.Size.Equals(value))
                     return;
                 var bounds = new Rectangle(_bounds.Location, value);
                 if (_pivotRelativeSizing)
@@ -302,7 +302,7 @@ namespace FlaxEngine.GUI
             get => _bounds;
             set
             {
-                if (!_bounds.Equals(ref value))
+                if (!_bounds.Equals(value))
                     SetBounds(ref value);
             }
         }
@@ -362,7 +362,7 @@ namespace FlaxEngine.GUI
             get => _scale;
             set
             {
-                if (!_scale.Equals(ref value))
+                if (!_scale.Equals(value))
                 {
                     SetScaleInternal(ref value);
                 }
@@ -378,7 +378,7 @@ namespace FlaxEngine.GUI
             get => _pivot;
             set
             {
-                if (!_pivot.Equals(ref value))
+                if (!_pivot.Equals(value))
                 {
                     SetPivotInternal(ref value);
                 }
@@ -395,7 +395,7 @@ namespace FlaxEngine.GUI
             get => _shear;
             set
             {
-                if (!_shear.Equals(ref value))
+                if (!_shear.Equals(value))
                 {
                     SetShearInternal(ref value);
                 }
@@ -425,7 +425,7 @@ namespace FlaxEngine.GUI
         [NoAnimate]
         public void Resize(ref Float2 value)
         {
-            if (_bounds.Size.Equals(ref value))
+            if (_bounds.Size.Equals(value))
                 return;
             var bounds = new Rectangle(_bounds.Location, value);
             bounds.Location += (_bounds.Size - value) * Pivot; // Pivot-relative resizing
@@ -490,12 +490,12 @@ namespace FlaxEngine.GUI
             UpdateTransform();
 
             // Handle location/size changes
-            if (!_bounds.Location.Equals(ref prevBounds.Location))
+            if (!_bounds.Location.Equals(prevBounds.Location))
             {
                 OnLocationChanged();
             }
 
-            if (!_bounds.Size.Equals(ref prevBounds.Size))
+            if (!_bounds.Size.Equals(prevBounds.Size))
             {
                 OnSizeChanged();
             }
@@ -580,7 +580,7 @@ namespace FlaxEngine.GUI
             _cachedTransform = m1;
 
             // Cache inverted transform
-            Matrix3x3.Invert(ref _cachedTransform, out _cachedTransformInv);
+            Matrix3x3.Invert(_cachedTransform, out _cachedTransformInv);
         }
 
         /// <summary>
@@ -598,8 +598,8 @@ namespace FlaxEngine.GUI
                     var anchorMin = AnchorPresetsData[i].Min;
                     var anchorMax = AnchorPresetsData[i].Max;
                     var bounds = _bounds;
-                    if (!Float2.NearEqual(ref _anchorMin, ref anchorMin) ||
-                        !Float2.NearEqual(ref _anchorMax, ref anchorMax))
+                    if (!Float2.NearEqual(_anchorMin, anchorMin) ||
+                        !Float2.NearEqual(_anchorMax, anchorMax))
                     {
                         // Disable scrolling for anchored controls (by default but can be manually restored)
                         if (!anchorMin.IsZero || !anchorMax.IsZero)

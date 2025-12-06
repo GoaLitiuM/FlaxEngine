@@ -62,7 +62,7 @@ namespace FlaxEditor.GUI
                 for (int i = 0; i < children.Count; i++)
                 {
                     if (children[i] is KeyframePoint p)
-                        p.IsSelected = p.Bounds.Intersects(ref selectionRect);
+                        p.IsSelected = p.Bounds.Intersects(selectionRect);
                 }
                 _editor.UpdateTangents();
             }
@@ -85,7 +85,7 @@ namespace FlaxEditor.GUI
             internal void OnMove(Float2 location)
             {
                 // Skip updating keyframes until move actual starts to be meaningful
-                if (Float2.Distance(ref _movingSelectionStartPosLock, ref location) < 1.5f)
+                if (Float2.Distance(_movingSelectionStartPosLock, location) < 1.5f)
                     return;
                 _movingSelectionStartPosLock = Float2.Minimum;
 

@@ -262,7 +262,7 @@ namespace FlaxEngine.GUI
         public override bool ContainsPoint(ref Float2 location, bool precise = false)
         {
             if (precise) // Precise check for checkbox element
-                return _box.Contains(ref location);
+                return _box.Contains(location);
             return base.ContainsPoint(ref location, precise);
         }
 
@@ -271,7 +271,7 @@ namespace FlaxEngine.GUI
         {
             base.OnMouseMove(location);
 
-            _mouseOverBox = _box.Contains(ref location);
+            _mouseOverBox = _box.Contains(location);
         }
 
         /// <inheritdoc />
@@ -298,7 +298,7 @@ namespace FlaxEngine.GUI
             if (button == MouseButton.Left && _isPressed)
             {
                 OnPressEnd();
-                if (_box.Contains(ref location))
+                if (_box.Contains(location))
                 {
                     OnClick();
                     return true;
@@ -313,7 +313,7 @@ namespace FlaxEngine.GUI
             if (button == MouseButton.Left && _isPressed)
             {
                 OnPressEnd();
-                if (_box.Contains(ref location))
+                if (_box.Contains(location))
                 {
                     OnClick();
                     return true;
@@ -351,7 +351,7 @@ namespace FlaxEngine.GUI
             if (_isPressed)
             {
                 OnPressEnd();
-                if (_box.Contains(ref location))
+                if (_box.Contains(location))
                 {
                     OnClick();
                     return true;

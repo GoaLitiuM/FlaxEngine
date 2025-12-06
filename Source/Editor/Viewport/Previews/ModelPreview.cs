@@ -379,7 +379,7 @@ namespace FlaxEditor.Viewport.Previews
             float screenMultiple = 0.5f * Mathf.Max(projectionMatrix.M11, projectionMatrix.M22);
             var sphere = PreviewActor.Sphere;
             var viewOrigin = ViewPosition;
-            var distSqr = Vector3.DistanceSquared(ref sphere.Center, ref viewOrigin);
+            var distSqr = Vector3.DistanceSquared(sphere.Center, viewOrigin);
             var screenRadiusSquared = Mathf.Square(screenMultiple * sphere.Radius) / Mathf.Max(1.0f, distSqr);
             screenSize = Mathf.Sqrt((float)screenRadiusSquared) * 2.0f;
 

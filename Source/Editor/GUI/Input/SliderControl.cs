@@ -180,7 +180,7 @@ namespace FlaxEditor.GUI.Input
                     Focus();
                     float mousePosition = location.X;
 
-                    if (_thumbRect.Contains(ref location))
+                    if (_thumbRect.Contains(location))
                     {
                         // Start sliding
                         _isSliding = true;

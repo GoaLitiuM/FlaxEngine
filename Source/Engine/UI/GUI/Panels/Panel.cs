@@ -637,14 +637,14 @@ namespace FlaxEngine.GUI
                 {
                     var upperLeft = Float2.Zero;
                     var bottomRight = c.Size;
-                    Matrix3x3.Transform2D(ref upperLeft, ref c._cachedTransform, out upperLeft);
-                    Matrix3x3.Transform2D(ref bottomRight, ref c._cachedTransform, out bottomRight);
-                    Float2.Min(ref upperLeft, ref bottomRight, out var min);
-                    Float2.Max(ref upperLeft, ref bottomRight, out var max);
+                    Matrix3x3.Transform2D(upperLeft, c._cachedTransform, out upperLeft);
+                    Matrix3x3.Transform2D(bottomRight, c._cachedTransform, out bottomRight);
+                    Float2.Min(upperLeft, bottomRight, out var min);
+                    Float2.Max(upperLeft, bottomRight, out var max);
                     if (hasTotal)
                     {
-                        Float2.Min(ref min, ref totalMin, out totalMin);
-                        Float2.Max(ref max, ref totalMax, out totalMax);
+                        Float2.Min(min, totalMin, out totalMin);
+                        Float2.Max(max, totalMax, out totalMax);
                     }
                     else
                     {
@@ -697,11 +697,11 @@ namespace FlaxEngine.GUI
 
             if (VScrollBar != null && VScrollBar.Enabled && height > MinSize)
             {
-                if (new Rectangle(0, 0, width, AreaSize).Contains(ref location))
+                if (new Rectangle(0, 0, width, AreaSize).Contains(location))
                 {
                     viewOffset.Y -= MoveScale;
                 }
-                else if (new Rectangle(0, height - AreaSize, width, AreaSize).Contains(ref location))
+                else if (new Rectangle(0, height - AreaSize, width, AreaSize).Contains(location))
                 {
                     viewOffset.Y += MoveScale;
                 }
@@ -712,11 +712,11 @@ namespace FlaxEngine.GUI
 
             if (HScrollBar != null && HScrollBar.Enabled && width > MinSize)
             {
-                if (new Rectangle(0, 0, AreaSize, height).Contains(ref location))
+                if (new Rectangle(0, 0, AreaSize, height).Contains(location))
                 {
                     viewOffset.X -= MoveScale;
                 }
-                else if (new Rectangle(width - AreaSize, 0, AreaSize, height).Contains(ref location))
+                else if (new Rectangle(width - AreaSize, 0, AreaSize, height).Contains(location))
                 {
                     viewOffset.X += MoveScale;
                 }

@@ -368,7 +368,7 @@ namespace FlaxEngine
         /// <param name="left">The first quaternion to add.</param>
         /// <param name="right">The second quaternion to add.</param>
         /// <param name="result">When the method completes, contains the sum of the two quaternions.</param>
-        public static void Add(ref Quaternion left, ref Quaternion right, out Quaternion result)
+        public static void Add(in Quaternion left, in Quaternion right, out Quaternion result)
         {
             result.X = left.X + right.X;
             result.Y = left.Y + right.Y;
@@ -384,7 +384,7 @@ namespace FlaxEngine
         /// <returns>The sum of the two quaternions.</returns>
         public static Quaternion Add(Quaternion left, Quaternion right)
         {
-            Add(ref left, ref right, out var result);
+            Add(in left, in right, out var result);
             return result;
         }
 
@@ -394,7 +394,7 @@ namespace FlaxEngine
         /// <param name="left">The first quaternion to subtract.</param>
         /// <param name="right">The second quaternion to subtract.</param>
         /// <param name="result">When the method completes, contains the difference of the two quaternions.</param>
-        public static void Subtract(ref Quaternion left, ref Quaternion right, out Quaternion result)
+        public static void Subtract(in Quaternion left, in Quaternion right, out Quaternion result)
         {
             result.X = left.X - right.X;
             result.Y = left.Y - right.Y;
@@ -410,7 +410,7 @@ namespace FlaxEngine
         /// <returns>The difference of the two quaternions.</returns>
         public static Quaternion Subtract(Quaternion left, Quaternion right)
         {
-            Subtract(ref left, ref right, out var result);
+            Subtract(in left, in right, out var result);
             return result;
         }
 
@@ -420,7 +420,7 @@ namespace FlaxEngine
         /// <param name="value">The quaternion to scale.</param>
         /// <param name="scale">The amount by which to scale the quaternion.</param>
         /// <param name="result">When the method completes, contains the scaled quaternion.</param>
-        public static void Multiply(ref Quaternion value, float scale, out Quaternion result)
+        public static void Multiply(in Quaternion value, float scale, out Quaternion result)
         {
             result.X = value.X * scale;
             result.Y = value.Y * scale;
@@ -436,7 +436,7 @@ namespace FlaxEngine
         /// <returns>The scaled quaternion.</returns>
         public static Quaternion Multiply(Quaternion value, float scale)
         {
-            Multiply(ref value, scale, out var result);
+            Multiply(in value, scale, out var result);
             return result;
         }
 
@@ -446,7 +446,7 @@ namespace FlaxEngine
         /// <param name="left">The first quaternion to multiply.</param>
         /// <param name="right">The second quaternion to multiply.</param>
         /// <param name="result">When the method completes, contains the multiplied quaternion.</param>
-        public static void Multiply(ref Quaternion left, ref Quaternion right, out Quaternion result)
+        public static void Multiply(in Quaternion left, in Quaternion right, out Quaternion result)
         {
             float a = left.Y * right.Z - left.Z * right.Y;
             float b = left.Z * right.X - left.X * right.Z;
@@ -466,7 +466,7 @@ namespace FlaxEngine
         /// <returns>The multiplied quaternion.</returns>
         public static Quaternion Multiply(Quaternion left, Quaternion right)
         {
-            Multiply(ref left, ref right, out var result);
+            Multiply(in left, in right, out var result);
             return result;
         }
 
@@ -475,7 +475,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The quaternion to negate.</param>
         /// <param name="result">When the method completes, contains a quaternion facing in the opposite direction.</param>
-        public static void Negate(ref Quaternion value, out Quaternion result)
+        public static void Negate(in Quaternion value, out Quaternion result)
         {
             result.X = -value.X;
             result.Y = -value.Y;
@@ -490,7 +490,7 @@ namespace FlaxEngine
         /// <returns>A quaternion facing in the opposite direction.</returns>
         public static Quaternion Negate(Quaternion value)
         {
-            Negate(ref value, out var result);
+            Negate(in value, out var result);
             return result;
         }
 
@@ -503,11 +503,11 @@ namespace FlaxEngine
         /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2" />).</param>
         /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3" />).</param>
         /// <param name="result">When the method completes, contains a new <see cref="Quaternion" /> containing the 4D Cartesian coordinates of the specified point.</param>
-        public static void Barycentric(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, float amount1, float amount2, out Quaternion result)
+        public static void Barycentric(in Quaternion value1, in Quaternion value2, in Quaternion value3, float amount1, float amount2, out Quaternion result)
         {
-            Slerp(ref value1, ref value2, amount1 + amount2, out var start);
-            Slerp(ref value1, ref value3, amount1 + amount2, out var end);
-            Slerp(ref start, ref end, amount2 / (amount1 + amount2), out result);
+            Slerp(in value1, in value2, amount1 + amount2, out var start);
+            Slerp(in value1, in value3, amount1 + amount2, out var end);
+            Slerp(in start, in end, amount2 / (amount1 + amount2), out result);
         }
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace FlaxEngine
         /// <returns>A new <see cref="Quaternion" /> containing the 4D Cartesian coordinates of the specified point.</returns>
         public static Quaternion Barycentric(Quaternion value1, Quaternion value2, Quaternion value3, float amount1, float amount2)
         {
-            Barycentric(ref value1, ref value2, ref value3, amount1, amount2, out var result);
+            Barycentric(in value1, in value2, in value3, amount1, amount2, out var result);
             return result;
         }
 
@@ -530,7 +530,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The quaternion to conjugate.</param>
         /// <param name="result">When the method completes, contains the conjugated quaternion.</param>
-        public static void Conjugate(ref Quaternion value, out Quaternion result)
+        public static void Conjugate(in Quaternion value, out Quaternion result)
         {
             result.X = -value.X;
             result.Y = -value.Y;
@@ -545,7 +545,7 @@ namespace FlaxEngine
         /// <returns>The conjugated quaternion.</returns>
         public static Quaternion Conjugate(Quaternion value)
         {
-            Conjugate(ref value, out var result);
+            Conjugate(in value, out var result);
             return result;
         }
 
@@ -555,7 +555,7 @@ namespace FlaxEngine
         /// <param name="left">First source quaternion.</param>
         /// <param name="right">Second source quaternion.</param>
         /// <returns>The dot product of the two quaternions.</returns>
-        public static float Dot(ref Quaternion left, ref Quaternion right)
+        public static float Dot(in Quaternion left, in Quaternion right)
         {
             return left.X * right.X + left.Y * right.Y + left.Z * right.Z + left.W * right.W;
         }
@@ -588,7 +588,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The quaternion to exponentiate.</param>
         /// <param name="result">When the method completes, contains the exponentiated quaternion.</param>
-        public static void Exponential(ref Quaternion value, out Quaternion result)
+        public static void Exponential(in Quaternion value, out Quaternion result)
         {
             var angle = (float)Math.Sqrt(value.X * value.X + value.Y * value.Y + value.Z * value.Z);
             var sin = (float)Math.Sin(angle);
@@ -615,7 +615,7 @@ namespace FlaxEngine
         /// <returns>The exponentiated quaternion.</returns>
         public static Quaternion Exponential(Quaternion value)
         {
-            Exponential(ref value, out var result);
+            Exponential(in value, out var result);
             return result;
         }
 
@@ -624,7 +624,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The quaternion to conjugate and renormalize.</param>
         /// <param name="result">When the method completes, contains the conjugated and renormalized quaternion.</param>
-        public static void Invert(ref Quaternion value, out Quaternion result)
+        public static void Invert(in Quaternion value, out Quaternion result)
         {
             result = value;
             result.Invert();
@@ -680,7 +680,7 @@ namespace FlaxEngine
         /// Passing <paramref name="amount" /> a value of 0 will cause <paramref name="start" /> to be returned; a value of 1
         /// will cause <paramref name="end" /> to be returned.
         /// </remarks>
-        public static void Lerp(ref Quaternion start, ref Quaternion end, float amount, out Quaternion result)
+        public static void Lerp(in Quaternion start, in Quaternion end, float amount, out Quaternion result)
         {
             float inverse = 1.0f - amount;
 
@@ -717,7 +717,7 @@ namespace FlaxEngine
         /// </remarks>
         public static Quaternion Lerp(Quaternion start, Quaternion end, float amount)
         {
-            Lerp(ref start, ref end, amount, out var result);
+            Lerp(in start, in end, amount, out var result);
             return result;
         }
 
@@ -726,7 +726,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The quaternion whose logarithm will be calculated.</param>
         /// <param name="result">When the method completes, contains the natural logarithm of the quaternion.</param>
-        public static void Logarithm(ref Quaternion value, out Quaternion result)
+        public static void Logarithm(in Quaternion value, out Quaternion result)
         {
             if (Math.Abs(value.W) < 1.0)
             {
@@ -760,7 +760,7 @@ namespace FlaxEngine
         /// <returns>The natural logarithm of the quaternion.</returns>
         public static Quaternion Logarithm(Quaternion value)
         {
-            Logarithm(ref value, out var result);
+            Logarithm(in value, out var result);
             return result;
         }
 
@@ -769,7 +769,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The quaternion to normalize.</param>
         /// <param name="result">When the method completes, contains the normalized quaternion.</param>
-        public static void Normalize(ref Quaternion value, out Quaternion result)
+        public static void Normalize(in Quaternion value, out Quaternion result)
         {
             Quaternion temp = value;
             result = temp;
@@ -793,9 +793,9 @@ namespace FlaxEngine
         /// <param name="axis">The axis of rotation.</param>
         /// <param name="angle">The angle of rotation (in radians).</param>
         /// <param name="result">When the method completes, contains the newly created quaternion.</param>
-        public static void RotationAxis(ref Float3 axis, float angle, out Quaternion result)
+        public static void RotationAxis(in Float3 axis, float angle, out Quaternion result)
         {
-            Float3.Normalize(ref axis, out var normalized);
+            Float3.Normalize(axis, out var normalized);
 
             float half = angle * 0.5f;
             var sin = (float)Math.Sin(half);
@@ -815,7 +815,7 @@ namespace FlaxEngine
         /// <returns>The newly created quaternion.</returns>
         public static Quaternion RotationAxis(Float3 axis, float angle)
         {
-            RotationAxis(ref axis, angle, out var result);
+            RotationAxis(in axis, angle, out var result);
             return result;
         }
 
@@ -824,7 +824,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="matrix">The rotation matrix.</param>
         /// <param name="result">When the method completes, contains the newly created quaternion.</param>
-        public static void RotationMatrix(ref Matrix matrix, out Quaternion result)
+        public static void RotationMatrix(in Matrix matrix, out Quaternion result)
         {
             float sqrt;
             float half;
@@ -877,7 +877,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="matrix">The rotation matrix.</param>
         /// <param name="result">When the method completes, contains the newly created quaternion.</param>
-        public static void RotationMatrix(ref Matrix3x3 matrix, out Quaternion result)
+        public static void RotationMatrix(in Matrix3x3 matrix, out Quaternion result)
         {
             float sqrt;
             float half;
@@ -932,10 +932,10 @@ namespace FlaxEngine
         /// <param name="target">The camera look-at target.</param>
         /// <param name="up">The camera's up vector.</param>
         /// <param name="result">When the method completes, contains the created look-at quaternion.</param>
-        public static void LookAt(ref Float3 eye, ref Float3 target, ref Float3 up, out Quaternion result)
+        public static void LookAt(in Float3 eye, in Float3 target, in Float3 up, out Quaternion result)
         {
-            Matrix3x3.LookAt(ref eye, ref target, ref up, out var matrix);
-            RotationMatrix(ref matrix, out result);
+            Matrix3x3.LookAt(eye, target, up, out var matrix);
+            RotationMatrix(in matrix, out result);
         }
 
         /// <summary>
@@ -958,7 +958,7 @@ namespace FlaxEngine
         /// <returns>The created look-at quaternion.</returns>
         public static Quaternion LookAt(Float3 eye, Float3 target, Float3 up)
         {
-            LookAt(ref eye, ref target, ref up, out var result);
+            LookAt(in eye, in target, in up, out var result);
             return result;
         }
 
@@ -968,10 +968,10 @@ namespace FlaxEngine
         /// <param name="forward">The camera's forward direction.</param>
         /// <param name="up">The camera's up vector.</param>
         /// <param name="result">When the method completes, contains the created look-at quaternion.</param>
-        public static void RotationLookAt(ref Float3 forward, ref Float3 up, out Quaternion result)
+        public static void RotationLookAt(in Float3 forward, in Float3 up, out Quaternion result)
         {
             var eye = Float3.Zero;
-            LookAt(ref eye, ref forward, ref up, out result);
+            LookAt(in eye, in forward, in up, out result);
         }
 
         /// <summary>
@@ -992,7 +992,7 @@ namespace FlaxEngine
         /// <returns>The created look-at quaternion.</returns>
         public static Quaternion RotationLookAt(Float3 forward, Float3 up)
         {
-            RotationLookAt(ref forward, ref up, out var result);
+            RotationLookAt(in forward, in up, out var result);
             return result;
         }
 
@@ -1014,7 +1014,7 @@ namespace FlaxEngine
         /// <returns>The calculated quaternion.</returns>
         public static Quaternion LookRotation(Float3 forward, Float3 up)
         {
-            LookRotation(ref forward, ref up, out var result);
+            LookRotation(in forward, in up, out var result);
             return result;
         }
 
@@ -1024,13 +1024,13 @@ namespace FlaxEngine
         /// <param name="forward">The forward direction. Direction to orient towards.</param>
         /// <param name="up">The up direction. Constrains y axis orientation to a plane this vector lies on. This rule might be broken if forward and up direction are nearly parallel.</param>
         /// <param name="result">The calculated quaternion.</param>
-        public static void LookRotation(ref Float3 forward, ref Float3 up, out Quaternion result)
+        public static void LookRotation(in Float3 forward, in Float3 up, out Quaternion result)
         {
             Float3 forwardNorm = forward;
             forwardNorm.Normalize();
-            Float3.Cross(ref up, ref forwardNorm, out var rightNorm);
+            Float3.Cross(up, forwardNorm, out var rightNorm);
             rightNorm.Normalize();
-            Float3.Cross(ref forwardNorm, ref rightNorm, out var upNorm);
+            Float3.Cross(forwardNorm, rightNorm, out var upNorm);
 
             float m00 = rightNorm.X;
             float m01 = rightNorm.Y;
@@ -1088,7 +1088,7 @@ namespace FlaxEngine
         /// <param name="to">The destination vector.</param>
         /// <param name="result">The result.</param>
         /// <param name="fallbackAxis">The fallback axis.</param>
-        public static void GetRotationFromTo(ref Float3 from, ref Float3 to, out Quaternion result, ref Float3 fallbackAxis)
+        public static void GetRotationFromTo(in Float3 from, in Float3 to, out Quaternion result, in Float3 fallbackAxis)
         {
             // Based on Stan Melax's article in Game Programming Gems
 
@@ -1098,7 +1098,7 @@ namespace FlaxEngine
             v1.Normalize();
 
             // If dot == 1, vectors are the same
-            float d = Float3.Dot(ref v0, ref v1);
+            float d = Float3.Dot(v0, v1);
             if (d >= 1.0f)
             {
                 result = Identity;
@@ -1110,7 +1110,7 @@ namespace FlaxEngine
                 if (fallbackAxis != Float3.Zero)
                 {
                     // Rotate 180 degrees about the fallback axis
-                    RotationAxis(ref fallbackAxis, Mathf.Pi, out result);
+                    RotationAxis(in fallbackAxis, Mathf.Pi, out result);
                 }
                 else
                 {
@@ -1119,14 +1119,14 @@ namespace FlaxEngine
                     if (axis.LengthSquared < Mathf.Epsilon) // Pick another if colinear
                         axis = Float3.Cross(Float3.UnitY, from);
                     axis.Normalize();
-                    RotationAxis(ref axis, Mathf.Pi, out result);
+                    RotationAxis(in axis, Mathf.Pi, out result);
                 }
             }
             else
             {
                 float s = Mathf.Sqrt((1 + d) * 2);
                 float invS = 1 / s;
-                Float3.Cross(ref v0, ref v1, out var c);
+                Float3.Cross(v0, v1, out var c);
                 result.X = c.X * invS;
                 result.Y = c.Y * invS;
                 result.Z = c.Z * invS;
@@ -1144,7 +1144,7 @@ namespace FlaxEngine
         /// <returns>The rotation.</returns>
         public static Quaternion GetRotationFromTo(Float3 from, Float3 to, Float3 fallbackAxis)
         {
-            GetRotationFromTo(ref from, ref to, out var result, ref fallbackAxis);
+            GetRotationFromTo(in from, in to, out var result, in fallbackAxis);
             return result;
         }
 
@@ -1154,7 +1154,7 @@ namespace FlaxEngine
         /// <param name="from">The source vector.</param>
         /// <param name="to">The destination vector.</param>
         /// <param name="result">The result.</param>
-        public static void FindBetween(ref Float3 from, ref Float3 to, out Quaternion result)
+        public static void FindBetween(in Float3 from, in Float3 to, out Quaternion result)
         {
             // http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
             float normFromNormTo = Mathf.Sqrt(from.LengthSquared * to.LengthSquared);
@@ -1186,7 +1186,7 @@ namespace FlaxEngine
         /// <returns>The rotation.</returns>
         public static Quaternion FindBetween(Float3 from, Float3 to)
         {
-            FindBetween(ref from, ref to, out var result);
+            FindBetween(in from, in to, out var result);
             return result;
         }
 
@@ -1198,10 +1198,10 @@ namespace FlaxEngine
         /// <param name="cameraUpVector">The up vector of the camera.</param>
         /// <param name="cameraForwardVector">The forward vector of the camera.</param>
         /// <param name="result">When the method completes, contains the created billboard quaternion.</param>
-        public static void Billboard(ref Float3 objectPosition, ref Float3 cameraPosition, ref Float3 cameraUpVector, ref Float3 cameraForwardVector, out Quaternion result)
+        public static void Billboard(in Float3 objectPosition, in Float3 cameraPosition, in Float3 cameraUpVector, in Float3 cameraForwardVector, out Quaternion result)
         {
-            Matrix3x3.Billboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, ref cameraForwardVector, out var matrix);
-            RotationMatrix(ref matrix, out result);
+            Matrix3x3.Billboard(objectPosition, cameraPosition, cameraUpVector, cameraForwardVector, out var matrix);
+            RotationMatrix(in matrix, out result);
         }
 
         /// <summary>
@@ -1214,7 +1214,7 @@ namespace FlaxEngine
         /// <returns>The created billboard quaternion.</returns>
         public static Quaternion Billboard(Float3 objectPosition, Float3 cameraPosition, Float3 cameraUpVector, Float3 cameraForwardVector)
         {
-            Billboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, ref cameraForwardVector, out var result);
+            Billboard(in objectPosition, in cameraPosition, in cameraUpVector, in cameraForwardVector, out var result);
             return result;
         }
 
@@ -1225,7 +1225,7 @@ namespace FlaxEngine
         /// <returns>The newly created quaternion.</returns>
         public static Quaternion RotationMatrix(Matrix matrix)
         {
-            RotationMatrix(ref matrix, out var result);
+            RotationMatrix(in matrix, out var result);
             return result;
         }
 
@@ -1311,7 +1311,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="eulerAngles">The pitch, yaw and roll angles of rotation.</param>
         /// <param name="result">When the method completes, contains the newly created quaternion.</param>
-        public static void Euler(ref Float3 eulerAngles, out Quaternion result)
+        public static void Euler(in Float3 eulerAngles, out Quaternion result)
         {
             RotationYawPitchRoll(eulerAngles.Y * Mathf.DegreesToRadians, eulerAngles.X * Mathf.DegreesToRadians, eulerAngles.Z * Mathf.DegreesToRadians, out result);
         }
@@ -1387,7 +1387,7 @@ namespace FlaxEngine
         /// <param name="end">End quaternion.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end" />.</param>
         /// <param name="result">When the method completes, contains the spherical linear interpolation of the two quaternions.</param>
-        public static void Slerp(ref Quaternion start, ref Quaternion end, float amount, out Quaternion result)
+        public static void Slerp(in Quaternion start, in Quaternion end, float amount, out Quaternion result)
         {
             float opposite;
             float inverse;
@@ -1422,7 +1422,7 @@ namespace FlaxEngine
         /// <returns>The spherical linear interpolation of the two quaternions.</returns>
         public static Quaternion Slerp(Quaternion start, Quaternion end, float amount)
         {
-            Slerp(ref start, ref end, amount, out var result);
+            Slerp(in start, in end, amount, out var result);
             return result;
         }
 
@@ -1435,11 +1435,11 @@ namespace FlaxEngine
         /// <param name="value4">Fourth source quaternion.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of interpolation.</param>
         /// <param name="result">When the method completes, contains the spherical quadrangle interpolation of the quaternions.</param>
-        public static void Squad(ref Quaternion value1, ref Quaternion value2, ref Quaternion value3, ref Quaternion value4, float amount, out Quaternion result)
+        public static void Squad(in Quaternion value1, in Quaternion value2, in Quaternion value3, in Quaternion value4, float amount, out Quaternion result)
         {
-            Slerp(ref value1, ref value4, amount, out var start);
-            Slerp(ref value2, ref value3, amount, out var end);
-            Slerp(ref start, ref end, 2.0f * amount * (1.0f - amount), out result);
+            Slerp(in value1, in value4, amount, out var start);
+            Slerp(in value2, in value3, amount, out var end);
+            Slerp(in start, in end, 2.0f * amount * (1.0f - amount), out result);
         }
 
         /// <summary>
@@ -1453,7 +1453,7 @@ namespace FlaxEngine
         /// <returns>The spherical quadrangle interpolation of the quaternions.</returns>
         public static Quaternion Squad(Quaternion value1, Quaternion value2, Quaternion value3, Quaternion value4, float amount)
         {
-            Squad(ref value1, ref value2, ref value3, ref value4, amount, out var result);
+            Squad(in value1, in value2, in value3, in value4, amount, out var result);
             return result;
         }
 
@@ -1472,8 +1472,8 @@ namespace FlaxEngine
             Quaternion q3 = (value3 + value4).LengthSquared < (value3 - value4).LengthSquared ? -value4 : value4;
             Quaternion q1 = value2;
 
-            Exponential(ref q1, out var q1Exp);
-            Exponential(ref q2, out var q2Exp);
+            Exponential(in q1, out var q1Exp);
+            Exponential(in q2, out var q2Exp);
 
             var results = new Quaternion[3];
             results[0] = q1 * Exponential(-0.25f * (Logarithm(q1Exp * q2) + Logarithm(q1Exp * q0)));
@@ -1530,7 +1530,7 @@ namespace FlaxEngine
         /// <returns>The sum of the two quaternions.</returns>
         public static Quaternion operator +(Quaternion left, Quaternion right)
         {
-            Add(ref left, ref right, out var result);
+            Add(in left, in right, out var result);
             return result;
         }
 
@@ -1542,7 +1542,7 @@ namespace FlaxEngine
         /// <returns>The difference of the two quaternions.</returns>
         public static Quaternion operator -(Quaternion left, Quaternion right)
         {
-            Subtract(ref left, ref right, out var result);
+            Subtract(in left, in right, out var result);
             return result;
         }
 
@@ -1553,7 +1553,7 @@ namespace FlaxEngine
         /// <returns>A quaternion facing in the opposite direction.</returns>
         public static Quaternion operator -(Quaternion value)
         {
-            Negate(ref value, out var result);
+            Negate(in value, out var result);
             return result;
         }
 
@@ -1565,7 +1565,7 @@ namespace FlaxEngine
         /// <returns>The scaled quaternion.</returns>
         public static Quaternion operator *(float scale, Quaternion value)
         {
-            Multiply(ref value, scale, out var result);
+            Multiply(in value, scale, out var result);
             return result;
         }
 
@@ -1577,7 +1577,7 @@ namespace FlaxEngine
         /// <returns>The scaled quaternion.</returns>
         public static Quaternion operator *(Quaternion value, float scale)
         {
-            Multiply(ref value, scale, out var result);
+            Multiply(in value, scale, out var result);
             return result;
         }
 
@@ -1589,7 +1589,7 @@ namespace FlaxEngine
         /// <returns>The multiplied quaternion.</returns>
         public static Quaternion operator *(Quaternion left, Quaternion right)
         {
-            Multiply(ref left, ref right, out var result);
+            Multiply(in left, in right, out var result);
             return result;
         }
 
@@ -1602,7 +1602,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Quaternion left, Quaternion right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -1614,7 +1614,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Quaternion left, Quaternion right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -1690,7 +1690,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if left and right are near another, <c>false</c> otherwise</returns>
         public static bool NearEqual(Quaternion left, Quaternion right, float epsilon = Mathf.Epsilon)
         {
-            return NearEqual(ref left, ref right, epsilon);
+            return NearEqual(in left, in right, epsilon);
         }
 
         /// <summary>
@@ -1700,7 +1700,7 @@ namespace FlaxEngine
         /// <param name="right">The right quaternion.</param>
         /// <param name="epsilon">The epsilon.</param>
         /// <returns><c>true</c> if left and right are near another, <c>false</c> otherwise</returns>
-        public static bool NearEqual(ref Quaternion left, ref Quaternion right, float epsilon = Mathf.Epsilon)
+        public static bool NearEqual(in Quaternion left, in Quaternion right, float epsilon = Mathf.Epsilon)
         {
             //return Dot(ref left, ref right) > 1.0f - epsilon;
             return Mathf.WithinEpsilon(left.X, right.X, epsilon) && Mathf.WithinEpsilon(left.Y, right.Y, epsilon) && Mathf.WithinEpsilon(left.Z, right.Z, epsilon) && Mathf.WithinEpsilon(left.W, right.W, epsilon);
@@ -1712,7 +1712,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Quaternion" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Quaternion" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref Quaternion other)
+        public bool Equals(in Quaternion other)
         {
             return X == other.X && Y == other.Y && Z == other.Z && W == other.W;
         }
@@ -1725,7 +1725,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Quaternion other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -1735,7 +1735,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Quaternion other && Equals(ref other);
+            return value is Quaternion other && Equals(in other);
         }
     }
 }

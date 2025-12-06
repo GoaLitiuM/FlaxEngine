@@ -146,13 +146,13 @@ namespace FlaxEditor.Surface
         /// <inheritdoc />
         public override bool CanSelect(ref Float2 location)
         {
-            return _headerRect.MakeOffsetted(Location).Contains(ref location) && !_resizeButtonRect.MakeOffsetted(Location).Contains(ref location);
+            return _headerRect.MakeOffsetted(Location).Contains(location) && !_resizeButtonRect.MakeOffsetted(Location).Contains(location);
         }
 
         /// <inheritdoc />
         public override bool IsSelectionIntersecting(ref Rectangle selectionRect)
         {
-            return _headerRect.MakeOffsetted(Location).Intersects(ref selectionRect);
+            return _headerRect.MakeOffsetted(Location).Intersects(selectionRect);
         }
 
         /// <inheritdoc />
@@ -287,7 +287,7 @@ namespace FlaxEditor.Surface
         /// <inheritdoc />
         public override bool ContainsPoint(ref Float2 location, bool precise)
         {
-            return _headerRect.Contains(ref location) || _resizeButtonRect.Contains(ref location);
+            return _headerRect.Contains(location) || _resizeButtonRect.Contains(location);
         }
 
         /// <inheritdoc />
@@ -297,7 +297,7 @@ namespace FlaxEditor.Surface
                 return true;
 
             // Check if can start resizing
-            if (button == MouseButton.Left && _resizeButtonRect.Contains(ref location) && Surface.CanEdit)
+            if (button == MouseButton.Left && _resizeButtonRect.Contains(location) && Surface.CanEdit)
             {
                 // Start sliding
                 _isResizing = true;
@@ -336,7 +336,7 @@ namespace FlaxEditor.Surface
                 return true;
 
             // Rename
-            if (_headerRect.Contains(ref location) && Surface.CanEdit)
+            if (_headerRect.Contains(location) && Surface.CanEdit)
             {
                 StartRenaming();
                 return true;
@@ -404,14 +404,14 @@ namespace FlaxEditor.Surface
                 return true;
 
             // Close
-            if (_closeButtonRect.Contains(ref location) && Surface.CanEdit)
+            if (_closeButtonRect.Contains(location) && Surface.CanEdit)
             {
                 Surface.Delete(this);
                 return true;
             }
 
             // Color
-            if (_colorButtonRect.Contains(ref location) && Surface.CanEdit)
+            if (_colorButtonRect.Contains(location) && Surface.CanEdit)
             {
                 ColorValueBox.ShowPickColorDialog?.Invoke(this, Color, OnColorChanged);
                 return true;

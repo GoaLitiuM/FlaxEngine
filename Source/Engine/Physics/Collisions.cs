@@ -93,7 +93,7 @@ namespace FlaxEngine
         {
             get
             {
-                Vector3.Subtract(ref ThisVelocity, ref OtherVelocity, out var result);
+                Vector3.Subtract(ThisVelocity, OtherVelocity, out var result);
                 return result;
             }
         }

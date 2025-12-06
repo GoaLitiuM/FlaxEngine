@@ -207,7 +207,7 @@ namespace FlaxEditor.SceneGraph.Actors
         /// <inheritdoc />
         public override bool RayCastSelf(ref RayCastData ray, out Real distance, out Vector3 normal)
         {
-            if (((BoxBrush)_actor).OrientedBox.Intersects(ref ray.Ray))
+            if (((BoxBrush)_actor).OrientedBox.Intersects(ray.Ray))
             {
                 for (int i = 0; i < ChildNodes.Count; i++)
                 {

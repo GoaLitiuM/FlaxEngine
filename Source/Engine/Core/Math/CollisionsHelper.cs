@@ -136,7 +136,7 @@ namespace FlaxEngine
         /// <param name="p0">The line first point.</param>
         /// <param name="p1">The line second point.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointPointLine(ref Float2 point, ref Float2 p0, ref Float2 p1, out Float2 result)
+        public static void ClosestPointPointLine(in Float2 point, in Float2 p0, in Float2 p1, out Float2 result)
         {
             var p = point - p0;
             var n = p1 - p0;
@@ -175,7 +175,7 @@ namespace FlaxEngine
         /// <param name="p0">The line first point.</param>
         /// <param name="p1">The line second point.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointPointLine(ref Vector3 point, ref Vector3 p0, ref Vector3 p1, out Vector3 result)
+        public static void ClosestPointPointLine(in Vector3 point, in Vector3 p0, in Vector3 p1, out Vector3 result)
         {
             Vector3 p = point - p0;
             Vector3 n = p1 - p0;
@@ -186,7 +186,7 @@ namespace FlaxEngine
                 return;
             }
             n /= length;
-            Real dot = Vector3.Dot(ref n, ref p);
+            Real dot = Vector3.Dot(n, p);
             if (dot <= 0.0f)
             {
                 result = p0;
@@ -208,7 +208,7 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex to test.</param>
         /// <param name="vertex3">The third vertex to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointPointTriangle(ref Vector3 point, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out Vector3 result)
+        public static void ClosestPointPointTriangle(in Vector3 point, in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3, out Vector3 result)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 136
@@ -286,12 +286,12 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="point">The point to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointPlanePoint(ref Plane plane, ref Vector3 point, out Vector3 result)
+        public static void ClosestPointPlanePoint(in Plane plane, in Vector3 point, out Vector3 result)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 126
 
-            Vector3.Dot(ref plane.Normal, ref point, out Real dot);
+            Vector3.Dot(plane.Normal, point, out Real dot);
             Real t = dot - plane.D;
 
             result = point - t * plane.Normal;
@@ -303,13 +303,13 @@ namespace FlaxEngine
         /// <param name="box">The box to test.</param>
         /// <param name="point">The point to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointBoxPoint(ref BoundingBox box, ref Vector3 point, out Vector3 result)
+        public static void ClosestPointBoxPoint(in BoundingBox box, in Vector3 point, out Vector3 result)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 130
 
-            Vector3.Max(ref point, ref box.Minimum, out Vector3 temp);
-            Vector3.Min(ref temp, ref box.Maximum, out result);
+            Vector3.Max(point, box.Minimum, out Vector3 temp);
+            Vector3.Min(temp, box.Maximum, out result);
         }
 
         /// <summary>
@@ -318,11 +318,11 @@ namespace FlaxEngine
         /// <param name="rect">The rectangle to test.</param>
         /// <param name="point">The point to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects.</param>
-        public static void ClosestPointRectanglePoint(ref Rectangle rect, ref Float2 point, out Float2 result)
+        public static void ClosestPointRectanglePoint(in Rectangle rect, in Float2 point, out Float2 result)
         {
             Float2 end = rect.Location + rect.Size;
-            Float2.Max(ref point, ref rect.Location, out var temp);
-            Float2.Min(ref temp, ref end, out result);
+            Float2.Max(point, rect.Location, out var temp);
+            Float2.Min(temp, end, out result);
         }
 
         /// <summary>
@@ -332,13 +332,13 @@ namespace FlaxEngine
         /// <param name="point">The point to test.</param>
         /// <param name="result">When the method completes, contains the closest point between the two objects; or, if the point is directly in the center of the sphere, contains <see cref="Vector3.Zero" />.
         /// </param>
-        public static void ClosestPointSpherePoint(ref BoundingSphere sphere, ref Vector3 point, out Vector3 result)
+        public static void ClosestPointSpherePoint(in BoundingSphere sphere, in Vector3 point, out Vector3 result)
         {
             //Source: Jorgy343
             //Reference: None
 
             //Get the unit direction from the sphere's center to the point.
-            Vector3.Subtract(ref point, ref sphere.Center, out result);
+            Vector3.Subtract(point, sphere.Center, out result);
             result.Normalize();
 
             //Multiply the unit direction by the sphere's radius to get a vector
@@ -360,13 +360,13 @@ namespace FlaxEngine
         /// is the 'closest' point of intersection. This can also be considered is the deepest point of
         /// intersection.
         /// </remarks>
-        public static void ClosestPointSphereSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2, out Vector3 result)
+        public static void ClosestPointSphereSphere(in BoundingSphere sphere1, in BoundingSphere sphere2, out Vector3 result)
         {
             //Source: Jorgy343
             //Reference: None
 
             //Get the unit direction from the first sphere's center to the second sphere's center.
-            Vector3.Subtract(ref sphere2.Center, ref sphere1.Center, out result);
+            Vector3.Subtract(sphere2.Center, sphere1.Center, out result);
             result.Normalize();
 
             //Multiply the unit direction by the first sphere's radius to get a vector
@@ -383,12 +383,12 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="point">The point to test.</param>
         /// <returns>The distance between the two objects.</returns>
-        public static Real DistancePlanePoint(ref Plane plane, ref Vector3 point)
+        public static Real DistancePlanePoint(in Plane plane, in Vector3 point)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 127
 
-            Vector3.Dot(ref plane.Normal, ref point, out Real dot);
+            Vector3.Dot(plane.Normal, point, out Real dot);
             return dot - plane.D;
         }
 
@@ -398,7 +398,7 @@ namespace FlaxEngine
         /// <param name="box">The box to test.</param>
         /// <param name="point">The point to test.</param>
         /// <returns>The distance between the two objects.</returns>
-        public static Real DistanceBoxPoint(ref BoundingBox box, ref Vector3 point)
+        public static Real DistanceBoxPoint(in BoundingBox box, in Vector3 point)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 131
@@ -428,7 +428,7 @@ namespace FlaxEngine
         /// <param name="box1">The first box to test.</param>
         /// <param name="box2">The second box to test.</param>
         /// <returns>The distance between the two objects.</returns>
-        public static Real DistanceBoxBox(ref BoundingBox box1, ref BoundingBox box2)
+        public static Real DistanceBoxBox(in BoundingBox box1, in BoundingBox box2)
         {
             //Source:
             //Reference:
@@ -480,12 +480,12 @@ namespace FlaxEngine
         /// <param name="sphere">The sphere to test.</param>
         /// <param name="point">The point to test.</param>
         /// <returns>The distance between the two objects.</returns>
-        public static Real DistanceSpherePoint(ref BoundingSphere sphere, ref Vector3 point)
+        public static Real DistanceSpherePoint(in BoundingSphere sphere, in Vector3 point)
         {
             //Source: Jorgy343
             //Reference: None
 
-            Vector3.Distance(ref sphere.Center, ref point, out Real distance);
+            Vector3.Distance(sphere.Center, point, out Real distance);
             distance -= sphere.Radius;
             return Math.Max(distance, 0f);
         }
@@ -496,12 +496,12 @@ namespace FlaxEngine
         /// <param name="sphere1">The first sphere to test.</param>
         /// <param name="sphere2">The second sphere to test.</param>
         /// <returns>The distance between the two objects.</returns>
-        public static Real DistanceSphereSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2)
+        public static Real DistanceSphereSphere(in BoundingSphere sphere1, in BoundingSphere sphere2)
         {
             //Source: Jorgy343
             //Reference: None
 
-            Vector3.Distance(ref sphere1.Center, ref sphere2.Center, out Real distance);
+            Vector3.Distance(sphere1.Center, sphere2.Center, out Real distance);
             distance -= sphere1.Radius + sphere2.Radius;
             return Math.Max(distance, 0f);
         }
@@ -512,12 +512,12 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="point">The point to test.</param>
         /// <returns>Whether the two objects intersect.</returns>
-        public static bool RayIntersectsPoint(ref Ray ray, ref Vector3 point)
+        public static bool RayIntersectsPoint(in Ray ray, in Vector3 point)
         {
             //Source: RayIntersectsSphere
             //Reference: None
 
-            Vector3.Subtract(ref ray.Position, ref point, out Vector3 m);
+            Vector3.Subtract(ray.Position, point, out Vector3 m);
 
             //Same thing as RayIntersectsSphere except that the radius of the sphere (point) is the epsilon for zero.
             Real b = Vector3.Dot(m, ray.Direction);
@@ -547,12 +547,12 @@ namespace FlaxEngine
         /// of the second ray, det denotes the determinant of a matrix, x denotes the cross
         /// product, [ ] denotes a matrix, and || || denotes the length or magnitude of a vector.
         /// </remarks>
-        public static bool RayIntersectsRay(ref Ray ray1, ref Ray ray2, out Vector3 point)
+        public static bool RayIntersectsRay(in Ray ray1, in Ray ray2, out Vector3 point)
         {
             //Source: Real-Time Rendering, Third Edition
             //Reference: Page 780
 
-            Vector3.Cross(ref ray1.Direction, ref ray2.Direction, out Vector3 cross);
+            Vector3.Cross(ray1.Direction, ray2.Direction, out Vector3 cross);
             Real denominator = cross.Length;
 
             //Lines are parallel.
@@ -629,18 +629,18 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersect.</returns>
-        public static bool RayIntersectsPlane(ref Ray ray, ref Plane plane, out Real distance)
+        public static bool RayIntersectsPlane(in Ray ray, in Plane plane, out Real distance)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 175
 
-            Vector3.Dot(ref plane.Normal, ref ray.Direction, out Real direction);
+            Vector3.Dot(plane.Normal, ray.Direction, out Real direction);
             if (Mathf.IsZero(direction))
             {
                 distance = 0f;
                 return false;
             }
-            Vector3.Dot(ref plane.Normal, ref ray.Position, out Real position);
+            Vector3.Dot(plane.Normal, ray.Position, out Real position);
             distance = (-plane.D - position) / direction;
             if (distance < 0f)
             {
@@ -660,18 +660,18 @@ namespace FlaxEngine
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersect.</returns>
         [Obsolete("Use RayIntersectsPlane with 'out Real distance' parameter instead")]
-        public static bool RayIntersectsPlane(ref Ray ray, ref Plane plane, out float distance)
+        public static bool RayIntersectsPlane(in Ray ray, in Plane plane, out float distance)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 175
 
-            Vector3.Dot(ref plane.Normal, ref ray.Direction, out Real direction);
+            Vector3.Dot(plane.Normal, ray.Direction, out Real direction);
             if (Mathf.IsZero(direction))
             {
                 distance = 0f;
                 return false;
             }
-            Vector3.Dot(ref plane.Normal, ref ray.Position, out Real position);
+            Vector3.Dot(plane.Normal, ray.Position, out Real position);
             distance = (float)((-plane.D - position) / direction);
             if (distance < 0f)
             {
@@ -689,11 +689,11 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool RayIntersectsPlane(ref Ray ray, ref Plane plane, out Vector3 point)
+        public static bool RayIntersectsPlane(in Ray ray, in Plane plane, out Vector3 point)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 175
-            if (!RayIntersectsPlane(ref ray, ref plane, out Real distance))
+            if (!RayIntersectsPlane(ray, plane, out Real distance))
             {
                 point = Vector3.Zero;
                 return false;
@@ -718,7 +718,7 @@ namespace FlaxEngine
         /// the ray, no intersection is assumed to have happened. In both cases of assumptions,
         /// this method returns false.
         /// </remarks>
-        public static bool RayIntersectsTriangle(ref Ray ray, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out Real distance)
+        public static bool RayIntersectsTriangle(in Ray ray, in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3, out Real distance)
         {
             //Source: Fast Minimum Storage Ray / Triangle Intersection
             //Reference: http://www.cs.virginia.edu/~gfx/Courses/2003/ImageSynthesis/papers/Acceleration/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
@@ -818,9 +818,9 @@ namespace FlaxEngine
         /// <param name="point">When the method completes, contains the point of intersection,
         /// or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool RayIntersectsTriangle(ref Ray ray, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out Vector3 point)
+        public static bool RayIntersectsTriangle(in Ray ray, in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3, out Vector3 point)
         {
-            if (!RayIntersectsTriangle(ref ray, ref vertex1, ref vertex2, ref vertex3, out Real distance))
+            if (!RayIntersectsTriangle(ray, vertex1, vertex2, vertex3, out Real distance))
             {
                 point = Vector3.Zero;
                 return false;
@@ -837,7 +837,7 @@ namespace FlaxEngine
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.
         /// </param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool RayIntersectsBox(ref Ray ray, ref BoundingBox box, out Real distance)
+        public static bool RayIntersectsBox(in Ray ray, in BoundingBox box, out Real distance)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 179
@@ -948,9 +948,9 @@ namespace FlaxEngine
         /// <param name="box">The box to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool RayIntersectsBox(ref Ray ray, ref BoundingBox box, out Vector3 point)
+        public static bool RayIntersectsBox(in Ray ray, in BoundingBox box, out Vector3 point)
         {
-            if (!RayIntersectsBox(ref ray, ref box, out Real distance))
+            if (!RayIntersectsBox(ray, box, out Real distance))
             {
                 point = Vector3.Zero;
                 return false;
@@ -967,12 +967,12 @@ namespace FlaxEngine
         /// <param name="sphere">The sphere to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool RayIntersectsSphere(ref Ray ray, ref BoundingSphere sphere, out Real distance)
+        public static bool RayIntersectsSphere(in Ray ray, in BoundingSphere sphere, out Real distance)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 177
 
-            Vector3.Subtract(ref ray.Position, ref sphere.Center, out Vector3 m);
+            Vector3.Subtract(ray.Position, sphere.Center, out Vector3 m);
 
             Real b = Vector3.Dot(m, ray.Direction);
             Real c = Vector3.Dot(m, m) - sphere.Radius * sphere.Radius;
@@ -1006,9 +1006,9 @@ namespace FlaxEngine
         /// <param name="sphere">The sphere to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool RayIntersectsSphere(ref Ray ray, ref BoundingSphere sphere, out Vector3 point)
+        public static bool RayIntersectsSphere(in Ray ray, in BoundingSphere sphere, out Vector3 point)
         {
-            if (!RayIntersectsSphere(ref ray, ref sphere, out Real distance))
+            if (!RayIntersectsSphere(ray, sphere, out Real distance))
             {
                 point = Vector3.Zero;
                 return false;
@@ -1024,9 +1024,9 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="point">The point to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static PlaneIntersectionType PlaneIntersectsPoint(ref Plane plane, ref Vector3 point)
+        public static PlaneIntersectionType PlaneIntersectsPoint(in Plane plane, in Vector3 point)
         {
-            Vector3.Dot(ref plane.Normal, ref point, out Real distance);
+            Vector3.Dot(plane.Normal, point, out Real distance);
             distance += plane.D;
 
             if (distance > 0f)
@@ -1044,13 +1044,13 @@ namespace FlaxEngine
         /// <param name="plane1">The first plane to test.</param>
         /// <param name="plane2">The second plane to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool PlaneIntersectsPlane(ref Plane plane1, ref Plane plane2)
+        public static bool PlaneIntersectsPlane(in Plane plane1, in Plane plane2)
         {
-            Vector3.Cross(ref plane1.Normal, ref plane2.Normal, out Vector3 direction);
+            Vector3.Cross(plane1.Normal, plane2.Normal, out Vector3 direction);
 
             //If direction is the zero vector, the planes are parallel and possibly
             //coincident. It is not an intersection. The dot product will tell us.
-            Vector3.Dot(ref direction, ref direction, out Real denominator);
+            Vector3.Dot(direction, direction, out Real denominator);
 
             if (Mathf.IsZero(denominator))
                 return false;
@@ -1070,16 +1070,16 @@ namespace FlaxEngine
         /// a line in three dimensions which has no real origin. The ray is considered valid when
         /// both the positive direction is used and when the negative direction is used.
         /// </remarks>
-        public static bool PlaneIntersectsPlane(ref Plane plane1, ref Plane plane2, out Ray line)
+        public static bool PlaneIntersectsPlane(in Plane plane1, in Plane plane2, out Ray line)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 207
 
-            Vector3.Cross(ref plane1.Normal, ref plane2.Normal, out Vector3 direction);
+            Vector3.Cross(plane1.Normal, plane2.Normal, out Vector3 direction);
 
             //If direction is the zero vector, the planes are parallel and possibly
             //coincident. It is not an intersection. The dot product will tell us.
-            Vector3.Dot(ref direction, ref direction, out Real denominator);
+            Vector3.Dot(direction, direction, out Real denominator);
 
             //We assume the planes are normalized, therefore the denominator
             //only serves as a parallel and coincident check. Otherwise we need
@@ -1091,7 +1091,7 @@ namespace FlaxEngine
             }
 
             Vector3 temp = plane1.D * plane2.Normal - plane2.D * plane1.Normal;
-            Vector3.Cross(ref temp, ref direction, out Vector3 point);
+            Vector3.Cross(temp, direction, out Vector3 point);
 
             line.Position = point;
             line.Direction = direction;
@@ -1108,14 +1108,14 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static PlaneIntersectionType PlaneIntersectsTriangle(ref Plane plane, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public static PlaneIntersectionType PlaneIntersectsTriangle(in Plane plane, in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 207
 
-            PlaneIntersectionType test1 = PlaneIntersectsPoint(ref plane, ref vertex1);
-            PlaneIntersectionType test2 = PlaneIntersectsPoint(ref plane, ref vertex2);
-            PlaneIntersectionType test3 = PlaneIntersectsPoint(ref plane, ref vertex3);
+            PlaneIntersectionType test1 = PlaneIntersectsPoint(plane, vertex1);
+            PlaneIntersectionType test2 = PlaneIntersectsPoint(plane, vertex2);
+            PlaneIntersectionType test3 = PlaneIntersectsPoint(plane, vertex3);
 
             if ((test1 == PlaneIntersectionType.Front) && (test2 == PlaneIntersectionType.Front) && (test3 == PlaneIntersectionType.Front))
                 return PlaneIntersectionType.Front;
@@ -1132,7 +1132,7 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="box">The box to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static PlaneIntersectionType PlaneIntersectsBox(ref Plane plane, ref BoundingBox box)
+        public static PlaneIntersectionType PlaneIntersectsBox(in Plane plane, in BoundingBox box)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 161
@@ -1147,7 +1147,7 @@ namespace FlaxEngine
             min.Y = plane.Normal.Y >= 0.0f ? box.Maximum.Y : box.Minimum.Y;
             min.Z = plane.Normal.Z >= 0.0f ? box.Maximum.Z : box.Minimum.Z;
 
-            Vector3.Dot(ref plane.Normal, ref max, out Real distance);
+            Vector3.Dot(plane.Normal, max, out Real distance);
 
             if (distance + plane.D > 0.0f)
                 return PlaneIntersectionType.Front;
@@ -1166,12 +1166,12 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static PlaneIntersectionType PlaneIntersectsSphere(ref Plane plane, ref BoundingSphere sphere)
+        public static PlaneIntersectionType PlaneIntersectsSphere(in Plane plane, in BoundingSphere sphere)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 160
 
-            Vector3.Dot(ref plane.Normal, ref sphere.Center, out Real distance);
+            Vector3.Dot(plane.Normal, sphere.Center, out Real distance);
             distance += plane.D;
 
             if (distance > sphere.Radius)
@@ -1192,7 +1192,7 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool BoxIntersectsTriangle(ref BoundingBox box, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public static bool BoxIntersectsTriangle(in BoundingBox box, in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
             if (BoxContainsPoint(ref box, ref vertex1) == ContainmentType.Contains)
                 return true;
@@ -1213,7 +1213,7 @@ namespace FlaxEngine
         /// <param name="box1">The first box to test.</param>
         /// <param name="box2">The second box to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool BoxIntersectsBox(ref BoundingBox box1, ref BoundingBox box2)
+        public static bool BoxIntersectsBox(in BoundingBox box1, in BoundingBox box2)
         {
             if ((box1.Minimum.X > box2.Maximum.X) || (box2.Minimum.X > box1.Maximum.X))
                 return false;
@@ -1233,13 +1233,13 @@ namespace FlaxEngine
         /// <param name="box">The box to test.</param>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool BoxIntersectsSphere(ref BoundingBox box, ref BoundingSphere sphere)
+        public static bool BoxIntersectsSphere(in BoundingBox box, in BoundingSphere sphere)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 166
 
-            Vector3.Clamp(ref sphere.Center, ref box.Minimum, ref box.Maximum, out Vector3 vector);
-            Real distance = Vector3.DistanceSquared(ref sphere.Center, ref vector);
+            Vector3.Clamp(sphere.Center, box.Minimum, box.Maximum, out Vector3 vector);
+            Real distance = Vector3.DistanceSquared(sphere.Center, vector);
             return distance <= sphere.Radius * sphere.Radius;
         }
 
@@ -1251,15 +1251,15 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool SphereIntersectsTriangle(ref BoundingSphere sphere, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public static bool SphereIntersectsTriangle(in BoundingSphere sphere, in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
             //Source: Real-Time Collision Detection by Christer Ericson
             //Reference: Page 167
 
-            ClosestPointPointTriangle(ref sphere.Center, ref vertex1, ref vertex2, ref vertex3, out Vector3 point);
+            ClosestPointPointTriangle(sphere.Center, vertex1, vertex2, vertex3, out Vector3 point);
             Vector3 v = point - sphere.Center;
 
-            Vector3.Dot(ref v, ref v, out Real dot);
+            Vector3.Dot(v, v, out Real dot);
 
             return dot <= sphere.Radius * sphere.Radius;
         }
@@ -1271,10 +1271,10 @@ namespace FlaxEngine
         /// <param name="sphere1">First sphere to test.</param>
         /// <param name="sphere2">Second sphere to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public static bool SphereIntersectsSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2)
+        public static bool SphereIntersectsSphere(in BoundingSphere sphere1, in BoundingSphere sphere2)
         {
             Real radiisum = sphere1.Radius + sphere2.Radius;
-            return Vector3.DistanceSquared(ref sphere1.Center, ref sphere2.Center) <= radiisum * radiisum;
+            return Vector3.DistanceSquared(sphere1.Center, sphere2.Center) <= radiisum * radiisum;
         }
 
         /// <summary>
@@ -1283,7 +1283,7 @@ namespace FlaxEngine
         /// <param name="box">The box to test.</param>
         /// <param name="point">The point to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public static ContainmentType BoxContainsPoint(ref BoundingBox box, ref Vector3 point)
+        public static ContainmentType BoxContainsPoint(in BoundingBox box, in Vector3 point)
         {
             if ((box.Minimum.X <= point.X) && (box.Maximum.X >= point.X) &&
                 (box.Minimum.Y <= point.Y) && (box.Maximum.Y >= point.Y) &&
@@ -1302,7 +1302,7 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public static ContainmentType BoxContainsTriangle(ref BoundingBox box, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public static ContainmentType BoxContainsTriangle(in BoundingBox box, in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
             ContainmentType test1 = BoxContainsPoint(ref box, ref vertex1);
             ContainmentType test2 = BoxContainsPoint(ref box, ref vertex2);
@@ -1324,7 +1324,7 @@ namespace FlaxEngine
         /// <param name="box1">The first box to test.</param>
         /// <param name="box2">The second box to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public static ContainmentType BoxContainsBox(ref BoundingBox box1, ref BoundingBox box2)
+        public static ContainmentType BoxContainsBox(in BoundingBox box1, in BoundingBox box2)
         {
             if ((box1.Maximum.X < box2.Minimum.X) || (box1.Minimum.X > box2.Maximum.X))
                 return ContainmentType.Disjoint;
@@ -1347,10 +1347,10 @@ namespace FlaxEngine
         /// <param name="box">The box to test.</param>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public static ContainmentType BoxContainsSphere(ref BoundingBox box, ref BoundingSphere sphere)
+        public static ContainmentType BoxContainsSphere(in BoundingBox box, in BoundingSphere sphere)
         {
-            Vector3.Clamp(ref sphere.Center, ref box.Minimum, ref box.Maximum, out Vector3 vector);
-            Real distance = Vector3.DistanceSquared(ref sphere.Center, ref vector);
+            Vector3.Clamp(sphere.Center, box.Minimum, box.Maximum, out Vector3 vector);
+            Real distance = Vector3.DistanceSquared(sphere.Center, vector);
 
             if (distance > sphere.Radius * sphere.Radius)
                 return ContainmentType.Disjoint;
@@ -1367,9 +1367,9 @@ namespace FlaxEngine
         /// <param name="sphere">The sphere to test.</param>
         /// <param name="point">The point to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public static ContainmentType SphereContainsPoint(ref BoundingSphere sphere, ref Vector3 point)
+        public static ContainmentType SphereContainsPoint(in BoundingSphere sphere, in Vector3 point)
         {
-            if (Vector3.DistanceSquared(ref point, ref sphere.Center) <= sphere.Radius * sphere.Radius)
+            if (Vector3.DistanceSquared(point, sphere.Center) <= sphere.Radius * sphere.Radius)
                 return ContainmentType.Contains;
 
             return ContainmentType.Disjoint;
@@ -1383,19 +1383,19 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public static ContainmentType SphereContainsTriangle(ref BoundingSphere sphere, ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public static ContainmentType SphereContainsTriangle(in BoundingSphere sphere, in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
             //Source: Jorgy343
             //Reference: None
 
-            ContainmentType test1 = SphereContainsPoint(ref sphere, ref vertex1);
-            ContainmentType test2 = SphereContainsPoint(ref sphere, ref vertex2);
-            ContainmentType test3 = SphereContainsPoint(ref sphere, ref vertex3);
+            ContainmentType test1 = SphereContainsPoint(sphere, vertex1);
+            ContainmentType test2 = SphereContainsPoint(sphere, vertex2);
+            ContainmentType test3 = SphereContainsPoint(sphere, vertex3);
 
             if ((test1 == ContainmentType.Contains) && (test2 == ContainmentType.Contains) && (test3 == ContainmentType.Contains))
                 return ContainmentType.Contains;
 
-            if (SphereIntersectsTriangle(ref sphere, ref vertex1, ref vertex2, ref vertex3))
+            if (SphereIntersectsTriangle(sphere, vertex1, vertex2, vertex3))
                 return ContainmentType.Intersects;
 
             return ContainmentType.Disjoint;
@@ -1407,11 +1407,11 @@ namespace FlaxEngine
         /// <param name="sphere">The sphere to test.</param>
         /// <param name="box">The box to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public static ContainmentType SphereContainsBox(ref BoundingSphere sphere, ref BoundingBox box)
+        public static ContainmentType SphereContainsBox(in BoundingSphere sphere, in BoundingBox box)
         {
             Vector3 vector;
 
-            if (!BoxIntersectsSphere(ref box, ref sphere))
+            if (!BoxIntersectsSphere(box, sphere))
                 return ContainmentType.Disjoint;
 
             Real radiusSquared = sphere.Radius * sphere.Radius;
@@ -1473,9 +1473,9 @@ namespace FlaxEngine
         /// <param name="sphere1">The first sphere to test.</param>
         /// <param name="sphere2">The second sphere to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public static ContainmentType SphereContainsSphere(ref BoundingSphere sphere1, ref BoundingSphere sphere2)
+        public static ContainmentType SphereContainsSphere(in BoundingSphere sphere1, in BoundingSphere sphere2)
         {
-            Real distance = Vector3.Distance(ref sphere1.Center, ref sphere2.Center);
+            Real distance = Vector3.Distance(sphere1.Center, sphere2.Center);
 
             if (sphere1.Radius + sphere2.Radius < distance)
                 return ContainmentType.Disjoint;
@@ -1494,7 +1494,7 @@ namespace FlaxEngine
         /// <param name="l2p1">The second line point 0.</param>
         /// <param name="l2p2">The second line point 1.</param>
         /// <returns>True if line intersects with the other line</returns>
-        public static bool LineIntersectsLine(ref Float2 l1p1, ref Float2 l1p2, ref Float2 l2p1, ref Float2 l2p2)
+        public static bool LineIntersectsLine(in Float2 l1p1, in Float2 l1p2, in Float2 l2p1, in Float2 l2p2)
         {
             float q = (l1p1.Y - l2p1.Y) * (l2p2.X - l2p1.X) - (l1p1.X - l2p1.X) * (l2p2.Y - l2p1.Y);
             float d = (l1p2.X - l1p1.X) * (l2p2.Y - l2p1.Y) - (l1p2.Y - l1p1.Y) * (l2p2.X - l2p1.X);
@@ -1513,17 +1513,17 @@ namespace FlaxEngine
         /// <param name="p2">The line point 1.</param>
         /// <param name="rect">The rectangle.</param>
         /// <returns>True if line intersects with the rectangle</returns>
-        public static bool LineIntersectsRect(ref Float2 p1, ref Float2 p2, ref Rectangle rect)
+        public static bool LineIntersectsRect(in Float2 p1, in Float2 p2, in Rectangle rect)
         {
             // TODO: optimize it
             var pA = new Float2(rect.Right, rect.Y);
             var pB = new Float2(rect.Right, rect.Bottom);
             var pC = new Float2(rect.X, rect.Bottom);
-            return LineIntersectsLine(ref p1, ref p2, ref rect.Location, ref pA) ||
-                   LineIntersectsLine(ref p1, ref p2, ref pA, ref pB) ||
-                   LineIntersectsLine(ref p1, ref p2, ref pB, ref pC) ||
-                   LineIntersectsLine(ref p1, ref p2, ref pC, ref rect.Location) ||
-                   (rect.Contains(ref p1) && rect.Contains(ref p2));
+            return LineIntersectsLine(in p1, in p2, in rect.Location, in pA) ||
+                   LineIntersectsLine(in p1, in p2, in pA, in pB) ||
+                   LineIntersectsLine(in p1, in p2, in pB, in pC) ||
+                   LineIntersectsLine(in p1, in p2, in pC, in rect.Location) ||
+                   (rect.Contains(p1) && rect.Contains(p2));
         }
 
         /// <summary>
@@ -1534,7 +1534,7 @@ namespace FlaxEngine
         /// <param name="b">The second vertex of the triangle.</param>
         /// <param name="c">The third vertex of the triangle.</param>
         /// <returns><c>true</c> if point is inside the triangle; otherwise, <c>false</c>.</returns>
-        public static bool IsPointInTriangle(ref Float2 point, ref Float2 a, ref Float2 b, ref Float2 c)
+        public static bool IsPointInTriangle(in Float2 point, in Float2 a, in Float2 b, in Float2 c)
         {
             var an = a - point;
             var bn = b - point;

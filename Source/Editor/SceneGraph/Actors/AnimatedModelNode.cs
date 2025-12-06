@@ -109,10 +109,10 @@ namespace FlaxEditor.SceneGraph.Actors
 
                     // Skin vertex position with the current pose
                     var position = positionStream.GetFloat3(j);
-                    Float3.Transform(ref position, ref skinningMatrices[indices[0]], out Float3 pos0);
-                    Float3.Transform(ref position, ref skinningMatrices[indices[1]], out Float3 pos1);
-                    Float3.Transform(ref position, ref skinningMatrices[indices[2]], out Float3 pos2);
-                    Float3.Transform(ref position, ref skinningMatrices[indices[3]], out Float3 pos3);
+                    Float3.Transform(position, skinningMatrices[indices[0]], out Float3 pos0);
+                    Float3.Transform(position, skinningMatrices[indices[1]], out Float3 pos1);
+                    Float3.Transform(position, skinningMatrices[indices[2]], out Float3 pos2);
+                    Float3.Transform(position, skinningMatrices[indices[3]], out Float3 pos3);
                     position = pos0 * weights[0] + pos1 * weights[1] + pos2 * weights[2] + pos3 * weights[3];
 
                     // Add vertex to the bone list
@@ -269,8 +269,8 @@ namespace FlaxEditor.SceneGraph.Actors
                 for (int i = 0; i < boneVertices.Count; i++)
                 {
                     var pos = boneTransform.WorldToLocal(boneVertices[i]);
-                    Vector3.Min(ref boneLocalBounds.Minimum, ref pos, out boneLocalBounds.Minimum);
-                    Vector3.Max(ref boneLocalBounds.Maximum, ref pos, out boneLocalBounds.Maximum);
+                    Vector3.Min(boneLocalBounds.Minimum, pos, out boneLocalBounds.Minimum);
+                    Vector3.Max(boneLocalBounds.Maximum, pos, out boneLocalBounds.Maximum);
                 }
 
                 // Add collision shape
@@ -415,7 +415,7 @@ namespace FlaxEditor.SceneGraph.Actors
                 float bkLength = bk.Length;
                 if (bkLength > 0.0f)
                 {
-                    Float3.Transform(ref bk, ref matrix, out Float3 bkA);
+                    Float3.Transform(bk, matrix, out Float3 bkA);
                     bk = bkA / bkLength;
                 }
             }

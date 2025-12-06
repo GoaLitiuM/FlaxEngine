@@ -31,7 +31,7 @@ namespace FlaxEditor.Tools.Terrain.Sculpt
                     var sourceHeight = p.SourceHeightMap[zz * p.HeightmapSize + xx];
 
                     var samplePositionLocal = p.PatchPositionLocal + new Vector3(xx * FlaxEngine.Terrain.UnitsPerVertex, sourceHeight, zz * FlaxEngine.Terrain.UnitsPerVertex);
-                    Vector3.Transform(ref samplePositionLocal, ref p.TerrainWorld, out Vector3 samplePositionWorld);
+                    Vector3.Transform(samplePositionLocal, p.TerrainWorld, out Vector3 samplePositionWorld);
 
                     var paintAmount = p.Brush.Sample(ref brushPosition, ref samplePositionWorld);
 

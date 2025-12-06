@@ -113,7 +113,7 @@ namespace FlaxEngine.GUI
                     return true;
 
                 // Close on click outside the popup
-                if (!new Rectangle(Float2.Zero, Size).Contains(ref location))
+                if (!new Rectangle(Float2.Zero, Size).Contains(location))
                 {
                     Defocus();
                     return true;
@@ -129,7 +129,7 @@ namespace FlaxEngine.GUI
                     return true;
 
                 // Close on touch outside the popup
-                if (!new Rectangle(Float2.Zero, Size).Contains(ref location))
+                if (!new Rectangle(Float2.Zero, Size).Contains(location))
                 {
                     Defocus();
                     return true;

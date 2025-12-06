@@ -347,7 +347,7 @@ namespace FlaxEditor.Surface.Archetypes
 
             public override bool CanSelect(ref Float2 location)
             {
-                return base.CanSelect(ref location) && !_resizeButtonRect.MakeOffsetted(Location).Contains(ref location);
+                return base.CanSelect(ref location) && !_resizeButtonRect.MakeOffsetted(Location).Contains(location);
             }
 
             public override void OnSurfaceLoaded(SurfaceNodeActions action)
@@ -414,7 +414,7 @@ namespace FlaxEditor.Surface.Archetypes
                 if (base.OnMouseDown(location, button))
                     return true;
 
-                if (button == MouseButton.Left && _resizeButtonRect.Contains(ref location) && Surface.CanEdit)
+                if (button == MouseButton.Left && _resizeButtonRect.Contains(location) && Surface.CanEdit)
                 {
                     // Start sliding
                     _isResizing = true;

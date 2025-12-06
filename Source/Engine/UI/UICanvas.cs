@@ -79,11 +79,11 @@ namespace FlaxEngine
 
             // Calculate rendering matrix (world*view*projection)
             Canvas.GetWorldMatrix(renderContext.View.Origin, out Matrix worldMatrix);
-            Matrix.Multiply(ref worldMatrix, ref renderContext.View.View, out Matrix viewMatrix);
+            Matrix.Multiply(worldMatrix, renderContext.View.View, out Matrix viewMatrix);
             Matrix projectionMatrix = renderContext.View.Projection;
             if (worldSpace && (Canvas.RenderLocation == PostProcessEffectLocation.Default || Canvas.RenderLocation == PostProcessEffectLocation.AfterAntiAliasingPass))
                 projectionMatrix = renderContext.View.NonJitteredProjection; // Fix TAA jittering when rendering UI in world after TAA resolve
-            Matrix.Multiply(ref viewMatrix, ref projectionMatrix, out Matrix viewProjectionMatrix);
+            Matrix.Multiply(viewMatrix, projectionMatrix, out Matrix viewProjectionMatrix);
 
             // Pick a depth buffer
             GPUTexture depthBuffer = Canvas.IgnoreDepth ? null : renderContext.Buffers.DepthBuffer;
@@ -344,7 +344,7 @@ namespace FlaxEngine
                 };
                 GetWorldMatrix(out Matrix world);
                 Matrix.Translation((float)bounds.Extents.X, (float)bounds.Extents.Y, 0, out Matrix offset);
-                Matrix.Multiply(ref offset, ref world, out var boxWorld);
+                Matrix.Multiply(offset, world, out var boxWorld);
                 boxWorld.Decompose(out bounds.Transformation);
                 return bounds;
             }
@@ -385,19 +385,19 @@ namespace FlaxEngine
             {
                 if (_renderMode == CanvasRenderMode.WorldSpace)
                 {
-                    Matrix.Transformation(ref transform.Scale, ref transform.Orientation, ref translation, out world);
+                    Matrix.Transformation(transform.Scale, transform.Orientation, translation, out world);
                 }
                 else if (_renderMode == CanvasRenderMode.WorldSpaceFaceCamera)
                 {
                     var view = _editorTask.View;
                     Matrix.Translation(_guiRoot.Width * -0.5f, _guiRoot.Height * -0.5f, 0, out var m1);
-                    Matrix.Scaling(ref transform.Scale, out var m2);
-                    Matrix.Multiply(ref m1, ref m2, out var m3);
+                    Matrix.Scaling(transform.Scale, out var m2);
+                    Matrix.Multiply(m1, m2, out var m3);
                     Quaternion.Euler(180, 180, 0, out var quat);
-                    Matrix.RotationQuaternion(ref quat, out m2);
-                    Matrix.Multiply(ref m3, ref m2, out m1);
+                    Matrix.RotationQuaternion(quat, out m2);
+                    Matrix.Multiply(m3, m2, out m1);
                     m2 = Matrix.Transformation(Float3.One, Quaternion.FromDirection(-view.Direction), translation);
-                    Matrix.Multiply(ref m1, ref m2, out world);
+                    Matrix.Multiply(m1, m2, out world);
                 }
                 else if (_renderMode == CanvasRenderMode.CameraSpace)
                 {
@@ -409,14 +409,14 @@ namespace FlaxEngine
                         _guiRoot.Size = _editorTask.Viewport.Size;
                     Matrix.Translation(_guiRoot.Width / -2.0f, _guiRoot.Height / -2.0f, 0, out world);
                     Matrix.RotationYawPitchRoll(Mathf.Pi, Mathf.Pi, 0, out var tmp2);
-                    Matrix.Multiply(ref world, ref tmp2, out var tmp1);
+                    Matrix.Multiply(world, tmp2, out var tmp1);
                     Float3 viewPos = view.Position - viewOrigin;
                     var viewRot = view.Direction != Float3.Up ? Quaternion.LookRotation(view.Direction, Float3.Up) : Quaternion.LookRotation(view.Direction, Float3.Right);
                     var viewUp = Float3.Up * viewRot;
                     var viewForward = view.Direction;
                     var pos = view.Position + view.Direction * Distance;
-                    Matrix.Billboard(ref pos, ref viewPos, ref viewUp, ref viewForward, out tmp2);
-                    Matrix.Multiply(ref tmp1, ref tmp2, out world);
+                    Matrix.Billboard(pos, viewPos, viewUp, viewForward, out tmp2);
+                    Matrix.Multiply(tmp1, tmp2, out world);
                     return;
                 }
                 else
@@ -433,19 +433,19 @@ namespace FlaxEngine
             if (_renderMode == CanvasRenderMode.WorldSpace || (_renderMode == CanvasRenderMode.WorldSpaceFaceCamera && !camera))
             {
                 // In 3D world
-                Matrix.Transformation(ref transform.Scale, ref transform.Orientation, ref translation, out world);
+                Matrix.Transformation(transform.Scale, transform.Orientation, translation, out world);
             }
             else if (_renderMode == CanvasRenderMode.WorldSpaceFaceCamera)
             {
                 // In 3D world face camera
                 Matrix.Translation(_guiRoot.Width * -0.5f, _guiRoot.Height * -0.5f, 0, out var m1);
-                Matrix.Scaling(ref transform.Scale, out var m2);
-                Matrix.Multiply(ref m1, ref m2, out var m3);
+                Matrix.Scaling(transform.Scale, out var m2);
+                Matrix.Multiply(m1, m2, out var m3);
                 Quaternion.Euler(180, 180, 0, out var quat);
-                Matrix.RotationQuaternion(ref quat, out m2);
-                Matrix.Multiply(ref m3, ref m2, out m1);
+                Matrix.RotationQuaternion(quat, out m2);
+                Matrix.Multiply(m3, m2, out m1);
                 m2 = Matrix.Transformation(Vector3.One, Quaternion.FromDirection(-camera.Direction), translation);
-                Matrix.Multiply(ref m1, ref m2, out world);
+                Matrix.Multiply(m1, m2, out world);
             }
             else if (_renderMode == CanvasRenderMode.CameraSpace && camera)
             {
@@ -456,8 +456,8 @@ namespace FlaxEngine
                 if (camera.UsePerspective)
                 {
                     camera.GetMatrices(out tmp1, out var tmp3, ref viewport);
-                    Matrix.Multiply(ref tmp1, ref tmp3, out tmp2);
-                    var frustum = new BoundingFrustum(ref tmp2);
+                    Matrix.Multiply(tmp1, tmp3, out tmp2);
+                    var frustum = new BoundingFrustum(tmp2);
                     _guiRoot.Size = new Float2(frustum.GetWidthAtDepth(Distance), frustum.GetHeightAtDepth(Distance));
                 }
                 else
@@ -468,7 +468,7 @@ namespace FlaxEngine
                 // Center viewport (and flip)
                 Matrix.Translation(_guiRoot.Width / -2.0f, _guiRoot.Height / -2.0f, 0, out world);
                 Matrix.RotationYawPitchRoll(Mathf.Pi, Mathf.Pi, 0, out tmp2);
-                Matrix.Multiply(ref world, ref tmp2, out tmp1);
+                Matrix.Multiply(world, tmp2, out tmp1);
 
                 // In front of the camera
                 Float3 viewPos = camera.Position - viewOrigin;
@@ -476,9 +476,9 @@ namespace FlaxEngine
                 var viewUp = Float3.Up * viewRot;
                 var viewForward = Float3.Forward * viewRot;
                 var pos = viewPos + viewForward * Distance;
-                Matrix.Billboard(ref pos, ref viewPos, ref viewUp, ref viewForward, out tmp2);
+                Matrix.Billboard(pos, viewPos, viewUp, viewForward, out tmp2);
 
-                Matrix.Multiply(ref tmp1, ref tmp2, out world);
+                Matrix.Multiply(tmp1, tmp2, out world);
             }
             else
             {

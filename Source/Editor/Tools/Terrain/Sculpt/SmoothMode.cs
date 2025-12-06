@@ -93,7 +93,7 @@ namespace FlaxEditor.Tools.Terrain.Sculpt
 
                         // Calculate brush influence at the current position
                         var samplePositionLocal = patch.PatchPositionLocal + new Vector3(localCoordX * FlaxEngine.Terrain.UnitsPerVertex, coordHeight, localCoordY * FlaxEngine.Terrain.UnitsPerVertex);
-                        Vector3.Transform(ref samplePositionLocal, ref patch.TerrainWorld, out Vector3 samplePositionWorld);
+                        Vector3.Transform(samplePositionLocal, patch.TerrainWorld, out Vector3 samplePositionWorld);
                         var paintAmount = patch.Brush.Sample(ref brushPosition, ref samplePositionWorld) * strength;
 
                         if (paintAmount == 0)

@@ -96,9 +96,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="point">The point to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Vector3 point)
+        public bool Intersects(in Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsPoint(ref this, ref point);
+            return CollisionsHelper.RayIntersectsPoint(this, point);
         }
 
         /// <summary>
@@ -106,9 +106,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="ray">The ray to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray)
+        public bool Intersects(in Ray ray)
         {
-            return CollisionsHelper.RayIntersectsRay(ref this, ref ray, out _);
+            return CollisionsHelper.RayIntersectsRay(this, ray, out _);
         }
 
         /// <summary>
@@ -117,9 +117,9 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Vector3 point)
+        public bool Intersects(in Ray ray, out Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsRay(ref this, ref ray, out point);
+            return CollisionsHelper.RayIntersectsRay(this, ray, out point);
         }
 
         /// <summary>
@@ -127,9 +127,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="plane">The plane to test</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Plane plane)
+        public bool Intersects(in Plane plane)
         {
-            return CollisionsHelper.RayIntersectsPlane(ref this, ref plane, out Real _);
+            return CollisionsHelper.RayIntersectsPlane(this, plane, out Real _);
         }
 
         /// <summary>
@@ -138,9 +138,9 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Plane plane, out Real distance)
+        public bool Intersects(in Plane plane, out Real distance)
         {
-            return CollisionsHelper.RayIntersectsPlane(ref this, ref plane, out distance);
+            return CollisionsHelper.RayIntersectsPlane(this, plane, out distance);
         }
 
 #if USE_LARGE_WORLDS
@@ -152,9 +152,9 @@ namespace FlaxEngine
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
         [Obsolete("Use Intersects with 'out Real distance' parameter instead")]
-        public bool Intersects(ref Plane plane, out float distance)
+        public bool Intersects(in Plane plane, out float distance)
         {
-            return CollisionsHelper.RayIntersectsPlane(ref this, ref plane, out distance);
+            return CollisionsHelper.RayIntersectsPlane(this, plane, out distance);
         }
 #endif
 
@@ -164,9 +164,9 @@ namespace FlaxEngine
         /// <param name="plane">The plane to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Plane plane, out Vector3 point)
+        public bool Intersects(in Plane plane, out Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsPlane(ref this, ref plane, out point);
+            return CollisionsHelper.RayIntersectsPlane(this, plane, out point);
         }
 
         /// <summary>
@@ -176,9 +176,9 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public bool Intersects(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
-            return CollisionsHelper.RayIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3, out Real _);
+            return CollisionsHelper.RayIntersectsTriangle(this, vertex1, vertex2, vertex3, out Real _);
         }
 
         /// <summary>
@@ -189,9 +189,9 @@ namespace FlaxEngine
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out Real distance)
+        public bool Intersects(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3, out Real distance)
         {
-            return CollisionsHelper.RayIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3, out distance);
+            return CollisionsHelper.RayIntersectsTriangle(this, vertex1, vertex2, vertex3, out distance);
         }
 
 #if USE_LARGE_WORLDS
@@ -205,9 +205,9 @@ namespace FlaxEngine
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
         [Obsolete("Use Intersects with 'out Real distance' parameter instead")]
-        public bool Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out float distance)
+        public bool Intersects(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3, out float distance)
         {
-            var result = CollisionsHelper.RayIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3, out Real dst);
+            var result = CollisionsHelper.RayIntersectsTriangle(this, vertex1, vertex2, vertex3, out Real dst);
             distance = (float)dst;
             return result;
         }
@@ -221,9 +221,9 @@ namespace FlaxEngine
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3, out Vector3 point)
+        public bool Intersects(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3, out Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3, out point);
+            return CollisionsHelper.RayIntersectsTriangle(this, vertex1, vertex2, vertex3, out point);
         }
 
         /// <summary>
@@ -231,9 +231,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingBox box)
+        public bool Intersects(in BoundingBox box)
         {
-            return CollisionsHelper.RayIntersectsBox(ref this, ref box, out Real _);
+            return CollisionsHelper.RayIntersectsBox(this, box, out Real _);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace FlaxEngine
         /// <returns>Whether the two objects intersected.</returns>
         public bool Intersects(BoundingBox box)
         {
-            return Intersects(ref box);
+            return Intersects(in box);
         }
 
         /// <summary>
@@ -252,9 +252,9 @@ namespace FlaxEngine
         /// <param name="box">The box to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingBox box, out Real distance)
+        public bool Intersects(in BoundingBox box, out Real distance)
         {
-            return CollisionsHelper.RayIntersectsBox(ref this, ref box, out distance);
+            return CollisionsHelper.RayIntersectsBox(this, box, out distance);
         }
 
         /// <summary>
@@ -263,9 +263,9 @@ namespace FlaxEngine
         /// <param name="box">The box to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingBox box, out Vector3 point)
+        public bool Intersects(in BoundingBox box, out Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsBox(ref this, ref box, out point);
+            return CollisionsHelper.RayIntersectsBox(this, box, out point);
         }
 
         /// <summary>
@@ -273,9 +273,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingSphere sphere)
+        public bool Intersects(in BoundingSphere sphere)
         {
-            return CollisionsHelper.RayIntersectsSphere(ref this, ref sphere, out Real _);
+            return CollisionsHelper.RayIntersectsSphere(this, sphere, out Real _);
         }
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace FlaxEngine
         /// <returns>Whether the two objects intersected.</returns>
         public bool Intersects(BoundingSphere sphere)
         {
-            return Intersects(ref sphere);
+            return Intersects(in sphere);
         }
 
         /// <summary>
@@ -294,9 +294,9 @@ namespace FlaxEngine
         /// <param name="sphere">The sphere to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingSphere sphere, out Real distance)
+        public bool Intersects(in BoundingSphere sphere, out Real distance)
         {
-            return CollisionsHelper.RayIntersectsSphere(ref this, ref sphere, out distance);
+            return CollisionsHelper.RayIntersectsSphere(this, sphere, out distance);
         }
 
 #if USE_LARGE_WORLDS
@@ -308,9 +308,9 @@ namespace FlaxEngine
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
         [Obsolete("Use Intersects with 'out Real distance' parameter instead")]
-        public bool Intersects(ref BoundingSphere sphere, out float distance)
+        public bool Intersects(in BoundingSphere sphere, out float distance)
         {
-            var result = CollisionsHelper.RayIntersectsSphere(ref this, ref sphere, out Real dst);
+            var result = CollisionsHelper.RayIntersectsSphere(this, sphere, out Real dst);
             distance = (float)dst;
             return result;
         }
@@ -322,9 +322,9 @@ namespace FlaxEngine
         /// <param name="sphere">The sphere to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingSphere sphere, out Vector3 point)
+        public bool Intersects(in BoundingSphere sphere, out Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsSphere(ref this, ref sphere, out point);
+            return CollisionsHelper.RayIntersectsSphere(this, sphere, out point);
         }
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace FlaxEngine
         /// <param name="viewport">The screen viewport.</param>
         /// <param name="vp">The View*Projection matrix.</param>
         /// <returns>The resulting ray.</returns>
-        public static Ray GetPickRay(float x, float y, ref Viewport viewport, ref Matrix vp)
+        public static Ray GetPickRay(float x, float y, in Viewport viewport, in Matrix vp)
         {
             Vector3 nearPoint = new Vector3(x, y, 0.0f);
             Vector3 farPoint = new Vector3(x, y, 1.0f);
@@ -358,7 +358,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Ray left, Ray right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Ray left, Ray right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -431,7 +431,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Vector4" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Vector4" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref Ray other)
+        public bool Equals(in Ray other)
         {
             return Position == other.Position && Direction == other.Direction;
         }
@@ -444,7 +444,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Ray other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -454,7 +454,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Ray other && Equals(ref other);
+            return value is Ray other && Equals(in other);
         }
     }
 }

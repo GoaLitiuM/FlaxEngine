@@ -308,7 +308,7 @@ namespace FlaxEditor.Surface.Archetypes
                 if (base.OnMouseDoubleClick(location, button))
                     return true;
 
-                if (_nameField.Bounds.Contains(ref location) && Surface.CanEdit)
+                if (_nameField.Bounds.Contains(location) && Surface.CanEdit)
                 {
                     StartRenaming();
                     return true;
@@ -1128,7 +1128,7 @@ namespace FlaxEditor.Surface.Archetypes
             /// <inheritdoc />
             public override bool OnMouseDoubleClick(Float2 location, MouseButton button)
             {
-                if (button == MouseButton.Left && _headerRect.Contains(ref location))
+                if (button == MouseButton.Left && _headerRect.Contains(location))
                 {
                     // Open function content item if exists
                     var method = GetMethod(out var scriptType, out _, out _);
@@ -1759,7 +1759,7 @@ namespace FlaxEditor.Surface.Archetypes
             /// <inheritdoc />
             public override bool OnMouseDoubleClick(Float2 location, MouseButton button)
             {
-                if (button == MouseButton.Left && _headerRect.Contains(ref location))
+                if (button == MouseButton.Left && _headerRect.Contains(location))
                 {
                     OnEditSignature();
                     return true;

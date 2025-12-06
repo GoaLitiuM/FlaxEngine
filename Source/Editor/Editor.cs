@@ -1056,7 +1056,7 @@ namespace FlaxEditor
             if (actor)
             {
                 Internal_GetEditorBoxWithChildren(FlaxEngine.Object.GetUnmanagedPtr(actor), out var box);
-                BoundingSphere.FromBox(ref box, out sphere);
+                BoundingSphere.FromBox(box, out sphere);
                 if (sphere == BoundingSphere.Empty)
                     sphere = new BoundingSphere(actor.Position, sphere.Radius);
                 sphere.Radius = Math.Max(sphere.Radius, 15.0f);

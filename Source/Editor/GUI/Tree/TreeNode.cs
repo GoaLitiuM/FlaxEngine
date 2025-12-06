@@ -555,7 +555,7 @@ namespace FlaxEditor.GUI.Tree
         /// <returns>True if hits it.</returns>
         protected virtual bool TestHeaderHit(ref Float2 location)
         {
-            return _headerRect.Contains(ref location);
+            return _headerRect.Contains(location);
         }
 
         /// <summary>
@@ -871,7 +871,7 @@ namespace FlaxEditor.GUI.Tree
 
                 static Rectangle GetChildGlobalRectangle(Control control, ref Matrix3x3 globalTransform)
                 {
-                    Matrix3x3.Multiply(ref control._cachedTransform, ref globalTransform, out var globalChildTransform);
+                    Matrix3x3.Multiply(control._cachedTransform, globalTransform, out var globalChildTransform);
                     return new Rectangle(globalChildTransform.M31, globalChildTransform.M32, control.Width * globalChildTransform.M11, control.Height * globalChildTransform.M22);
                 }
             }

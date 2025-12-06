@@ -141,7 +141,7 @@ namespace FlaxEngine.GUI
                 OnParentChangedInternal();
 
                 // Check if parent size has been changed
-                if (_parent != null && !_parent.Size.Equals(ref oldParentSize))
+                if (_parent != null && !_parent.Size.Equals(oldParentSize))
                 {
                     OnParentResized();
                 }
@@ -204,8 +204,8 @@ namespace FlaxEngine.GUI
                 var result = AnchorPresets.Custom;
                 for (int i = 0; i < AnchorPresetsData.Length; i++)
                 {
-                    if (Float2.NearEqual(ref _anchorMin, ref AnchorPresetsData[i].Min) &&
-                        Float2.NearEqual(ref _anchorMax, ref AnchorPresetsData[i].Max))
+                    if (Float2.NearEqual(_anchorMin, AnchorPresetsData[i].Min) &&
+                        Float2.NearEqual(_anchorMax, AnchorPresetsData[i].Max))
                     {
                         result = AnchorPresetsData[i].Preset;
                         break;
@@ -1209,7 +1209,7 @@ namespace FlaxEngine.GUI
         /// <returns>The converted point location in parent control coordinates.</returns>
         public virtual Float2 PointToParent(ref Float2 location)
         {
-            Matrix3x3.Transform2D(ref location, ref _cachedTransform, out var result);
+            Matrix3x3.Transform2D(location, _cachedTransform, out var result);
             return result;
         }
 
@@ -1230,7 +1230,7 @@ namespace FlaxEngine.GUI
         /// <returns>The converted point location in control's space.</returns>
         public virtual Float2 PointFromParent(ref Float2 locationParent)
         {
-            Matrix3x3.Transform2D(ref locationParent, ref _cachedTransformInv, out var result);
+            Matrix3x3.Transform2D(locationParent, _cachedTransformInv, out var result);
             return result;
         }
 

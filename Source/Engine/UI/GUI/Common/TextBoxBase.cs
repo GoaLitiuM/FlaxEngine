@@ -332,7 +332,7 @@ namespace FlaxEngine.GUI
             set
             {
                 value = Float2.Round(value);
-                if (Float2.NearEqual(ref value, ref _targetViewOffset))
+                if (Float2.NearEqual(value, _targetViewOffset))
                     return;
                 _targetViewOffset = _viewOffset = value;
                 OnTargetViewOffsetChanged();

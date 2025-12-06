@@ -212,7 +212,7 @@ namespace FlaxEngine.GUI
             set
             {
                 value = Float2.Max(value, Float2.One);
-                if (Float2.NearEqual(ref _resolutionMin, ref value))
+                if (Float2.NearEqual(_resolutionMin, value))
                     return;
                 _resolutionMin = value;
                 PerformLayout();
@@ -231,7 +231,7 @@ namespace FlaxEngine.GUI
             set
             {
                 value = Float2.Max(value, Float2.One);
-                if (Float2.NearEqual(ref _resolutionMax, ref value))
+                if (Float2.NearEqual(_resolutionMax, value))
                     return;
                 _resolutionMax = value;
                 PerformLayout();
@@ -400,7 +400,7 @@ namespace FlaxEngine.GUI
 
             // Draw children with scale
             var scaling = new Float3(_scale, _scale, 1);
-            Matrix3x3.Scaling(ref scaling, out Matrix3x3 scale);
+            Matrix3x3.Scaling(scaling, out Matrix3x3 scale);
             Render2D.PushTransform(scale);
             if (ClipChildren)
             {

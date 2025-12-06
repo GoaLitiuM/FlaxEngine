@@ -416,7 +416,7 @@ public class Slider : ContainerControl
             Focus();
             float mousePosition = Direction is SliderDirection.HorizontalRight or SliderDirection.HorizontalLeft ? location.X : location.Y;
 
-            if (_thumbRect.Contains(ref location))
+            if (_thumbRect.Contains(location))
             {
                 // Start sliding
                 _isSliding = true;

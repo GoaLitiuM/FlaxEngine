@@ -216,7 +216,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to add.</param>
         /// <param name="right">The second vector to add.</param>
         /// <param name="result">When the method completes, contains the sum of the two vectors.</param>
-        public static void Add(ref Int4 left, ref Int4 right, out Int4 result)
+        public static void Add(in Int4 left, in Int4 right, out Int4 result)
         {
             result = new Int4(left.X + right.X, left.Y + right.Y, left.Z + right.Z, left.W + right.W);
         }
@@ -238,7 +238,7 @@ namespace FlaxEngine
         /// <param name="left">The input vector</param>
         /// <param name="right">The scalar value to be added to elements</param>
         /// <param name="result">The vector with added scalar for each element.</param>
-        public static void Add(ref Int4 left, ref int right, out Int4 result)
+        public static void Add(in Int4 left, int right, out Int4 result)
         {
             result = new Int4(left.X + right, left.Y + right, left.Z + right, left.W + right);
         }
@@ -260,7 +260,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to subtract.</param>
         /// <param name="right">The second vector to subtract.</param>
         /// <param name="result">When the method completes, contains the difference of the two vectors.</param>
-        public static void Subtract(ref Int4 left, ref Int4 right, out Int4 result)
+        public static void Subtract(in Int4 left, in Int4 right, out Int4 result)
         {
             result = new Int4(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W);
         }
@@ -282,7 +282,7 @@ namespace FlaxEngine
         /// <param name="left">The input vector</param>
         /// <param name="right">The scalar value to be subtracted from elements</param>
         /// <param name="result">The vector with subtracted scalar for each element.</param>
-        public static void Subtract(ref Int4 left, ref int right, out Int4 result)
+        public static void Subtract(in Int4 left, int right, out Int4 result)
         {
             result = new Int4(left.X - right, left.Y - right, left.Z - right, left.W - right);
         }
@@ -304,7 +304,7 @@ namespace FlaxEngine
         /// <param name="left">The scalar value to be subtracted from elements</param>
         /// <param name="right">The input vector.</param>
         /// <param name="result">The vector with subtracted scalar for each element.</param>
-        public static void Subtract(ref int left, ref Int4 right, out Int4 result)
+        public static void Subtract(int left, in Int4 right, out Int4 result)
         {
             result = new Int4(left - right.X, left - right.Y, left - right.Z, left - right.W);
         }
@@ -326,7 +326,7 @@ namespace FlaxEngine
         /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Multiply(ref Int4 value, int scale, out Int4 result)
+        public static void Multiply(in Int4 value, int scale, out Int4 result)
         {
             result = new Int4(value.X * scale, value.Y * scale, value.Z * scale, value.W * scale);
         }
@@ -348,7 +348,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to multiply.</param>
         /// <param name="right">The second vector to multiply.</param>
         /// <param name="result">When the method completes, contains the multiplied vector.</param>
-        public static void Multiply(ref Int4 left, ref Int4 right, out Int4 result)
+        public static void Multiply(in Int4 left, in Int4 right, out Int4 result)
         {
             result = new Int4(left.X * right.X, left.Y * right.Y, left.Z * right.Z, left.W * right.W);
         }
@@ -370,7 +370,7 @@ namespace FlaxEngine
         /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(ref Int4 value, int scale, out Int4 result)
+        public static void Divide(in Int4 value, int scale, out Int4 result)
         {
             result = new Int4(value.X / scale, value.Y / scale, value.Z / scale, value.W / scale);
         }
@@ -392,7 +392,7 @@ namespace FlaxEngine
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="value">The vector to scale.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(int scale, ref Int4 value, out Int4 result)
+        public static void Divide(int scale, in Int4 value, out Int4 result)
         {
             result = new Int4(scale / value.X, scale / value.Y, scale / value.Z, scale / value.W);
         }
@@ -413,7 +413,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The vector to negate.</param>
         /// <param name="result">When the method completes, contains a vector facing in the opposite direction.</param>
-        public static void Negate(ref Int4 value, out Int4 result)
+        public static void Negate(in Int4 value, out Int4 result)
         {
             result = new Int4(-value.X, -value.Y, -value.Z, -value.W);
         }
@@ -435,7 +435,7 @@ namespace FlaxEngine
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         /// <param name="result">When the method completes, contains the clamped value.</param>
-        public static void Clamp(ref Int4 value, ref Int4 min, ref Int4 max, out Int4 result)
+        public static void Clamp(in Int4 value, in Int4 min, in Int4 max, out Int4 result)
         {
             int x = value.X;
             x = x > max.X ? max.X : x;
@@ -465,7 +465,7 @@ namespace FlaxEngine
         /// <returns>The clamped value.</returns>
         public static Int4 Clamp(Int4 value, Int4 min, Int4 max)
         {
-            Clamp(ref value, ref min, ref max, out Int4 result);
+            Clamp(in value, in min, in max, out Int4 result);
             return result;
         }
 
@@ -475,7 +475,7 @@ namespace FlaxEngine
         /// <param name="left">The first source vector.</param>
         /// <param name="right">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the largest components of the source vectors.</param>
-        public static void Max(ref Int4 left, ref Int4 right, out Int4 result)
+        public static void Max(in Int4 left, in Int4 right, out Int4 result)
         {
             result.X = left.X > right.X ? left.X : right.X;
             result.Y = left.Y > right.Y ? left.Y : right.Y;
@@ -491,7 +491,7 @@ namespace FlaxEngine
         /// <returns>A vector containing the largest components of the source vectors.</returns>
         public static Int4 Max(Int4 left, Int4 right)
         {
-            Max(ref left, ref right, out Int4 result);
+            Max(in left, in right, out Int4 result);
             return result;
         }
 
@@ -501,7 +501,7 @@ namespace FlaxEngine
         /// <param name="left">The first source vector.</param>
         /// <param name="right">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the smallest components of the source vectors.</param>
-        public static void Min(ref Int4 left, ref Int4 right, out Int4 result)
+        public static void Min(in Int4 left, in Int4 right, out Int4 result)
         {
             result.X = left.X < right.X ? left.X : right.X;
             result.Y = left.Y < right.Y ? left.Y : right.Y;
@@ -517,7 +517,7 @@ namespace FlaxEngine
         /// <returns>A vector containing the smallest components of the source vectors.</returns>
         public static Int4 Min(Int4 left, Int4 right)
         {
-            Min(ref left, ref right, out Int4 result);
+            Min(in left, in right, out Int4 result);
             return result;
         }
 
@@ -544,7 +544,7 @@ namespace FlaxEngine
 
         /// <summary>
         /// Multiplies a vector with another by performing component-wise multiplication equivalent to
-        /// <see cref="Multiply(ref Int4,ref Int4,out Int4)" />.
+        /// <see cref="Multiply(in Int4,in Int4,out Int4)" />.
         /// </summary>
         /// <param name="left">The first vector to multiply.</param>
         /// <param name="right">The second vector to multiply.</param>
@@ -726,7 +726,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Int4 left, Int4 right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -738,7 +738,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Int4 left, Int4 right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -886,7 +886,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="other">The <see cref="Int4" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Int4" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(ref Int4 other)
+        public bool Equals(in Int4 other)
         {
             return other.X == X && other.Y == Y && other.Z == Z && other.W == W;
         }
@@ -899,7 +899,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Int4 other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -909,7 +909,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Int4 other && Equals(ref other);
+            return value is Int4 other && Equals(in other);
         }
     }
 }

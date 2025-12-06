@@ -502,7 +502,7 @@ namespace FlaxEditor.Surface
         /// <inheritdoc />
         public override bool OnMouseDown(Float2 location, MouseButton button)
         {
-            if (button == MouseButton.Left && _arrangeButtonRect.Contains(ref location))
+            if (button == MouseButton.Left && _arrangeButtonRect.Contains(location))
             {
                 _arrangeButtonInUse = true;
                 Focus();

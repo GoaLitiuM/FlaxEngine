@@ -58,15 +58,15 @@ namespace FlaxEngine.GUI
 
             _canvas.GetWorldMatrix(out var world);
             Matrix.Translation((float)bounds.Extents.X, (float)bounds.Extents.Y, 0, out var offset);
-            Matrix.Multiply(ref offset, ref world, out var boxWorld);
+            Matrix.Multiply(offset, world, out var boxWorld);
             boxWorld.Decompose(out bounds.Transformation);
 
             // Hit test
-            if (bounds.Intersects(ref ray, out Vector3 hitPoint))
+            if (bounds.Intersects(ray, out Vector3 hitPoint))
             {
                 // Transform world-space hit point to canvas local-space
                 world.Invert();
-                Vector3.Transform(ref hitPoint, ref world, out Vector3 localHitPoint);
+                Vector3.Transform(hitPoint, world, out Vector3 localHitPoint);
 
                 canvasLocation = new Float2(localHitPoint);
                 return ContainsPoint(ref canvasLocation, precise);
@@ -169,7 +169,7 @@ namespace FlaxEngine.GUI
             // Transform canvas local-space point to the game root location
             _canvas.GetWorldMatrix(out Matrix world);
             Vector3 locationCanvasSpace = new Vector3(location, 0.0f);
-            Vector3.Transform(ref locationCanvasSpace, ref world, out Vector3 locationWorldSpace);
+            Vector3.Transform(locationCanvasSpace, world, out Vector3 locationWorldSpace);
             camera.ProjectPoint(locationWorldSpace, out location);
             return location;
         }

@@ -60,7 +60,7 @@ namespace FlaxEngine
             set
             {
                 pMatrix = value;
-                GetPlanesFromMatrix(ref pMatrix, out pNear, out pFar, out pLeft, out pRight, out pTop, out pBottom);
+                GetPlanesFromMatrix(in pMatrix, out pNear, out pFar, out pLeft, out pRight, out pTop, out pBottom);
             }
         }
 
@@ -101,17 +101,17 @@ namespace FlaxEngine
         public BoundingFrustum(Matrix matrix)
         {
             pMatrix = matrix;
-            GetPlanesFromMatrix(ref pMatrix, out pNear, out pFar, out pLeft, out pRight, out pTop, out pBottom);
+            GetPlanesFromMatrix(in pMatrix, out pNear, out pFar, out pLeft, out pRight, out pTop, out pBottom);
         }
 
         /// <summary>
         /// Creates a new instance of BoundingFrustum.
         /// </summary>
         /// <param name="matrix">Combined matrix that usually takes view × projection matrix.</param>
-        public BoundingFrustum(ref Matrix matrix)
+        public BoundingFrustum(in Matrix matrix)
         {
             pMatrix = matrix;
-            GetPlanesFromMatrix(ref pMatrix, out pNear, out pFar, out pLeft, out pRight, out pTop, out pBottom);
+            GetPlanesFromMatrix(in pMatrix, out pNear, out pFar, out pLeft, out pRight, out pTop, out pBottom);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="BoundingFrustum" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="BoundingFrustum" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref BoundingFrustum other)
+        public bool Equals(in BoundingFrustum other)
         {
             return pMatrix == other.pMatrix;
         }
@@ -142,7 +142,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(BoundingFrustum other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            return obj is BoundingFrustum other && Equals(ref other);
+            return obj is BoundingFrustum other && Equals(in other);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(BoundingFrustum left, BoundingFrustum right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(BoundingFrustum left, BoundingFrustum right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace FlaxEngine
             }
         }
 
-        private static void GetPlanesFromMatrix(ref Matrix matrix, out Plane near, out Plane far, out Plane left, out Plane right, out Plane top, out Plane bottom)
+        private static void GetPlanesFromMatrix(in Matrix matrix, out Plane near, out Plane far, out Plane left, out Plane right, out Plane top, out Plane bottom)
         {
             //http://www.chadvernon.com/blog/resources/directx9/frustum-culling/
 
@@ -245,14 +245,14 @@ namespace FlaxEngine
             far.Normalize();
         }
 
-        private static Vector3 Get3PlanesInterPoint(ref Plane p1, ref Plane p2, ref Plane p3)
+        private static Vector3 Get3PlanesInterPoint(in Plane p1, in Plane p2, in Plane p3)
         {
-            Vector3.Cross(ref p2.Normal, ref p3.Normal, out var n2Xn3);
-            Vector3.Cross(ref p3.Normal, ref p1.Normal, out var n3Xn1);
-            Vector3.Cross(ref p1.Normal, ref p2.Normal, out var n1Xn2);
-            var div1 = Vector3.Dot(ref p1.Normal, ref n2Xn3);
-            var div2 = Vector3.Dot(ref p2.Normal, ref n3Xn1);
-            var div3 = Vector3.Dot(ref p3.Normal, ref n1Xn2);
+            Vector3.Cross(p2.Normal, p3.Normal, out var n2Xn3);
+            Vector3.Cross(p3.Normal, p1.Normal, out var n3Xn1);
+            Vector3.Cross(p1.Normal, p2.Normal, out var n1Xn2);
+            var div1 = Vector3.Dot(p1.Normal, n2Xn3);
+            var div2 = Vector3.Dot(p2.Normal, n3Xn1);
+            var div3 = Vector3.Dot(p3.Normal, n1Xn2);
             if (Mathf.IsZero(div1 * div2 * div3))
                 return Vector3.Zero;
             return n2Xn3 * (-p1.D / div1) - n3Xn1 * (p2.D / div2) - n1Xn2 * (p3.D / div3);
@@ -346,14 +346,14 @@ namespace FlaxEngine
         /// <returns>The 8 corners of the frustum</returns>
         public void GetCorners(Vector3[] corners)
         {
-            corners[0] = Get3PlanesInterPoint(ref pNear, ref pBottom, ref pRight); //Near1
-            corners[1] = Get3PlanesInterPoint(ref pNear, ref pTop, ref pRight); //Near2
-            corners[2] = Get3PlanesInterPoint(ref pNear, ref pTop, ref pLeft); //Near3
-            corners[3] = Get3PlanesInterPoint(ref pNear, ref pBottom, ref pLeft); //Near3
-            corners[4] = Get3PlanesInterPoint(ref pFar, ref pBottom, ref pRight); //Far1
-            corners[5] = Get3PlanesInterPoint(ref pFar, ref pTop, ref pRight); //Far2
-            corners[6] = Get3PlanesInterPoint(ref pFar, ref pTop, ref pLeft); //Far3
-            corners[7] = Get3PlanesInterPoint(ref pFar, ref pBottom, ref pLeft); //Far3
+            corners[0] = Get3PlanesInterPoint(in pNear, in pBottom, in pRight); //Near1
+            corners[1] = Get3PlanesInterPoint(in pNear, in pTop, in pRight); //Near2
+            corners[2] = Get3PlanesInterPoint(in pNear, in pTop, in pLeft); //Near3
+            corners[3] = Get3PlanesInterPoint(in pNear, in pBottom, in pLeft); //Near3
+            corners[4] = Get3PlanesInterPoint(in pFar, in pBottom, in pRight); //Far1
+            corners[5] = Get3PlanesInterPoint(in pFar, in pTop, in pRight); //Far2
+            corners[6] = Get3PlanesInterPoint(in pFar, in pTop, in pLeft); //Far3
+            corners[7] = Get3PlanesInterPoint(in pFar, in pBottom, in pLeft); //Far3
         }
 
         /// <summary>
@@ -361,7 +361,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>Type of the containment</returns>
-        public ContainmentType Contains(ref Vector3 point)
+        public ContainmentType Contains(in Vector3 point)
         {
             var result = PlaneIntersectionType.Front;
             var planeResult = PlaneIntersectionType.Front;
@@ -370,22 +370,22 @@ namespace FlaxEngine
                 switch (i)
                 {
                 case 0:
-                    planeResult = pNear.Intersects(ref point);
+                    planeResult = pNear.Intersects(point);
                     break;
                 case 1:
-                    planeResult = pFar.Intersects(ref point);
+                    planeResult = pFar.Intersects(point);
                     break;
                 case 2:
-                    planeResult = pLeft.Intersects(ref point);
+                    planeResult = pLeft.Intersects(point);
                     break;
                 case 3:
-                    planeResult = pRight.Intersects(ref point);
+                    planeResult = pRight.Intersects(point);
                     break;
                 case 4:
-                    planeResult = pTop.Intersects(ref point);
+                    planeResult = pTop.Intersects(point);
                     break;
                 case 5:
-                    planeResult = pBottom.Intersects(ref point);
+                    planeResult = pBottom.Intersects(point);
                     break;
                 }
                 switch (planeResult)
@@ -410,10 +410,10 @@ namespace FlaxEngine
         /// <returns>Type of the containment</returns>
         public ContainmentType Contains(Vector3 point)
         {
-            return Contains(ref point);
+            return Contains(in point);
         }
 
-        private void GetBoxToPlanePVertexNVertex(ref BoundingBox box, ref Vector3 planeNormal, out Vector3 p, out Vector3 n)
+        private void GetBoxToPlanePVertexNVertex(in BoundingBox box, in Vector3 planeNormal, out Vector3 p, out Vector3 n)
         {
             p = box.Minimum;
             if (planeNormal.X >= 0)
@@ -437,17 +437,17 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box.</param>
         /// <returns>Type of the containment</returns>
-        public ContainmentType Contains(ref BoundingBox box)
+        public ContainmentType Contains(in BoundingBox box)
         {
             var result = ContainmentType.Contains;
             for (var i = 0; i < 6; i++)
             {
                 var plane = GetPlane(i);
-                GetBoxToPlanePVertexNVertex(ref box, ref plane.Normal, out var p, out var n);
-                if (CollisionsHelper.PlaneIntersectsPoint(ref plane, ref p) == PlaneIntersectionType.Back)
+                GetBoxToPlanePVertexNVertex(in box, in plane.Normal, out var p, out var n);
+                if (CollisionsHelper.PlaneIntersectsPoint(plane, p) == PlaneIntersectionType.Back)
                     return ContainmentType.Disjoint;
 
-                if (CollisionsHelper.PlaneIntersectsPoint(ref plane, ref n) == PlaneIntersectionType.Back)
+                if (CollisionsHelper.PlaneIntersectsPoint(plane, n) == PlaneIntersectionType.Back)
                     result = ContainmentType.Intersects;
             }
             return result;
@@ -460,7 +460,7 @@ namespace FlaxEngine
         /// <returns>Type of the containment</returns>
         public ContainmentType Contains(BoundingBox box)
         {
-            return Contains(ref box);
+            return Contains(in box);
         }
 
         /// <summary>
@@ -468,9 +468,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box.</param>
         /// <param name="result">Type of the containment.</param>
-        public void Contains(ref BoundingBox box, out ContainmentType result)
+        public void Contains(in BoundingBox box, out ContainmentType result)
         {
-            result = Contains(ref box);
+            result = Contains(in box);
         }
 
         /// <summary>
@@ -478,7 +478,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere.</param>
         /// <returns>Type of the containment</returns>
-        public ContainmentType Contains(ref BoundingSphere sphere)
+        public ContainmentType Contains(in BoundingSphere sphere)
         {
             var result = PlaneIntersectionType.Front;
             var planeResult = PlaneIntersectionType.Front;
@@ -487,22 +487,22 @@ namespace FlaxEngine
                 switch (i)
                 {
                 case 0:
-                    planeResult = pNear.Intersects(ref sphere);
+                    planeResult = pNear.Intersects(sphere);
                     break;
                 case 1:
-                    planeResult = pFar.Intersects(ref sphere);
+                    planeResult = pFar.Intersects(sphere);
                     break;
                 case 2:
-                    planeResult = pLeft.Intersects(ref sphere);
+                    planeResult = pLeft.Intersects(sphere);
                     break;
                 case 3:
-                    planeResult = pRight.Intersects(ref sphere);
+                    planeResult = pRight.Intersects(sphere);
                     break;
                 case 4:
-                    planeResult = pTop.Intersects(ref sphere);
+                    planeResult = pTop.Intersects(sphere);
                     break;
                 case 5:
-                    planeResult = pBottom.Intersects(ref sphere);
+                    planeResult = pBottom.Intersects(sphere);
                     break;
                 }
                 switch (planeResult)
@@ -527,7 +527,7 @@ namespace FlaxEngine
         /// <returns>Type of the containment</returns>
         public ContainmentType Contains(BoundingSphere sphere)
         {
-            return Contains(ref sphere);
+            return Contains(in sphere);
         }
 
         /// <summary>
@@ -535,9 +535,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere.</param>
         /// <param name="result">Type of the containment.</param>
-        public void Contains(ref BoundingSphere sphere, out ContainmentType result)
+        public void Contains(in BoundingSphere sphere, out ContainmentType result)
         {
-            result = Contains(ref sphere);
+            result = Contains(in sphere);
         }
 
         /// <summary>
@@ -545,9 +545,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere.</param>
         /// <returns>Type of the containment</returns>
-        public bool Intersects(ref BoundingSphere sphere)
+        public bool Intersects(in BoundingSphere sphere)
         {
-            return Contains(ref sphere) != ContainmentType.Disjoint;
+            return Contains(in sphere) != ContainmentType.Disjoint;
         }
 
         /// <summary>
@@ -555,9 +555,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere.</param>
         /// <param name="result">Set to <c>true</c> if the current BoundingFrustum intersects a BoundingSphere.</param>
-        public void Intersects(ref BoundingSphere sphere, out bool result)
+        public void Intersects(in BoundingSphere sphere, out bool result)
         {
-            result = Contains(ref sphere) != ContainmentType.Disjoint;
+            result = Contains(in sphere) != ContainmentType.Disjoint;
         }
 
         /// <summary>
@@ -565,9 +565,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box.</param>
         /// <returns><c>true</c> if the current BoundingFrustum intersects a BoundingSphere.</returns>
-        public bool Intersects(ref BoundingBox box)
+        public bool Intersects(in BoundingBox box)
         {
-            return Contains(ref box) != ContainmentType.Disjoint;
+            return Contains(in box) != ContainmentType.Disjoint;
         }
 
         /// <summary>
@@ -575,16 +575,16 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box.</param>
         /// <param name="result"><c>true</c> if the current BoundingFrustum intersects a BoundingSphere.</param>
-        public void Intersects(ref BoundingBox box, out bool result)
+        public void Intersects(in BoundingBox box, out bool result)
         {
-            result = Contains(ref box) != ContainmentType.Disjoint;
+            result = Contains(in box) != ContainmentType.Disjoint;
         }
 
-        private PlaneIntersectionType PlaneIntersectsPoints(ref Plane plane, Vector3[] points)
+        private PlaneIntersectionType PlaneIntersectsPoints(in Plane plane, Vector3[] points)
         {
-            PlaneIntersectionType result = CollisionsHelper.PlaneIntersectsPoint(ref plane, ref points[0]);
+            PlaneIntersectionType result = CollisionsHelper.PlaneIntersectsPoint(plane, points[0]);
             for (var i = 1; i < points.Length; i++)
-                if (CollisionsHelper.PlaneIntersectsPoint(ref plane, ref points[i]) != result)
+                if (CollisionsHelper.PlaneIntersectsPoint(plane, points[i]) != result)
                     return PlaneIntersectionType.Intersecting;
             return result;
         }
@@ -594,9 +594,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="plane">The plane.</param>
         /// <returns>Plane intersection type.</returns>
-        public PlaneIntersectionType Intersects(ref Plane plane)
+        public PlaneIntersectionType Intersects(in Plane plane)
         {
-            return PlaneIntersectsPoints(ref plane, GetCorners());
+            return PlaneIntersectsPoints(in plane, GetCorners());
         }
 
         /// <summary>
@@ -604,9 +604,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="plane">The plane.</param>
         /// <param name="result">Plane intersection type.</param>
-        public void Intersects(ref Plane plane, out PlaneIntersectionType result)
+        public void Intersects(in Plane plane, out PlaneIntersectionType result)
         {
-            result = PlaneIntersectsPoints(ref plane, GetCorners());
+            result = PlaneIntersectsPoints(in plane, GetCorners());
         }
 
         /// <summary>
@@ -648,9 +648,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="ray">The ray.</param>
         /// <returns><c>true</c> if the current BoundingFrustum intersects the specified Ray.</returns>
-        public bool Intersects(ref Ray ray)
+        public bool Intersects(in Ray ray)
         {
-            return Intersects(ref ray, out _, out _);
+            return Intersects(in ray, out _, out _);
         }
 
         /// <summary>
@@ -660,7 +660,7 @@ namespace FlaxEngine
         /// <param name="inDistance">The distance at which the ray enters the frustum if there is an intersection and the ray starts outside the frustum.</param>
         /// <param name="outDistance">The distance at which the ray exits the frustum if there is an intersection.</param>
         /// <returns><c>true</c> if the current BoundingFrustum intersects the specified Ray.</returns>
-        public bool Intersects(ref Ray ray, out Real? inDistance, out Real? outDistance)
+        public bool Intersects(in Ray ray, out Real? inDistance, out Real? outDistance)
         {
             if (Contains(ray.Position) != ContainmentType.Disjoint)
             {
@@ -668,7 +668,7 @@ namespace FlaxEngine
                 for (var i = 0; i < 6; i++)
                 {
                     Plane plane = GetPlane(i);
-                    if (CollisionsHelper.RayIntersectsPlane(ref ray, ref plane, out Real distance) && (distance < nearstPlaneDistance))
+                    if (CollisionsHelper.RayIntersectsPlane(ray, plane, out Real distance) && (distance < nearstPlaneDistance))
                         nearstPlaneDistance = distance;
                 }
 
@@ -684,7 +684,7 @@ namespace FlaxEngine
             for (var i = 0; i < 6; i++)
             {
                 Plane plane = GetPlane(i);
-                if (CollisionsHelper.RayIntersectsPlane(ref ray, ref plane, out Real distance))
+                if (CollisionsHelper.RayIntersectsPlane(ray, plane, out Real distance))
                 {
                     minDist = Mathf.Min(minDist, distance);
                     maxDist = Mathf.Max(maxDist, distance);
@@ -694,7 +694,7 @@ namespace FlaxEngine
             Vector3 minPoint = ray.Position + ray.Direction * minDist;
             Vector3 maxPoint = ray.Position + ray.Direction * maxDist;
             Vector3 center = (minPoint + maxPoint) / 2f;
-            if (Contains(ref center) != ContainmentType.Disjoint)
+            if (Contains(in center) != ContainmentType.Disjoint)
             {
                 inDistance = minDist;
                 outDistance = maxDist;
@@ -725,10 +725,10 @@ namespace FlaxEngine
             var maxPointDist = Real.MinValue;
             for (var i = 0; i < points.Length; i++)
             {
-                var pointDist = CollisionsHelper.DistancePlanePoint(ref ioFrustrum.pTop, ref points[i]);
-                pointDist = Mathf.Max(pointDist, CollisionsHelper.DistancePlanePoint(ref ioFrustrum.pBottom, ref points[i]));
-                pointDist = Mathf.Max(pointDist, CollisionsHelper.DistancePlanePoint(ref ioFrustrum.pLeft, ref points[i]) * horizontalToVerticalMapping);
-                pointDist = Mathf.Max(pointDist, CollisionsHelper.DistancePlanePoint(ref ioFrustrum.pRight, ref points[i]) * horizontalToVerticalMapping);
+                var pointDist = CollisionsHelper.DistancePlanePoint(ioFrustrum.pTop, points[i]);
+                pointDist = Mathf.Max(pointDist, CollisionsHelper.DistancePlanePoint(ioFrustrum.pBottom, points[i]));
+                pointDist = Mathf.Max(pointDist, CollisionsHelper.DistancePlanePoint(ioFrustrum.pLeft, points[i]) * horizontalToVerticalMapping);
+                pointDist = Mathf.Max(pointDist, CollisionsHelper.DistancePlanePoint(ioFrustrum.pRight, points[i]) * horizontalToVerticalMapping);
                 maxPointDist = Mathf.Max(maxPointDist, pointDist);
             }
             return -maxPointDist / vSin;
@@ -741,7 +741,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="boundingBox">The bounding box.</param>
         /// <returns>The zoom to fit distance</returns>
-        public Real GetZoomToExtentsShiftDistance(ref BoundingBox boundingBox)
+        public Real GetZoomToExtentsShiftDistance(in BoundingBox boundingBox)
         {
             return GetZoomToExtentsShiftDistance(boundingBox.GetCorners());
         }
@@ -760,7 +760,7 @@ namespace FlaxEngine
         /// Get the vector shift which when added to camera position will do the effect of zoom to extents (zoom to fit) operation, so all the passed points will fit in the current view.</summary>
         /// <param name="boundingBox">The bounding box.</param>
         /// <returns>The zoom to fit vector</returns>
-        public Vector3 GetZoomToExtentsShiftVector(ref BoundingBox boundingBox)
+        public Vector3 GetZoomToExtentsShiftVector(in BoundingBox boundingBox)
         {
             return GetZoomToExtentsShiftDistance(boundingBox.GetCorners()) * pNear.Normal;
         }

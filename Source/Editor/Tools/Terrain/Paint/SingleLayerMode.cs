@@ -86,7 +86,7 @@ namespace FlaxEditor.Tools.Terrain.Paint
                     var src = (Color)p.SourceData[zz * p.HeightmapSize + xx];
 
                     var samplePositionLocal = p.PatchPositionLocal + new Vector3(xx * FlaxEngine.Terrain.UnitsPerVertex, 0, zz * FlaxEngine.Terrain.UnitsPerVertex);
-                    Vector3.Transform(ref samplePositionLocal, ref p.TerrainWorld, out Vector3 samplePositionWorld);
+                    Vector3.Transform(samplePositionLocal, p.TerrainWorld, out Vector3 samplePositionWorld);
                     var sample = Mathf.Saturate(p.Brush.Sample(ref brushPosition, ref samplePositionWorld));
 
                     var paintAmount = sample * strength;

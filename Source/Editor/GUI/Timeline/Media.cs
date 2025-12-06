@@ -356,7 +356,7 @@ namespace FlaxEditor.GUI.Timeline
             {
                 Render2D.DrawLine(bounds.UpperLeft, bounds.BottomLeft, moveColor, moveThickness);
             }
-            else if (IsMouseOver && CanResize && MoveLeftEdgeRect.Contains(ref _mouseLocation))
+            else if (IsMouseOver && CanResize && MoveLeftEdgeRect.Contains(_mouseLocation))
             {
                 Render2D.DrawLine(bounds.UpperLeft, bounds.BottomLeft, Color.Yellow);
             }
@@ -364,7 +364,7 @@ namespace FlaxEditor.GUI.Timeline
             {
                 Render2D.DrawLine(bounds.UpperRight, bounds.BottomRight, moveColor, moveThickness);
             }
-            else if (IsMouseOver && CanResize && MoveRightEdgeRect.Contains(ref _mouseLocation))
+            else if (IsMouseOver && CanResize && MoveRightEdgeRect.Contains(_mouseLocation))
             {
                 Render2D.DrawLine(bounds.UpperRight, bounds.BottomRight, Color.Yellow);
             }
@@ -384,8 +384,8 @@ namespace FlaxEditor.GUI.Timeline
                 _startMoveLocation = Root.MousePosition;
                 _startMoveStartFrame = StartFrame;
                 _startMoveDuration = DurationFrames;
-                _startMoveLeftEdge = MoveLeftEdgeRect.Contains(ref location) && CanResize;
-                _startMoveRightEdge = MoveRightEdgeRect.Contains(ref location) && CanResize;
+                _startMoveLeftEdge = MoveLeftEdgeRect.Contains(location) && CanResize;
+                _startMoveRightEdge = MoveRightEdgeRect.Contains(location) && CanResize;
                 StartMouseCapture(true);
                 if (_startMoveLeftEdge || _startMoveRightEdge)
                     return true;

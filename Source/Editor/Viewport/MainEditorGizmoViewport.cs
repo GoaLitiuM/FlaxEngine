@@ -278,7 +278,7 @@ namespace FlaxEditor.Viewport
                 for (int i = 0; i < selection.Count; i++)
                 {
                     selection[i].GetEditorSphere(out var sphere);
-                    BoundingSphere.Merge(ref selectionBounds, ref sphere, out selectionBounds);
+                    BoundingSphere.Merge(selectionBounds, sphere, out selectionBounds);
                 }
 
                 if (ContainsFocus)
@@ -470,8 +470,8 @@ namespace FlaxEditor.Viewport
                 }
                 else
                 {
-                    Matrix.RotationQuaternion(ref trans.Orientation, out var transWorld);
-                    Matrix.RotationQuaternion(ref rotationDelta, out var deltaWorld);
+                    Matrix.RotationQuaternion(trans.Orientation, out var transWorld);
+                    Matrix.RotationQuaternion(rotationDelta, out var deltaWorld);
                     Matrix world = transWorld * Matrix.Translation(pivotOffset) * deltaWorld * Matrix.Translation(-pivotOffset);
                     trans.SetRotation(ref world);
                     trans.Translation += world.TranslationVector;
@@ -567,8 +567,8 @@ namespace FlaxEditor.Viewport
                     }
                     else
                     {
-                        Matrix.RotationQuaternion(ref trans.Orientation, out var transWorld);
-                        Matrix.RotationQuaternion(ref rotationDelta, out var deltaWorld);
+                        Matrix.RotationQuaternion(trans.Orientation, out var transWorld);
+                        Matrix.RotationQuaternion(rotationDelta, out var deltaWorld);
                         Matrix world = transWorld * Matrix.Translation(pivotOffset) * deltaWorld * Matrix.Translation(-pivotOffset);
                         trans.SetRotation(ref world);
                         trans.Translation += world.TranslationVector;
@@ -627,7 +627,7 @@ namespace FlaxEditor.Viewport
         protected override void OnLeftMouseButtonUp()
         {
             // Skip if was controlling mouse or mouse is not over the area
-            if (_prevInput.IsControllingMouse || !Bounds.Contains(ref _viewMousePos))
+            if (_prevInput.IsControllingMouse || !Bounds.Contains(_viewMousePos))
                 return;
 
             // Select rubberbanded rect actor nodes or pick with gizmo
@@ -650,7 +650,7 @@ namespace FlaxEditor.Viewport
                 return true;
 
             // Handle mouse going up when using rubber band with mouse capture that click up outside the view
-            if (button == MouseButton.Left && !new Rectangle(Float2.Zero, Size).Contains(ref location))
+            if (button == MouseButton.Left && !new Rectangle(Float2.Zero, Size).Contains(location))
             {
                 _rubberBandSelector.ReleaseRubberBandSelection();
                 return true;

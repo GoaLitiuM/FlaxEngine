@@ -129,7 +129,7 @@ namespace FlaxEditor.Gizmo
                         if (_selectionParents[i] is ActorNode actorNode)
                         {
                             var b = actorNode.Actor.EditorBoxChildren;
-                            BoundingBox.Merge(ref editorBounds, ref b, out editorBounds);
+                            BoundingBox.Merge(editorBounds, b, out editorBounds);
                             bottomToCenter = Mathf.Min(bottomToCenter, actorNode.Actor.Position.Y - editorBounds.Minimum.Y);
                         }
                     }

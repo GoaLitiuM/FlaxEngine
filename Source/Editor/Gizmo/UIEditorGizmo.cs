@@ -240,7 +240,7 @@ namespace FlaxEditor
             {
                 foreach (var widget in _widgets)
                 {
-                    if (widget.Bounds.Contains(ref location))
+                    if (widget.Bounds.Contains(location))
                     {
                         // Initialize widget movement
                         _activeWidget = widget;
@@ -326,7 +326,7 @@ namespace FlaxEditor
             {
                 foreach (var widget in _widgets)
                 {
-                    if (widget.Bounds.Contains(ref location))
+                    if (widget.Bounds.Contains(location))
                     {
                         Cursor = widget.Cursor;
                         cursorChanged = true;
@@ -643,10 +643,10 @@ namespace FlaxEditor
                 DrawControlWidget(uiControl, ref ur, ref mousePos, ref widgetHandleSize, viewScale, new Float2(1, -1), CursorType.SizeNESW);
                 DrawControlWidget(uiControl, ref bl, ref mousePos, ref widgetHandleSize, viewScale, new Float2(-1, 1), CursorType.SizeNESW);
                 DrawControlWidget(uiControl, ref br, ref mousePos, ref widgetHandleSize, viewScale, new Float2(1, 1), CursorType.SizeNWSE);
-                Float2.Lerp(ref ul, ref bl, 0.5f, out var el);
-                Float2.Lerp(ref ur, ref br, 0.5f, out var er);
-                Float2.Lerp(ref ul, ref ur, 0.5f, out var eu);
-                Float2.Lerp(ref bl, ref br, 0.5f, out var eb);
+                Float2.Lerp(ul, bl, 0.5f, out var el);
+                Float2.Lerp(ur, br, 0.5f, out var er);
+                Float2.Lerp(ul, ur, 0.5f, out var eu);
+                Float2.Lerp(bl, br, 0.5f, out var eb);
                 DrawControlWidget(uiControl, ref el, ref mousePos, ref widgetHandleSize, viewScale, new Float2(-1, 0), CursorType.SizeWE);
                 DrawControlWidget(uiControl, ref er, ref mousePos, ref widgetHandleSize, viewScale, new Float2(1, 0), CursorType.SizeWE);
                 DrawControlWidget(uiControl, ref eu, ref mousePos, ref widgetHandleSize, viewScale, new Float2(0, -1), CursorType.SizeNS);
@@ -749,7 +749,7 @@ namespace FlaxEditor
                 default: break;
                 }
             }
-            if (rect.Contains(ref mousePos))
+            if (rect.Contains(mousePos))
             {
                 Render2D.FillRectangle(rect, style.Foreground);
                 Render2D.DrawRectangle(rect, style.SelectionBorder);

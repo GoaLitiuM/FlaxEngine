@@ -191,7 +191,7 @@ namespace FlaxEditor.Surface.Archetypes
 
                 // Header
                 var headerColor = style.BackgroundHighlighted;
-                if (_headerRect.Contains(ref _mousePosition))
+                if (_headerRect.Contains(_mousePosition))
                     headerColor *= 1.07f;
                 Render2D.FillRectangle(_headerRect, headerColor);
                 Render2D.DrawText(style.FontLarge, Title, _headerRect, style.Foreground, TextAlignment.Center, TextAlignment.Center);

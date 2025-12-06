@@ -144,7 +144,7 @@ namespace FlaxEditor.GUI.Timeline
                 var k = keyframes[i];
 
                 var sphere = new BoundingSphere(k.Value, KeyframeSize);
-                if (sphere.Intersects(ref selectRay))
+                if (sphere.Intersects(selectRay))
                 {
                     SelectKeyframe(_track, i, 0);
                     return;
@@ -154,7 +154,7 @@ namespace FlaxEditor.GUI.Timeline
                 {
                     var t = k.Value + k.TangentIn;
                     var box = BoundingBox.FromSphere(new BoundingSphere(t, TangentSize));
-                    if (box.Intersects(ref selectRay))
+                    if (box.Intersects(selectRay))
                     {
                         SelectKeyframe(_track, i, 1);
                         return;
@@ -165,7 +165,7 @@ namespace FlaxEditor.GUI.Timeline
                 {
                     var t = k.Value + k.TangentOut;
                     var box = BoundingBox.FromSphere(new BoundingSphere(t, TangentSize));
-                    if (box.Intersects(ref selectRay))
+                    if (box.Intersects(selectRay))
                     {
                         SelectKeyframe(_track, i, 2);
                         return;

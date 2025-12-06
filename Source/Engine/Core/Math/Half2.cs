@@ -100,7 +100,7 @@ namespace FlaxEngine
         /// <c>true</c> if <paramref name="left" /> has the same value as <paramref name="right" />; otherwise, <c>false</c>.</returns>
         public static bool operator ==(Half2 left, Half2 right)
         {
-            return Equals(ref left, ref right);
+            return Equals(in left, in right);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace FlaxEngine
         [return: MarshalAs(UnmanagedType.U1)]
         public static bool operator !=(Half2 left, Half2 right)
         {
-            return !Equals(ref left, ref right);
+            return !Equals(in left, in right);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace FlaxEngine
         /// <returns>
         /// <c>true</c> if <paramref name="value1" /> is the same instance as <paramref name="value2" /> or 
         /// if both are <c>null</c> references or if <c>value1.Equals(value2)</c> returns <c>true</c>; otherwise, <c>false</c>.</returns>
-        public static bool Equals(ref Half2 value1, ref Half2 value2)
+        public static bool Equals(in Half2 value1, in Half2 value2)
         {
             return ((value1.X == value2.X) && (value1.Y == value2.Y));
         }

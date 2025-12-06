@@ -96,7 +96,7 @@ namespace FlaxEditor.GUI
         private void DoDrag()
         {
             // Do the drag drop operation if has selected element
-            if (new Rectangle(Float2.Zero, Size).Contains(ref _mouseDownPos))
+            if (new Rectangle(Float2.Zero, Size).Contains(_mouseDownPos))
             {
                 if (Validator.SelectedAsset != null)
                     DoDragDrop(DragAssets.GetDragData(Validator.SelectedAsset));

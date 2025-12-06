@@ -177,7 +177,7 @@ namespace FlaxEditor.SceneGraph.Actors
                 var actor = (Spline)_node.Actor;
                 var pos = actor.GetSplinePoint(Index);
                 var nodeSize = NodeSizeByDistance(Transform.Translation, PointNodeSize, ray.View.Position);
-                return new BoundingSphere(pos, nodeSize).Intersects(ref ray.Ray, out distance);
+                return new BoundingSphere(pos, nodeSize).Intersects(ray.Ray, out distance);
             }
 
             public override void OnDebugDraw(ViewportDebugDrawData data)
@@ -264,7 +264,7 @@ namespace FlaxEditor.SceneGraph.Actors
                 var actor = (Spline)_node.Actor;
                 var pos = actor.GetSplineTangent(_index, _isIn).Translation;
                 var tangentSize = NodeSizeByDistance(Transform.Translation, TangentNodeSize, ray.View.Position);
-                return new BoundingSphere(pos, tangentSize).Intersects(ref ray.Ray, out distance);
+                return new BoundingSphere(pos, tangentSize).Intersects(ray.Ray, out distance);
             }
 
             public override void OnDebugDraw(ViewportDebugDrawData data)

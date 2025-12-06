@@ -581,7 +581,7 @@ namespace FlaxEngine.GUI
                     predictedLocation = new Float2(Size.X, location.Y - layoutSize.Y);
                     break;
                 }
-                if (new Rectangle(Float2.Zero, Size).Contains(ref predictedLocation))
+                if (new Rectangle(Float2.Zero, Size).Contains(predictedLocation))
                 {
                     var result = NavigationRaycast(direction, predictedLocation, visited);
                     if (result != null)
@@ -646,8 +646,8 @@ namespace FlaxEngine.GUI
                 var childNavLocation = child.Center;
                 var childBounds = child.Bounds;
                 var childNavDirection = Float2.Normalize(childNavLocation - location);
-                var childNavCoherence1 = Float2.Dot(ref uiDir1, ref childNavDirection);
-                var childNavCoherence2 = Float2.Dot(ref uiDir2, ref childNavDirection);
+                var childNavCoherence1 = Float2.Dot(uiDir1, childNavDirection);
+                var childNavCoherence2 = Float2.Dot(uiDir2, childNavDirection);
                 var distance = Rectangle.Distance(childBounds, location);
                 if (childNavCoherence1 > Mathf.Epsilon && childNavCoherence2 > Mathf.Epsilon && distance < minDistance)
                 {
@@ -836,9 +836,9 @@ namespace FlaxEngine.GUI
                     var child = children[i];
                     if (child.Visible)
                     {
-                        Matrix3x3.Multiply(ref child._cachedTransform, ref globalTransform, out var globalChildTransform);
+                        Matrix3x3.Multiply(child._cachedTransform, globalTransform, out var globalChildTransform);
                         var childGlobalRect = new Rectangle(globalChildTransform.M31, globalChildTransform.M32, child.Width * globalChildTransform.M11, child.Height * globalChildTransform.M22);
-                        if (globalClipping.Intersects(ref childGlobalRect))
+                        if (globalClipping.Intersects(childGlobalRect))
                         {
                             Render2D.PushTransform(ref child._cachedTransform);
                             child.Draw();

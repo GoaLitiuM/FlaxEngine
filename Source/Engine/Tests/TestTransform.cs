@@ -26,12 +26,12 @@ namespace FlaxEngine.Tests
             Matrix a2;
             {
                 Matrix m1, m2;
-                Matrix.Scaling(ref t1.Scale, out a2);
-                Matrix.RotationQuaternion(ref t1.Orientation, out m2);
-                Matrix.Multiply(ref a2, ref m2, out m1);
+                Matrix.Scaling(t1.Scale, out a2);
+                Matrix.RotationQuaternion(t1.Orientation, out m2);
+                Matrix.Multiply(a2, m2, out m1);
                 Float3 translation = t1.Translation;
-                Matrix.Translation(ref translation, out m2);
-                Matrix.Multiply(ref m1, ref m2, out a2);
+                Matrix.Translation(translation, out m2);
+                Matrix.Multiply(m1, m2, out a2);
             }
 
             Matrix a3;
@@ -57,10 +57,10 @@ namespace FlaxEngine.Tests
             {
                 Vector3 result;
                 Matrix scale, rotation, scaleRotation;
-                Matrix.Scaling(ref t1.Scale, out scale);
-                Matrix.RotationQuaternion(ref t1.Orientation, out rotation);
-                Matrix.Multiply(ref scale, ref rotation, out scaleRotation);
-                Vector3.Transform(ref t2.Translation, ref scaleRotation, out result);
+                Matrix.Scaling(t1.Scale, out scale);
+                Matrix.RotationQuaternion(t1.Orientation, out rotation);
+                Matrix.Multiply(scale, rotation, out scaleRotation);
+                Vector3.Transform(t2.Translation, scaleRotation, out result);
                 a3 = result + t1.Translation;
             }
 
@@ -88,12 +88,12 @@ namespace FlaxEngine.Tests
             Float3 a3;
             {
                 Matrix scale, rotation, scaleRotation;
-                Matrix.Scaling(ref t1.Scale, out scale);
-                Matrix.RotationQuaternion(ref t1.Orientation, out rotation);
-                Matrix.Multiply(ref scale, ref rotation, out scaleRotation);
-                Matrix.Invert(ref scaleRotation, out scale);
+                Matrix.Scaling(t1.Scale, out scale);
+                Matrix.RotationQuaternion(t1.Orientation, out rotation);
+                Matrix.Multiply(scale, rotation, out scaleRotation);
+                Matrix.Invert(scaleRotation, out scale);
                 a3 = t2.Translation - t1.Translation;
-                Float3.Transform(ref a3, ref scale, out a3);
+                Float3.Transform(a3, scale, out a3);
             }
 
             var a4T = new Vector3[1];
@@ -145,7 +145,7 @@ namespace FlaxEngine.Tests
                 Transform ab = a.LocalToWorld(b);
                 Transform ba = a.WorldToLocal(ab);
 
-                Assert.IsTrue(Transform.NearEqual(ref b, ref ba, 0.00001f), $"Got: {b} but expected {ba}");
+                Assert.IsTrue(Transform.NearEqual(b, ba, 0.00001f), $"Got: {b} but expected {ba}");
             }
         }
 
@@ -163,11 +163,11 @@ namespace FlaxEngine.Tests
 
                 Transform ab = a + b;
                 Transform newA = ab - b;
-                Assert.IsTrue(Transform.NearEqual(ref a, ref newA, 0.00001f), $"Got: {newA} but expected {a}");
+                Assert.IsTrue(Transform.NearEqual(a, newA, 0.00001f), $"Got: {newA} but expected {a}");
 
                 Transform ba = b + a;
                 Transform newB = ba - a;
-                Assert.IsTrue(Transform.NearEqual(ref b, ref newB, 0.00001f), $"Got: {newB} but expected {b}");
+                Assert.IsTrue(Transform.NearEqual(b, newB, 0.00001f), $"Got: {newB} but expected {b}");
             }
         }
     }

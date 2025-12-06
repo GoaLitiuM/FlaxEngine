@@ -231,7 +231,7 @@ namespace FlaxEditor.GUI
             var controlUnderMouse = GetChildAt(mousePos);
             var isMouseOverSth = controlUnderMouse != null && controlUnderMouse != _title;
             var rb = GetRightButton();
-            if (rb != null && _minimizeButton != null && new Rectangle(rb.UpperRight, _minimizeButton.BottomLeft - rb.UpperRight).Contains(ref mousePos) && !isMouseOverSth)
+            if (rb != null && _minimizeButton != null && new Rectangle(rb.UpperRight, _minimizeButton.BottomLeft - rb.UpperRight).Contains(mousePos) && !isMouseOverSth)
                 return WindowHitCodes.Caption;
 
             return WindowHitCodes.Client;

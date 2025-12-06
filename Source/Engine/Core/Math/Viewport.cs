@@ -171,7 +171,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="other">The <see cref="Viewport"/> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Viewport"/> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(ref Viewport other)
+        public bool Equals(in Viewport other)
         {
             return Mathf.NearEqual(X, other.X) &&
                    Mathf.NearEqual(Y, other.Y) &&
@@ -189,7 +189,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Viewport other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified object is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
-            return obj is Viewport other && Equals(ref other);
+            return obj is Viewport other && Equals(in other);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Viewport left, Viewport right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Viewport left, Viewport right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -265,10 +265,10 @@ namespace FlaxEngine
         /// <returns>The projected vector.</returns>
         public Vector3 Project(Vector3 source, Matrix projection, Matrix view, Matrix world)
         {
-            Matrix.Multiply(ref world, ref view, out Matrix matrix);
-            Matrix.Multiply(ref matrix, ref projection, out matrix);
+            Matrix.Multiply(world, view, out Matrix matrix);
+            Matrix.Multiply(matrix, projection, out matrix);
 
-            Project(ref source, ref matrix, out Vector3 vector);
+            Project(in source, in matrix, out Vector3 vector);
             return vector;
         }
 
@@ -278,9 +278,9 @@ namespace FlaxEngine
         /// <param name="source">The vector to project.</param>
         /// <param name="matrix">A combined WorldViewProjection matrix.</param>
         /// <param name="vector">The projected vector.</param>
-        public void Project(ref Vector3 source, ref Matrix matrix, out Vector3 vector)
+        public void Project(in Vector3 source, in Matrix matrix, out Vector3 vector)
         {
-            Vector3.Transform(ref source, ref matrix, out vector);
+            Vector3.Transform(source, matrix, out vector);
             var w = source.X * matrix.M14 + source.Y * matrix.M24 + source.Z * matrix.M34 + matrix.M44;
 
             if (!Mathf.IsZero(w))
@@ -303,11 +303,11 @@ namespace FlaxEngine
         /// <returns>The unprojected Vector.</returns>
         public Vector3 Unproject(Vector3 source, Matrix projection, Matrix view, Matrix world)
         {
-            Matrix.Multiply(ref world, ref view, out Matrix matrix);
-            Matrix.Multiply(ref matrix, ref projection, out matrix);
-            Matrix.Invert(ref matrix, out matrix);
+            Matrix.Multiply(world, view, out Matrix matrix);
+            Matrix.Multiply(matrix, projection, out matrix);
+            Matrix.Invert(matrix, out matrix);
 
-            Unproject(ref source, ref matrix, out Vector3 vector);
+            Unproject(in source, in matrix, out Vector3 vector);
             return vector;
         }
 
@@ -317,14 +317,14 @@ namespace FlaxEngine
         /// <param name="source">The vector to project.</param>
         /// <param name="matrix">An inverted combined WorldViewProjection matrix.</param>
         /// <param name="vector">The unprojected vector.</param>
-        public void Unproject(ref Vector3 source, ref Matrix matrix, out Vector3 vector)
+        public void Unproject(in Vector3 source, in Matrix matrix, out Vector3 vector)
         {
             vector.X = (source.X - X) / Width * 2f - 1f;
             vector.Y = -((source.Y - Y) / Height * 2f - 1f);
             vector.Z = (source.Z - MinDepth) / (MaxDepth - MinDepth);
 
             var w = vector.X * matrix.M14 + vector.Y * matrix.M24 + vector.Z * matrix.M34 + matrix.M44;
-            Vector3.Transform(ref vector, ref matrix, out vector);
+            Vector3.Transform(vector, matrix, out vector);
 
             if (!Mathf.IsZero(w))
             {

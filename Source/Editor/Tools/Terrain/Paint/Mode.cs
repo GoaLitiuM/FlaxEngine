@@ -93,7 +93,7 @@ namespace FlaxEditor.Tools.Terrain.Paint
             var brushBounds = gizmo.CursorBrushBounds;
             terrain.GetLocalToWorldMatrix(out p.TerrainWorld);
             terrain.GetWorldToLocalMatrix(out var terrainInvWorld);
-            BoundingBox.Transform(ref brushBounds, ref terrainInvWorld, out var brushBoundsLocal);
+            BoundingBox.Transform(brushBounds, terrainInvWorld, out var brushBoundsLocal);
 
             // TODO: try caching brush weights before apply to reduce complexity and batch brush sampling
 

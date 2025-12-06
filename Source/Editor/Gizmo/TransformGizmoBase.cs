@@ -212,10 +212,10 @@ namespace FlaxEditor.Gizmo
             Vector3 delta = Vector3.Zero;
             Ray ray = Owner.MouseRay;
 
-            Matrix.RotationQuaternion(ref _gizmoWorld.Orientation, out var rotationMatrix);
-            Matrix.Invert(ref rotationMatrix, out var invRotationMatrix);
+            Matrix.RotationQuaternion(_gizmoWorld.Orientation, out var rotationMatrix);
+            Matrix.Invert(rotationMatrix, out var invRotationMatrix);
             ray.Position = Vector3.Transform(ray.Position, invRotationMatrix);
-            Vector3.TransformNormal(ref ray.Direction, ref invRotationMatrix, out ray.Direction);
+            Vector3.TransformNormal(ray.Direction, invRotationMatrix, out ray.Direction);
 
             var position = Position;
             var planeXY = new Plane(Vector3.Backward, Vector3.Transform(position, invRotationMatrix).Z);
@@ -232,7 +232,7 @@ namespace FlaxEditor.Gizmo
             case Axis.X:
             {
                 var plane = planeDotXY > planeDotZX ? planeXY : planeZX;
-                if (ray.Intersects(ref plane, out intersection))
+                if (ray.Intersects(plane, out intersection))
                 {
                     _intersectPosition = ray.GetPoint(intersection);
                     if (!_lastIntersectionPosition.IsZero)
@@ -244,7 +244,7 @@ namespace FlaxEditor.Gizmo
             case Axis.Y:
             {
                 var plane = planeDotXY > planeDotYZ ? planeXY : planeYZ;
-                if (ray.Intersects(ref plane, out intersection))
+                if (ray.Intersects(plane, out intersection))
                 {
                     _intersectPosition = ray.GetPoint(intersection);
                     if (!_lastIntersectionPosition.IsZero)
@@ -256,7 +256,7 @@ namespace FlaxEditor.Gizmo
             case Axis.Z:
             {
                 var plane = planeDotZX > planeDotYZ ? planeZX : planeYZ;
-                if (ray.Intersects(ref plane, out intersection))
+                if (ray.Intersects(plane, out intersection))
                 {
                     _intersectPosition = ray.GetPoint(intersection);
                     if (!_lastIntersectionPosition.IsZero)
@@ -267,7 +267,7 @@ namespace FlaxEditor.Gizmo
             }
             case Axis.YZ:
             {
-                if (ray.Intersects(ref planeYZ, out intersection))
+                if (ray.Intersects(planeYZ, out intersection))
                 {
                     _intersectPosition = ray.GetPoint(intersection);
                     if (!_lastIntersectionPosition.IsZero)
@@ -288,7 +288,7 @@ namespace FlaxEditor.Gizmo
             }
             case Axis.XY:
             {
-                if (ray.Intersects(ref planeXY, out intersection))
+                if (ray.Intersects(planeXY, out intersection))
                 {
                     _intersectPosition = ray.GetPoint(intersection);
                     if (!_lastIntersectionPosition.IsZero)
@@ -309,7 +309,7 @@ namespace FlaxEditor.Gizmo
             }
             case Axis.ZX:
             {
-                if (ray.Intersects(ref planeZX, out intersection))
+                if (ray.Intersects(planeZX, out intersection))
                 {
                     _intersectPosition = ray.GetPoint(intersection);
                     if (!_lastIntersectionPosition.IsZero)
@@ -332,7 +332,7 @@ namespace FlaxEditor.Gizmo
             {
                 var gizmoToView = Position - Owner.ViewPosition;
                 var plane = new Plane(-Vector3.Normalize(gizmoToView), gizmoToView.Length);
-                if (ray.Intersects(ref plane, out intersection))
+                if (ray.Intersects(plane, out intersection))
                 {
                     _intersectPosition = ray.GetPoint(intersection);
                     if (!_lastIntersectionPosition.IsZero)
@@ -473,11 +473,11 @@ namespace FlaxEditor.Gizmo
                     dir = Float3.Forward * _gizmoWorld.Orientation;
 
                 Float3 viewDir = Owner.ViewPosition - Position;
-                Float3.Dot(ref viewDir, ref dir, out float dot);
+                Float3.Dot(viewDir, dir, out float dot);
                 if (dot < 0.0f)
                     delta *= -1;
 
-                Quaternion.RotationAxis(ref dir, delta, out _rotationDelta);
+                Quaternion.RotationAxis(dir, delta, out _rotationDelta);
                 break;
             }
 

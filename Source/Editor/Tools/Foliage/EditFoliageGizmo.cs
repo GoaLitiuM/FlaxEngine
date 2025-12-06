@@ -104,7 +104,7 @@ namespace FlaxEditor.Tools.Foliage
             if (foliage && instanceIndex >= 0 && instanceIndex < foliage.InstancesCount)
             {
                 var instance = foliage.GetInstance(instanceIndex);
-                BoundingBox.FromSphere(ref instance.Bounds, out bounds);
+                BoundingBox.FromSphere(instance.Bounds, out bounds);
             }
         }
 
@@ -155,8 +155,8 @@ namespace FlaxEditor.Tools.Foliage
                 }
                 else
                 {
-                    Matrix.RotationQuaternion(ref trans.Orientation, out var transWorld);
-                    Matrix.RotationQuaternion(ref rotationDelta, out var deltaWorld);
+                    Matrix.RotationQuaternion(trans.Orientation, out var transWorld);
+                    Matrix.RotationQuaternion(rotationDelta, out var deltaWorld);
                     Matrix world = transWorld * Matrix.Translation(pivotOffset) * deltaWorld * Matrix.Translation(-pivotOffset);
                     trans.SetRotation(ref world);
                     trans.Translation += world.TranslationVector;

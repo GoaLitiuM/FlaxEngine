@@ -37,15 +37,15 @@ namespace FlaxEditor.SceneGraph.Actors
             {
                 var up = Float3.Up;
                 Float3 translation = transform.Translation;
-                Matrix.Billboard(ref translation, ref viewPosition, ref up, ref viewDirection, out m2);
-                Matrix.Multiply(ref m1, ref m2, out m3);
-                Matrix.Scaling(ref transform.Scale, out m1);
-                Matrix.Multiply(ref m1, ref m3, out world);
+                Matrix.Billboard(translation, viewPosition, up, viewDirection, out m2);
+                Matrix.Multiply(m1, m2, out m3);
+                Matrix.Scaling(transform.Scale, out m1);
+                Matrix.Multiply(m1, m3, out world);
             }
             else
             {
                 transform.GetWorld(out m2);
-                Matrix.Multiply(ref m1, ref m2, out world);
+                Matrix.Multiply(m1, m2, out world);
             }
 
             OrientedBoundingBox bounds;
@@ -53,7 +53,7 @@ namespace FlaxEditor.SceneGraph.Actors
             world.Decompose(out bounds.Transformation);
 
             normal = -ray.Ray.Direction;
-            return bounds.Intersects(ref ray.Ray, out distance);
+            return bounds.Intersects(ray.Ray, out distance);
         }
 
         /// <inheritdoc />

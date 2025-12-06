@@ -340,7 +340,7 @@ namespace FlaxEngine.GUI
             for (int i = 0; i < textBlocksCount; i++)
             {
                 ref TextBlock textBlock = ref textBlocks[i];
-                if (textBlock.Bounds.Intersects(ref viewRect))
+                if (textBlock.Bounds.Intersects(viewRect))
                 {
                     firstTextBlock = i;
                     break;
@@ -350,7 +350,7 @@ namespace FlaxEngine.GUI
             for (int i = textBlocksCount - 1; i > firstTextBlock; i--)
             {
                 ref TextBlock textBlock = ref textBlocks[i];
-                if (textBlock.Bounds.Intersects(ref viewRect))
+                if (textBlock.Bounds.Intersects(viewRect))
                 {
                     endTextBlock = i + 1;
                     break;

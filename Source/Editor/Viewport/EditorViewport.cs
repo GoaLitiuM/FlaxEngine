@@ -349,8 +349,8 @@ namespace FlaxEditor.Viewport
                 Float3 position = ViewPosition - viewOrigin;
                 CreateViewMatrix(position, out var view);
                 CreateProjectionMatrix(out var projection);
-                Matrix.Multiply(ref view, ref projection, out var viewProjection);
-                return new BoundingFrustum(ref viewProjection);
+                Matrix.Multiply(view, projection, out var viewProjection);
+                return new BoundingFrustum(viewProjection);
             }
         }
 
@@ -1438,7 +1438,7 @@ namespace FlaxEditor.Viewport
             var target = position + direction;
             var right = Mathf.Abs(Float3.Dot(direction, Float3.Up)) < 1.0f - Mathf.Epsilon ? Float3.Normalize(Float3.Cross(Float3.Up, direction)) : Float3.Forward;
             var up = Float3.Normalize(Float3.Cross(direction, right));
-            Matrix.LookAt(ref position, ref target, ref up, out result);
+            Matrix.LookAt(position, target, up, out result);
         }
 
         /// <summary>
@@ -1484,14 +1484,14 @@ namespace FlaxEditor.Viewport
             // Create view frustum
             CreateProjectionMatrix(out var p);
             CreateViewMatrix(position, out var v);
-            Matrix.Multiply(ref v, ref p, out var ivp);
+            Matrix.Multiply(v, p, out var ivp);
             ivp.Invert();
 
             // Create near and far points
             var nearPoint = new Vector3(mousePosition, _nearPlane);
             var farPoint = new Vector3(mousePosition, _farPlane);
-            viewport.Unproject(ref nearPoint, ref ivp, out nearPoint);
-            viewport.Unproject(ref farPoint, ref ivp, out farPoint);
+            viewport.Unproject(nearPoint, ivp, out nearPoint);
+            viewport.Unproject(farPoint, ivp, out farPoint);
 
             return new Ray(nearPoint + viewOrigin, Vector3.Normalize(farPoint - nearPoint));
         }
@@ -1511,8 +1511,8 @@ namespace FlaxEditor.Viewport
             Float3 position = ViewPosition - viewOrigin;
             CreateProjectionMatrix(out var p);
             CreateViewMatrix(position, out var v);
-            Matrix.Multiply(ref v, ref p, out var vp);
-            viewport.Project(ref worldSpaceLocation, ref vp, out var projected);
+            Matrix.Multiply(v, p, out var vp);
+            viewport.Project(worldSpaceLocation, vp, out var projected);
             viewportSpaceLocation = new Float2((float)projected.X, (float)projected.Y);
         }
 

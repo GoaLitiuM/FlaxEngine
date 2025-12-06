@@ -219,11 +219,11 @@ namespace FlaxEditor.CustomEditors.Editors
             var button2Rect = new Rectangle(button1Rect.Right + 2, 1, 14, 14);
 
             // Deselect
-            if (_value && button1Rect.Contains(ref location) && _type == ScriptType.Null)
+            if (_value && button1Rect.Contains(location) && _type == ScriptType.Null)
                 Value = ScriptType.Null;
 
             // Picker dropdown menu
-            if ((isSelected && _type == ScriptType.Null ? button2Rect : button1Rect).Contains(ref location))
+            if ((isSelected && _type == ScriptType.Null ? button2Rect : button1Rect).Contains(location))
                 ShowDropDownMenu();
 
             return base.OnMouseUp(location, button);

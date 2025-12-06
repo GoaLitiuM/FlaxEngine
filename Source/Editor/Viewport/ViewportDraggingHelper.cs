@@ -153,7 +153,7 @@ namespace FlaxEditor.Viewport
                 hitLocation = ray.Position + ray.Direction * closest;
                 hitNormal = normal;
             }
-            else if (girdGizmo != null && girdGizmo.Enabled && CollisionsHelper.RayIntersectsPlane(ref ray, ref gridPlane, out closest) && closest < 4000.0f)
+            else if (girdGizmo != null && girdGizmo.Enabled && CollisionsHelper.RayIntersectsPlane(ray, gridPlane, out closest) && closest < 4000.0f)
             {
                 // Use grid location
                 hitLocation = ray.Position + ray.Direction * closest;

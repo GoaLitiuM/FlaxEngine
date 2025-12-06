@@ -92,7 +92,7 @@ namespace FlaxEditor.Viewport.Cameras
             for (int i = 0; i < selection.Count; i++)
             {
                 selection[i].GetEditorSphere(out var sphere);
-                BoundingSphere.Merge(ref mergesSphere, ref sphere, out mergesSphere);
+                BoundingSphere.Merge(mergesSphere, sphere, out mergesSphere);
             }
 
             if (mergesSphere == BoundingSphere.Empty)

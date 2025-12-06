@@ -868,7 +868,7 @@ namespace FlaxEditor.Surface
         }
 
         /// <inheritdoc />
-        protected override bool ShowTooltip => base.ShowTooltip && _headerRect.Contains(ref _mousePosition) && !Surface.IsLeftMouseButtonDown && !Surface.IsRightMouseButtonDown && !Surface.IsPrimaryMenuOpened;
+        protected override bool ShowTooltip => base.ShowTooltip && _headerRect.Contains(_mousePosition) && !Surface.IsLeftMouseButtonDown && !Surface.IsRightMouseButtonDown && !Surface.IsPrimaryMenuOpened;
 
         /// <inheritdoc />
         public override bool OnShowTooltip(out string text, out Float2 location, out Rectangle area)
@@ -898,13 +898,13 @@ namespace FlaxEditor.Surface
         /// <inheritdoc />
         public override bool OnTestTooltipOverControl(ref Float2 location)
         {
-            return _headerRect.Contains(ref location) && ShowTooltip && !Surface.IsConnecting && !Surface.IsSelecting;
+            return _headerRect.Contains(location) && ShowTooltip && !Surface.IsConnecting && !Surface.IsSelecting;
         }
 
         /// <inheritdoc />
         public override bool CanSelect(ref Float2 location)
         {
-            return _headerRect.MakeOffsetted(Location).Contains(ref location);
+            return _headerRect.MakeOffsetted(Location).Contains(location);
         }
 
         /// <inheritdoc />
@@ -1056,7 +1056,7 @@ namespace FlaxEditor.Surface
 
             // Header
             var headerColor = style.BackgroundHighlighted;
-            if (_headerRect.Contains(ref _mousePosition) && !Surface.IsConnecting && !Surface.IsSelecting)
+            if (_headerRect.Contains(_mousePosition) && !Surface.IsConnecting && !Surface.IsSelecting)
                 headerColor *= 1.07f;
             Render2D.FillRectangle(_headerRect, headerColor);
             Render2D.DrawText(style.FontLarge, Title, _headerRect, style.Foreground, TextAlignment.Center, TextAlignment.Center);
@@ -1099,7 +1099,7 @@ namespace FlaxEditor.Surface
             if (base.OnMouseDown(location, button))
                 return true;
 
-            if (button == MouseButton.Left && (Archetype.Flags & NodeFlags.NoCloseButton) == 0 && _closeButtonRect.Contains(ref location))
+            if (button == MouseButton.Left && (Archetype.Flags & NodeFlags.NoCloseButton) == 0 && _closeButtonRect.Contains(location))
                 return true;
             if (button == MouseButton.Right)
                 mouseDownMousePosition = Input.Mouse.Position;
@@ -1115,7 +1115,7 @@ namespace FlaxEditor.Surface
 
             // Close/ delete
             bool canDelete = !Surface.IsConnecting && !Surface.WasSelecting && !Surface.WasMovingSelection;
-            if (button == MouseButton.Left && canDelete && (Archetype.Flags & NodeFlags.NoCloseButton) == 0 && _closeButtonRect.Contains(ref location))
+            if (button == MouseButton.Left && canDelete && (Archetype.Flags & NodeFlags.NoCloseButton) == 0 && _closeButtonRect.Contains(location))
             {
                 Surface.Delete(this);
                 return true;

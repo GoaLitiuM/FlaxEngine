@@ -79,7 +79,7 @@ namespace FlaxEngine
             get => Orientation.EulerAngles;
             set
             {
-                Quaternion.Euler(ref value, out var orientation);
+                Quaternion.Euler(value, out var orientation);
                 Internal_SetOrientation(__unmanagedPtr, ref orientation);
             }
         }
@@ -97,7 +97,7 @@ namespace FlaxEngine
             get => LocalOrientation.EulerAngles;
             set
             {
-                Quaternion.Euler(ref value, out var orientation);
+                Quaternion.Euler(value, out var orientation);
                 Internal_SetLocalOrientation(__unmanagedPtr, ref orientation);
             }
         }

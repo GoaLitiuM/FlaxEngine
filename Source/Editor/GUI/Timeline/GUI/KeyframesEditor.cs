@@ -115,7 +115,7 @@ namespace FlaxEditor.GUI
                 {
                     if (Children[i] is KeyframePoint p)
                     {
-                        p.IsSelected = p.Bounds.Intersects(ref selectionRect);
+                        p.IsSelected = p.Bounds.Intersects(selectionRect);
                     }
                 }
             }
@@ -401,7 +401,7 @@ namespace FlaxEditor.GUI
                     Cursor = CursorType.Default;
 
                     // Check if no move has been made at all
-                    if (Float2.Distance(ref location, ref _rightMouseDownPos) < 2.0f)
+                    if (Float2.Distance(location, _rightMouseDownPos) < 2.0f)
                     {
                         var selectionCount = _editor.SelectionCount;
                         var point = GetChildAt(location) as KeyframePoint;

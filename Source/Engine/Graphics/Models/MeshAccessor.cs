@@ -494,8 +494,8 @@ namespace FlaxEngine
                     for (int i = 0; i < vertices; i++)
                     {
                         Float3 pos = positionStream.GetFloat3(i);
-                        Float3.Min(ref min, ref pos, out min);
-                        Float3.Max(ref max, ref pos, out max);
+                        Float3.Min(min, pos, out min);
+                        Float3.Max(max, pos, out max);
                     }
                     bounds = new BoundingBox(min, max);
                 }

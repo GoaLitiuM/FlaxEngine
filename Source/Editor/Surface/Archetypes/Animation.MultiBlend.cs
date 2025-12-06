@@ -479,7 +479,7 @@ namespace FlaxEditor.Surface.Archetypes
 
                 // Scale debug pointer when it moves to make it more visible when investigating blending
                 const float debugMaxSize = 2.0f;
-                float debugScale = Mathf.Saturate(Float2.Distance(ref _debugPos, ref prev) / new Float2(_rangeX.Absolute.ValuesSum, _rangeY.Absolute.ValuesSum).Length * 100.0f) * debugMaxSize + 1.0f;
+                float debugScale = Mathf.Saturate(Float2.Distance(_debugPos, prev) / new Float2(_rangeX.Absolute.ValuesSum, _rangeY.Absolute.ValuesSum).Length * 100.0f) * debugMaxSize + 1.0f;
                 float debugBlendSpeed = _debugScale <= debugScale ? 4.0f : 1.0f;
                 _debugScale = Mathf.Lerp(_debugScale, debugScale, deltaTime * debugBlendSpeed);
             }
@@ -1189,9 +1189,9 @@ namespace FlaxEditor.Surface.Archetypes
                     _triangleColors = new Color[_triangles.Length];
                     for (int i = 0; i < _triangles.Length; i += 3)
                     {
-                        var is0 = Float2.NearEqual(ref _triangles[i + 0], ref pos);
-                        var is1 = Float2.NearEqual(ref _triangles[i + 1], ref pos);
-                        var is2 = Float2.NearEqual(ref _triangles[i + 2], ref pos);
+                        var is0 = Float2.NearEqual(_triangles[i + 0], pos);
+                        var is1 = Float2.NearEqual(_triangles[i + 1], pos);
+                        var is2 = Float2.NearEqual(_triangles[i + 2], pos);
                         if (is0 || is1 || is2)
                         {
                             selectedTriangles.Add(_triangles[i + 0]);

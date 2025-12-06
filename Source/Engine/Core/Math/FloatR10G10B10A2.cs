@@ -136,7 +136,7 @@ namespace FlaxEngine
         /// <param name="value1" />
         /// <param name="value2" />
         /// <returns><c>true</c> if <paramref name = "value1" /> is the same instance as <paramref name = "value2" /> or if both are <c>null</c> references or if <c>value1.Equals(value2)</c> returns <c>true</c>; otherwise, <c>false</c>.</returns>
-        public static bool Equals(ref FloatR10G10B10A2 value1, ref FloatR10G10B10A2 value2)
+        public static bool Equals(in FloatR10G10B10A2 value1, in FloatR10G10B10A2 value2)
         {
             return value1.rawValue == value2.rawValue;
         }

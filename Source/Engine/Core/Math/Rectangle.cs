@@ -177,7 +177,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="location">Point location to check</param>
         /// <returns>True if point is inside rectangle's area</returns>
-        public bool Contains(ref Float2 location)
+        public bool Contains(in Float2 location)
         {
             return (location.X >= Location.X && location.Y >= Location.Y) && (location.X <= Location.X + Size.X && location.Y <= Location.Y + Size.Y);
         }
@@ -197,7 +197,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The rectangle to evaluate</param>
         /// <returns>True if this rectangle entirely contains the specified rectangle, or false if not</returns>
-        public bool Contains(ref Rectangle value)
+        public bool Contains(in Rectangle value)
         {
             return (Location.X <= value.Location.X) && (value.Right <= Right) && (Location.Y <= value.Location.Y) && (value.Bottom <= Bottom);
         }
@@ -217,7 +217,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The rectangle to evaluate</param>
         /// <returns>True if the specified rectangle intersects with this one, otherwise false</returns>
-        public bool Intersects(ref Rectangle value)
+        public bool Intersects(in Rectangle value)
         {
             return (value.Location.X <= Right) && (Location.X <= value.Right) && (value.Location.Y <= Bottom) && (Location.Y <= value.Bottom);
         }
@@ -364,7 +364,7 @@ namespace FlaxEngine
         /// <param name="a">First rectangle</param>
         /// <param name="b">Second rectangle</param>
         /// <param name="result">When the method completes, contains the rectangle that both a and b rectangles.</param>
-        public static void Union(ref Rectangle a, ref Rectangle b, out Rectangle result)
+        public static void Union(in Rectangle a, in Rectangle b, out Rectangle result)
         {
             float left = Mathf.Min(a.Left, b.Left);
             float right = Mathf.Max(a.Right, b.Right);
@@ -394,7 +394,7 @@ namespace FlaxEngine
         /// <param name="a">The first rectangle.</param>
         /// <param name="b">The second rectangle.</param>
         /// <param name="result">When the method completes, contains the rectangle that shared part of a and b rectangles.</param>
-        public static void Shared(ref Rectangle a, ref Rectangle b, out Rectangle result)
+        public static void Shared(in Rectangle a, in Rectangle b, out Rectangle result)
         {
             float left = Mathf.Max(a.Left, b.Left);
             float right = Mathf.Min(a.Right, b.Right);
@@ -411,8 +411,8 @@ namespace FlaxEngine
         /// <returns>Rectangle that contains both p1 and p2</returns>
         public static Rectangle FromPoints(Float2 p1, Float2 p2)
         {
-            Float2.Min(ref p1, ref p2, out var upperLeft);
-            Float2.Max(ref p1, ref p2, out var rightBottom);
+            Float2.Min(p1, p2, out var upperLeft);
+            Float2.Max(p1, p2, out var rightBottom);
             return new Rectangle(upperLeft, Float2.Max(rightBottom - upperLeft, Float2.Zero));
         }
 
@@ -421,12 +421,12 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="p1">First point</param>
         /// <param name="p2">Second point</param>
-        /// <returns>Rectangle that contains both p1 and p2</returns>
         /// <param name="result">When the method completes, contains the rectangle that contains both p1 and p2 points.</param>
-        public static void FromPoints(ref Float2 p1, ref Float2 p2, out Rectangle result)
+        /// <returns>Rectangle that contains both p1 and p2</returns>
+        public static void FromPoints(in Float2 p1, in Float2 p2, out Rectangle result)
         {
-            Float2.Min(ref p1, ref p2, out var upperLeft);
-            Float2.Max(ref p1, ref p2, out var rightBottom);
+            Float2.Min(p1, p2, out var upperLeft);
+            Float2.Max(p1, p2, out var rightBottom);
             result = new Rectangle(upperLeft, Float2.Max(rightBottom - upperLeft, Float2.Zero));
         }
 
@@ -474,7 +474,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Rectangle left, Rectangle right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -486,7 +486,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Rectangle left, Rectangle right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         #endregion
@@ -497,7 +497,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Rectangle" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Rectangle" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref Rectangle other)
+        public bool Equals(in Rectangle other)
         {
             return Location == other.Location && Size == other.Size;
         }
@@ -505,13 +505,13 @@ namespace FlaxEngine
         /// <inheritdoc />
         public bool Equals(Rectangle other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            return obj is Rectangle other && Equals(ref other);
+            return obj is Rectangle other && Equals(in other);
         }
 
         /// <inheritdoc />

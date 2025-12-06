@@ -689,8 +689,8 @@ namespace FlaxEditor.GUI
                 if (selectedOnly && !point.IsSelected)
                     continue;
                 var pos = point.Point;
-                Float2.Min(ref posMin, ref pos, out posMin);
-                Float2.Max(ref posMax, ref pos, out posMax);
+                Float2.Min(posMin, pos, out posMin);
+                Float2.Max(posMax, pos, out posMax);
             }
 
             // Apply margin around the area
@@ -703,16 +703,16 @@ namespace FlaxEditor.GUI
             PointFromKeyframesToContents(ref posMin, ref viewRect);
             PointFromKeyframesToContents(ref posMax, ref viewRect);
             var tmp = posMin;
-            Float2.Min(ref posMin, ref posMax, out posMin);
-            Float2.Max(ref posMax, ref tmp, out posMax);
+            Float2.Min(posMin, posMax, out posMin);
+            Float2.Max(posMax, tmp, out posMax);
             var contentsSize = posMax - posMin;
 
             // Convert from Contents to Main Panel
             posMin = _contents.PointToParent(posMin);
             posMax = _contents.PointToParent(posMax);
             tmp = posMin;
-            Float2.Min(ref posMin, ref posMax, out posMin);
-            Float2.Max(ref posMax, ref tmp, out posMax);
+            Float2.Min(posMin, posMax, out posMin);
+            Float2.Max(posMax, tmp, out posMax);
 
             // Update zoom (leave unchanged when focusing a single point)
             var zoomMask = EnableZoom;

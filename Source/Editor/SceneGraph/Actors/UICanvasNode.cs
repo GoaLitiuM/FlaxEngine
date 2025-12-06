@@ -64,7 +64,7 @@ namespace FlaxEditor.SceneGraph.Actors
             normal = Vector3.Up;
 
             if (Actor is UICanvas uiCanvas && uiCanvas.Is3D)
-                return uiCanvas.Bounds.Intersects(ref ray.Ray, out distance);
+                return uiCanvas.Bounds.Intersects(ray.Ray, out distance);
 
             distance = 0;
             return false;

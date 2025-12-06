@@ -192,7 +192,7 @@ namespace FlaxEditor.CustomEditors.Editors
 
             public override bool OnMouseDown(Float2 location, MouseButton button)
             {
-                if (DropdownRect.Contains(ref location))
+                if (DropdownRect.Contains(location))
                 {
                     Focus();
                     ShowPicker();
@@ -206,7 +206,7 @@ namespace FlaxEditor.CustomEditors.Editors
             {
                 base.OnMouseMove(location);
 
-                if (DropdownRect.Contains(ref location))
+                if (DropdownRect.Contains(location))
                     Cursor = CursorType.Default;
                 else
                     Cursor = CursorType.IBeam;

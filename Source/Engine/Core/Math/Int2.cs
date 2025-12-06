@@ -198,7 +198,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to add.</param>
         /// <param name="right">The second vector to add.</param>
         /// <param name="result">When the method completes, contains the sum of the two vectors.</param>
-        public static void Add(ref Int2 left, ref Int2 right, out Int2 result)
+        public static void Add(in Int2 left, in Int2 right, out Int2 result)
         {
             result = new Int2(left.X + right.X, left.Y + right.Y);
         }
@@ -220,7 +220,7 @@ namespace FlaxEngine
         /// <param name="left">The input vector</param>
         /// <param name="right">The scalar value to be added to elements</param>
         /// <param name="result">The vector with added scalar for each element.</param>
-        public static void Add(ref Int2 left, ref int right, out Int2 result)
+        public static void Add(in Int2 left, int right, out Int2 result)
         {
             result = new Int2(left.X + right, left.Y + right);
         }
@@ -242,7 +242,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to subtract.</param>
         /// <param name="right">The second vector to subtract.</param>
         /// <param name="result">When the method completes, contains the difference of the two vectors.</param>
-        public static void Subtract(ref Int2 left, ref Int2 right, out Int2 result)
+        public static void Subtract(in Int2 left, in Int2 right, out Int2 result)
         {
             result = new Int2(left.X - right.X, left.Y - right.Y);
         }
@@ -264,7 +264,7 @@ namespace FlaxEngine
         /// <param name="left">The input vector</param>
         /// <param name="right">The scalar value to be subtracted from elements</param>
         /// <param name="result">The vector with subtracted scalar for each element.</param>
-        public static void Subtract(ref Int2 left, ref int right, out Int2 result)
+        public static void Subtract(in Int2 left, int right, out Int2 result)
         {
             result = new Int2(left.X - right, left.Y - right);
         }
@@ -286,7 +286,7 @@ namespace FlaxEngine
         /// <param name="left">The scalar value to be subtracted from elements</param>
         /// <param name="right">The input vector</param>
         /// <param name="result">The vector with subtracted scalar for each element.</param>
-        public static void Subtract(ref int left, ref Int2 right, out Int2 result)
+        public static void Subtract(int left, in Int2 right, out Int2 result)
         {
             result = new Int2(left - right.X, left - right.Y);
         }
@@ -308,7 +308,7 @@ namespace FlaxEngine
         /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Multiply(ref Int2 value, int scale, out Int2 result)
+        public static void Multiply(in Int2 value, int scale, out Int2 result)
         {
             result = new Int2(value.X * scale, value.Y * scale);
         }
@@ -330,7 +330,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to multiply.</param>
         /// <param name="right">The second vector to multiply.</param>
         /// <param name="result">When the method completes, contains the multiplied vector.</param>
-        public static void Multiply(ref Int2 left, ref Int2 right, out Int2 result)
+        public static void Multiply(in Int2 left, in Int2 right, out Int2 result)
         {
             result = new Int2(left.X * right.X, left.Y * right.Y);
         }
@@ -352,7 +352,7 @@ namespace FlaxEngine
         /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(ref Int2 value, int scale, out Int2 result)
+        public static void Divide(in Int2 value, int scale, out Int2 result)
         {
             result = new Int2(value.X / scale, value.Y / scale);
         }
@@ -374,7 +374,7 @@ namespace FlaxEngine
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="value">The vector to scale.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(int scale, ref Int2 value, out Int2 result)
+        public static void Divide(int scale, in Int2 value, out Int2 result)
         {
             result = new Int2(scale / value.X, scale / value.Y);
         }
@@ -395,7 +395,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The vector to negate.</param>
         /// <param name="result">When the method completes, contains a vector facing in the opposite direction.</param>
-        public static void Negate(ref Int2 value, out Int2 result)
+        public static void Negate(in Int2 value, out Int2 result)
         {
             result = new Int2(-value.X, -value.Y);
         }
@@ -417,7 +417,7 @@ namespace FlaxEngine
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         /// <param name="result">When the method completes, contains the clamped value.</param>
-        public static void Clamp(ref Int2 value, ref Int2 min, ref Int2 max, out Int2 result)
+        public static void Clamp(in Int2 value, in Int2 min, in Int2 max, out Int2 result)
         {
             int x = value.X;
             x = x > max.X ? max.X : x;
@@ -439,7 +439,7 @@ namespace FlaxEngine
         /// <returns>The clamped value.</returns>
         public static Int2 Clamp(Int2 value, Int2 min, Int2 max)
         {
-            Clamp(ref value, ref min, ref max, out Int2 result);
+            Clamp(in value, in min, in max, out Int2 result);
             return result;
         }
 
@@ -449,8 +449,8 @@ namespace FlaxEngine
         /// <param name="value1">The first vector.</param>
         /// <param name="value2">The second vector.</param>
         /// <param name="result">When the method completes, contains the distance between the two vectors.</param>
-        /// <remarks><see cref="Int2.DistanceSquared(ref Int2, ref Int2, out int)" /> may be preferred when only the relative distance is needed and speed is of the essence.</remarks>
-        public static void Distance(ref Int2 value1, ref Int2 value2, out float result)
+        /// <remarks><see cref="Int2.DistanceSquared(in Int2, in Int2, out int)" /> may be preferred when only the relative distance is needed and speed is of the essence.</remarks>
+        public static void Distance(in Int2 value1, in Int2 value2, out float result)
         {
             int x = value1.X - value2.X;
             int y = value1.Y - value2.Y;
@@ -485,7 +485,7 @@ namespace FlaxEngine
         /// involves two square roots, which are computationally expensive. However, using distance squared
         /// provides the same information and avoids calculating two square roots.
         /// </remarks>
-        public static void DistanceSquared(ref Int2 value1, ref Int2 value2, out int result)
+        public static void DistanceSquared(in Int2 value1, in Int2 value2, out int result)
         {
             int x = value1.X - value2.X;
             int y = value1.Y - value2.Y;
@@ -520,7 +520,7 @@ namespace FlaxEngine
         /// <param name="left">First source vector.</param>
         /// <param name="right">Second source vector.</param>
         /// <param name="result">When the method completes, contains the dot product of the two vectors.</param>
-        public static void Dot(ref Int2 left, ref Int2 right, out int result)
+        public static void Dot(in Int2 left, in Int2 right, out int result)
         {
             result = left.X * right.X + left.Y * right.Y;
         }
@@ -542,7 +542,7 @@ namespace FlaxEngine
         /// <param name="left">The first source vector.</param>
         /// <param name="right">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the largest components of the source vectors.</param>
-        public static void Max(ref Int2 left, ref Int2 right, out Int2 result)
+        public static void Max(in Int2 left, in Int2 right, out Int2 result)
         {
             result.X = left.X > right.X ? left.X : right.X;
             result.Y = left.Y > right.Y ? left.Y : right.Y;
@@ -556,7 +556,7 @@ namespace FlaxEngine
         /// <returns>A vector containing the largest components of the source vectors.</returns>
         public static Int2 Max(Int2 left, Int2 right)
         {
-            Max(ref left, ref right, out Int2 result);
+            Max(in left, in right, out Int2 result);
             return result;
         }
 
@@ -566,7 +566,7 @@ namespace FlaxEngine
         /// <param name="left">The first source vector.</param>
         /// <param name="right">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the smallest components of the source vectors.</param>
-        public static void Min(ref Int2 left, ref Int2 right, out Int2 result)
+        public static void Min(in Int2 left, in Int2 right, out Int2 result)
         {
             result.X = left.X < right.X ? left.X : right.X;
             result.Y = left.Y < right.Y ? left.Y : right.Y;
@@ -580,7 +580,7 @@ namespace FlaxEngine
         /// <returns>A vector containing the smallest components of the source vectors.</returns>
         public static Int2 Min(Int2 left, Int2 right)
         {
-            Min(ref left, ref right, out Int2 result);
+            Min(in left, in right, out Int2 result);
             return result;
         }
 
@@ -607,7 +607,7 @@ namespace FlaxEngine
 
         /// <summary>
         /// Multiplies a vector with another by performing component-wise multiplication equivalent to
-        /// <see cref="Multiply(ref Int2,ref Int2,out Int2)" />.
+        /// <see cref="Multiply(in Int2,in Int2,out Int2)" />.
         /// </summary>
         /// <param name="left">The first vector to multiply.</param>
         /// <param name="right">The second vector to multiply.</param>
@@ -789,7 +789,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Int2 left, Int2 right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -801,7 +801,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Int2 left, Int2 right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -946,7 +946,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Int2" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Int2" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref Int2 other)
+        public bool Equals(in Int2 other)
         {
             return other.X == X && other.Y == Y;
         }
@@ -954,7 +954,7 @@ namespace FlaxEngine
         /// <summary>
         /// Determines whether the specified <see cref="Int2"/> are equal.
         /// </summary>
-        public static bool Equals(ref Int2 a, ref Int2 b)
+        public static bool Equals(in Int2 a, in Int2 b)
         {
             return a.X == b.X && a.Y == b.Y;
         }
@@ -967,7 +967,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Int2 other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -977,7 +977,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Int2 other && Equals(ref other);
+            return value is Int2 other && Equals(in other);
         }
     }
 }

@@ -337,7 +337,7 @@ namespace FlaxEditor.GUI.Timeline
                             DebugDraw.DrawSphere(sphere, selected ? Color.Yellow : Color.Red);
                             sphere.Radius *= 0.95f;
                             DebugDraw.DrawSphere(sphere, new Color(1, 0, 0, coveredAlpha), 0, false);
-                            if (select && sphere.Intersects(ref selectRay))
+                            if (select && sphere.Intersects(selectRay))
                                 SelectKeyframeGizmo(curveTrack, i, 0);
 
                             if (!k.TangentIn.IsZero)
@@ -349,7 +349,7 @@ namespace FlaxEditor.GUI.Timeline
                                 var box = BoundingBox.FromSphere(new BoundingSphere(t, EditCurveTrackGizmo.TangentSize));
                                 DebugDraw.DrawBox(box, selected ? Color.Yellow : Color.AliceBlue);
                                 DebugDraw.DrawBox(box, Color.AliceBlue.AlphaMultiplied(coveredAlpha), 0, false);
-                                if (select && box.Intersects(ref selectRay))
+                                if (select && box.Intersects(selectRay))
                                     SelectKeyframeGizmo(curveTrack, i, 2);
                             }
 
@@ -362,7 +362,7 @@ namespace FlaxEditor.GUI.Timeline
                                 var box = BoundingBox.FromSphere(new BoundingSphere(t, EditCurveTrackGizmo.TangentSize));
                                 DebugDraw.DrawBox(box, selected ? Color.Yellow : Color.AliceBlue);
                                 DebugDraw.DrawBox(box, Color.AliceBlue.AlphaMultiplied(coveredAlpha), 0, false);
-                                if (select && box.Intersects(ref selectRay))
+                                if (select && box.Intersects(selectRay))
                                     SelectKeyframeGizmo(curveTrack, i, 2);
                             }
 

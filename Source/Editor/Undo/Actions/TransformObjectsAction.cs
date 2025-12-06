@@ -119,7 +119,7 @@ namespace FlaxEditor
             if (!isPlayMode && options.General.AutoRebuildNavMesh && data.Scene != null)
             {
                 // Handle simple case where objects were moved just a little and use one navmesh build request to improve performance
-                if (data.BeforeBounds.Intersects(ref data.AfterBounds))
+                if (data.BeforeBounds.Intersects(data.AfterBounds))
                 {
                     Navigation.BuildNavMesh(data.Scene, BoundingBox.Merge(data.BeforeBounds, data.AfterBounds), options.General.AutoRebuildNavMeshTimeoutMs);
                 }

@@ -314,7 +314,7 @@ namespace FlaxEditor.Tools.Terrain
             for (int patchIndex = 0; patchIndex < patchesCount; patchIndex++)
             {
                 terrain.GetPatchBounds(patchIndex, out BoundingBox tmp);
-                if (!tmp.Intersects(ref brushBounds))
+                if (!tmp.Intersects(brushBounds))
                     continue;
 
                 terrain.GetPatchCoord(patchIndex, out var patchCoord);
@@ -323,7 +323,7 @@ namespace FlaxEditor.Tools.Terrain
                 for (int chunkIndex = 0; chunkIndex < FlaxEngine.Terrain.PatchChunksCount; chunkIndex++)
                 {
                     terrain.GetChunkBounds(patchIndex, chunkIndex, out tmp);
-                    if (!tmp.Intersects(ref brushBounds))
+                    if (!tmp.Intersects(brushBounds))
                         continue;
 
                     var chunkCoord = new Int2(chunkIndex % FlaxEngine.Terrain.PatchEdgeChunksCount, chunkIndex / FlaxEngine.Terrain.PatchEdgeChunksCount);

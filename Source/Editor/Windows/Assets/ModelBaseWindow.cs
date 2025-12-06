@@ -664,7 +664,7 @@ namespace FlaxEditor.Windows.Assets
                     Float2 uv2 = texCoordStream.GetFloat2((int)i2) * uvScale;
 
                     // Don't draw too small triangles
-                    float area = Float2.TriangleArea(ref uv0, ref uv1, ref uv2);
+                    float area = Float2.TriangleArea(uv0, uv1, uv2);
                     if (area > 10.0f)
                     {
                         // Draw triangle

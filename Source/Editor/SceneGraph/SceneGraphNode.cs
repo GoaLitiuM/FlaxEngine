@@ -352,7 +352,7 @@ namespace FlaxEditor.SceneGraph
             for (int i = 0; i < ChildNodes.Count; i++)
             {
                 ChildNodes[i].GetEditorSphere(out var childSphere);
-                BoundingSphere.Merge(ref sphere, ref childSphere, out sphere);
+                BoundingSphere.Merge(sphere, childSphere, out sphere);
             }
         }
 

@@ -208,7 +208,7 @@ namespace FlaxEditor.GUI.Timeline.Tracks
                 // Hit-test dot
                 var size = Height - 2.0f;
                 var rect = new Rectangle(new Float2(size * -0.5f) + Size * 0.5f, new Float2(size));
-                return rect.Contains(ref location);
+                return rect.Contains(location);
             }
 
             return base.ContainsPoint(ref location, precise);

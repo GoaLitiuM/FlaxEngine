@@ -258,7 +258,7 @@ namespace FlaxEditor.GUI.Tree
                     }
 
                     var nodeArea = new Rectangle(pos, child.Size);
-                    if (child.IsExpanded && range.Intersects(ref nodeArea))
+                    if (child.IsExpanded && range.Intersects(nodeArea))
                         WalkSelectRangeExpandedTree(selection, child, ref range);
                 }
             }

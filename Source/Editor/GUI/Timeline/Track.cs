@@ -810,7 +810,7 @@ namespace FlaxEditor.GUI.Timeline
         /// <returns>True if hits it.</returns>
         protected virtual bool TestHeaderHit(ref Float2 location)
         {
-            return new Rectangle(0, 0, Width, HeaderHeight).Contains(ref location);
+            return new Rectangle(0, 0, Width, HeaderHeight).Contains(location);
         }
 
         /// <summary>

@@ -164,11 +164,11 @@ namespace FlaxEditor.CustomEditors.Dedicated
                 var button2Rect = new Rectangle(button1Rect.Right + 2, 1, 14, 14);
 
                 // Deselect
-                if (isSelected && button1Rect.Contains(ref location))
+                if (isSelected && button1Rect.Contains(location))
                     Value = new ModelInstanceActor.MeshReference { Actor = null, LODIndex = -1, MeshIndex = -1 };
 
                 // Picker dropdown menu
-                if ((isSelected ? button2Rect : button1Rect).Contains(ref location))
+                if ((isSelected ? button2Rect : button1Rect).Contains(location))
                     ShowDropDownMenu();
 
                 return base.OnMouseUp(location, button);

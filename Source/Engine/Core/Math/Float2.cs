@@ -309,7 +309,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to add.</param>
         /// <param name="right">The second vector to add.</param>
         /// <param name="result">When the method completes, contains the sum of the two vectors.</param>
-        public static void Add(ref Float2 left, ref Float2 right, out Float2 result)
+        public static void Add(in Float2 left, in Float2 right, out Float2 result)
         {
             result = new Float2(left.X + right.X, left.Y + right.Y);
         }
@@ -331,7 +331,7 @@ namespace FlaxEngine
         /// <param name="left">The input vector</param>
         /// <param name="right">The scalar value to be added to elements</param>
         /// <param name="result">The vector with added scalar for each element.</param>
-        public static void Add(ref Float2 left, ref float right, out Float2 result)
+        public static void Add(in Float2 left, float right, out Float2 result)
         {
             result = new Float2(left.X + right, left.Y + right);
         }
@@ -353,7 +353,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to subtract.</param>
         /// <param name="right">The second vector to subtract.</param>
         /// <param name="result">When the method completes, contains the difference of the two vectors.</param>
-        public static void Subtract(ref Float2 left, ref Float2 right, out Float2 result)
+        public static void Subtract(in Float2 left, in Float2 right, out Float2 result)
         {
             result = new Float2(left.X - right.X, left.Y - right.Y);
         }
@@ -375,7 +375,7 @@ namespace FlaxEngine
         /// <param name="left">The input vector</param>
         /// <param name="right">The scalar value to be subtracted from elements</param>
         /// <param name="result">The vector with subtracted scalar for each element.</param>
-        public static void Subtract(ref Float2 left, ref float right, out Float2 result)
+        public static void Subtract(in Float2 left, float right, out Float2 result)
         {
             result = new Float2(left.X - right, left.Y - right);
         }
@@ -397,7 +397,7 @@ namespace FlaxEngine
         /// <param name="left">The scalar value to be subtracted from elements</param>
         /// <param name="right">The input vector</param>
         /// <param name="result">The vector with subtracted scalar for each element.</param>
-        public static void Subtract(ref float left, ref Float2 right, out Float2 result)
+        public static void Subtract(float left, in Float2 right, out Float2 result)
         {
             result = new Float2(left - right.X, left - right.Y);
         }
@@ -419,7 +419,7 @@ namespace FlaxEngine
         /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Multiply(ref Float2 value, float scale, out Float2 result)
+        public static void Multiply(in Float2 value, float scale, out Float2 result)
         {
             result = new Float2(value.X * scale, value.Y * scale);
         }
@@ -441,7 +441,7 @@ namespace FlaxEngine
         /// <param name="left">The first vector to multiply.</param>
         /// <param name="right">The second vector to multiply.</param>
         /// <param name="result">When the method completes, contains the multiplied vector.</param>
-        public static void Multiply(ref Float2 left, ref Float2 right, out Float2 result)
+        public static void Multiply(in Float2 left, in Float2 right, out Float2 result)
         {
             result = new Float2(left.X * right.X, left.Y * right.Y);
         }
@@ -463,7 +463,7 @@ namespace FlaxEngine
         /// <param name="value">The vector to scale.</param>
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(ref Float2 value, float scale, out Float2 result)
+        public static void Divide(in Float2 value, float scale, out Float2 result)
         {
             result = new Float2(value.X / scale, value.Y / scale);
         }
@@ -485,7 +485,7 @@ namespace FlaxEngine
         /// <param name="scale">The amount by which to scale the vector.</param>
         /// <param name="value">The vector to scale.</param>
         /// <param name="result">When the method completes, contains the scaled vector.</param>
-        public static void Divide(float scale, ref Float2 value, out Float2 result)
+        public static void Divide(float scale, in Float2 value, out Float2 result)
         {
             result = new Float2(scale / value.X, scale / value.Y);
         }
@@ -506,7 +506,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The vector to negate.</param>
         /// <param name="result">When the method completes, contains a vector facing in the opposite direction.</param>
-        public static void Negate(ref Float2 value, out Float2 result)
+        public static void Negate(in Float2 value, out Float2 result)
         {
             result = new Float2(-value.X, -value.Y);
         }
@@ -531,7 +531,7 @@ namespace FlaxEngine
         /// <param name="amount1">Barycentric coordinate b2, which expresses the weighting factor toward vertex 2 (specified in <paramref name="value2" />).</param>
         /// <param name="amount2">Barycentric coordinate b3, which expresses the weighting factor toward vertex 3 (specified in <paramref name="value3" />).</param>
         /// <param name="result">When the method completes, contains the 2D Cartesian coordinates of the specified point.</param>
-        public static void Barycentric(ref Float2 value1, ref Float2 value2, ref Float2 value3, float amount1, float amount2, out Float2 result)
+        public static void Barycentric(in Float2 value1, in Float2 value2, in Float2 value3, float amount1, float amount2, out Float2 result)
         {
             result = new Float2(value1.X + amount1 * (value2.X - value1.X) + amount2 * (value3.X - value1.X),
                                 value1.Y + amount1 * (value2.Y - value1.Y) + amount2 * (value3.Y - value1.Y));
@@ -549,7 +549,7 @@ namespace FlaxEngine
         /// <returns>A new <see cref="Float2" /> containing the 2D Cartesian coordinates of the specified point.</returns>
         public static Float2 Barycentric(Float2 value1, Float2 value2, Float2 value3, float amount1, float amount2)
         {
-            Barycentric(ref value1, ref value2, ref value3, amount1, amount2, out Float2 result);
+            Barycentric(in value1, in value2, in value3, amount1, amount2, out Float2 result);
             return result;
         }
 
@@ -560,7 +560,7 @@ namespace FlaxEngine
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         /// <param name="result">When the method completes, contains the clamped value.</param>
-        public static void Clamp(ref Float2 value, ref Float2 min, ref Float2 max, out Float2 result)
+        public static void Clamp(in Float2 value, in Float2 min, in Float2 max, out Float2 result)
         {
             float x = value.X;
             x = x > max.X ? max.X : x;
@@ -580,7 +580,7 @@ namespace FlaxEngine
         /// <returns>The clamped value.</returns>
         public static Float2 Clamp(Float2 value, Float2 min, Float2 max)
         {
-            Clamp(ref value, ref min, ref max, out Float2 result);
+            Clamp(in value, in min, in max, out Float2 result);
             return result;
         }
 
@@ -600,7 +600,7 @@ namespace FlaxEngine
         /// <param name="v1">The second triangle vertex.</param>
         /// <param name="v2">The third triangle vertex.</param>
         /// <returns>The triangle area.</returns>
-        public static float TriangleArea(ref Float2 v0, ref Float2 v1, ref Float2 v2)
+        public static float TriangleArea(in Float2 v0, in Float2 v1, in Float2 v2)
         {
             return Mathf.Abs((v0.X * (v1.Y - v2.Y) + v1.X * (v2.Y - v0.Y) + v2.X * (v0.Y - v1.Y)) / 2);
         }
@@ -611,8 +611,8 @@ namespace FlaxEngine
         /// <param name="value1">The first vector.</param>
         /// <param name="value2">The second vector.</param>
         /// <param name="result">When the method completes, contains the distance between the two vectors.</param>
-        /// <remarks><see cref="Float2.DistanceSquared(ref Float2, ref Float2, out float)" /> may be preferred when only the relative distance is needed and speed is of the essence.</remarks>
-        public static void Distance(ref Float2 value1, ref Float2 value2, out float result)
+        /// <remarks><see cref="Float2.DistanceSquared(in Float2, in Float2, out float)" /> may be preferred when only the relative distance is needed and speed is of the essence.</remarks>
+        public static void Distance(in Float2 value1, in Float2 value2, out float result)
         {
             float x = value1.X - value2.X;
             float y = value1.Y - value2.Y;
@@ -639,8 +639,8 @@ namespace FlaxEngine
         /// <param name="value1">The first vector.</param>
         /// <param name="value2">The second vector.</param>
         /// <returns>The distance between the two vectors.</returns>
-        /// <remarks><see cref="Float2.DistanceSquared(ref Float2, ref Float2, out float)" /> may be preferred when only the relative distance is needed and speed is of the essence.</remarks>
-        public static float Distance(ref Float2 value1, ref Float2 value2)
+        /// <remarks><see cref="Float2.DistanceSquared(in Float2, in Float2, out float)" /> may be preferred when only the relative distance is needed and speed is of the essence.</remarks>
+        public static float Distance(in Float2 value1, in Float2 value2)
         {
             float x = value1.X - value2.X;
             float y = value1.Y - value2.Y;
@@ -653,7 +653,7 @@ namespace FlaxEngine
         /// <param name="value1">The first vector.</param>
         /// <param name="value2">The second vector</param>
         /// <param name="result">When the method completes, contains the squared distance between the two vectors.</param>
-        public static void DistanceSquared(ref Float2 value1, ref Float2 value2, out float result)
+        public static void DistanceSquared(in Float2 value1, in Float2 value2, out float result)
         {
             float x = value1.X - value2.X;
             float y = value1.Y - value2.Y;
@@ -666,7 +666,7 @@ namespace FlaxEngine
         /// <param name="value1">The first vector.</param>
         /// <param name="value2">The second vector</param>
         /// <returns>The squared distance between the two vectors.</returns>
-        public static float DistanceSquared(ref Float2 value1, ref Float2 value2)
+        public static float DistanceSquared(in Float2 value1, in Float2 value2)
         {
             float x = value1.X - value2.X;
             float y = value1.Y - value2.Y;
@@ -695,7 +695,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if left and right are near, <c>false</c> otherwise</returns>
         public static bool NearEqual(Float2 left, Float2 right, float epsilon = Mathf.Epsilon)
         {
-            return NearEqual(ref left, ref right, epsilon);
+            return NearEqual(in left, in right, epsilon);
         }
 
         /// <summary>
@@ -705,7 +705,7 @@ namespace FlaxEngine
         /// <param name="right">The right vector.</param>
         /// <param name="epsilon">The epsilon.</param>
         /// <returns><c>true</c> if left and right are near another, <c>false</c> otherwise</returns>
-        public static bool NearEqual(ref Float2 left, ref Float2 right, float epsilon = Mathf.Epsilon)
+        public static bool NearEqual(in Float2 left, in Float2 right, float epsilon = Mathf.Epsilon)
         {
             return Mathf.WithinEpsilon(left.X, right.X, epsilon) && Mathf.WithinEpsilon(left.Y, right.Y, epsilon);
         }
@@ -716,7 +716,7 @@ namespace FlaxEngine
         /// <param name="left">First source vector.</param>
         /// <param name="right">Second source vector.</param>
         /// <param name="result">When the method completes, contains the dot product of the two vectors.</param>
-        public static void Dot(ref Float2 left, ref Float2 right, out float result)
+        public static void Dot(in Float2 left, in Float2 right, out float result)
         {
             result = left.X * right.X + left.Y * right.Y;
         }
@@ -727,7 +727,7 @@ namespace FlaxEngine
         /// <param name="left">First source vector.</param>
         /// <param name="right">Second source vector.</param>
         /// <returns>The dot product of the two vectors.</returns>
-        public static float Dot(ref Float2 left, ref Float2 right)
+        public static float Dot(in Float2 left, in Float2 right)
         {
             return left.X * right.X + left.Y * right.Y;
         }
@@ -749,7 +749,7 @@ namespace FlaxEngine
         /// <param name="left">First source vector.</param>
         /// <param name="right">Second source vector.</param>
         /// <param name="result">When the method completes, contains the cross product of the two vectors.</param>
-        public static void Cross(ref Float2 left, ref Float2 right, out float result)
+        public static void Cross(in Float2 left, in Float2 right, out float result)
         {
             result = left.X * right.Y - left.Y * right.X;
         }
@@ -760,7 +760,7 @@ namespace FlaxEngine
         /// <param name="left">First source vector.</param>
         /// <param name="right">Second source vector.</param>
         /// <returns>The cross product of the two vectors.</returns>
-        public static float Cross(ref Float2 left, ref Float2 right)
+        public static float Cross(in Float2 left, in Float2 right)
         {
             return left.X * right.Y - left.Y * right.X;
         }
@@ -781,7 +781,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The vector to normalize.</param>
         /// <param name="result">When the method completes, contains the normalized vector.</param>
-        public static void Normalize(ref Float2 value, out Float2 result)
+        public static void Normalize(in Float2 value, out Float2 result)
         {
             result = value;
             result.Normalize();
@@ -893,7 +893,7 @@ namespace FlaxEngine
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end" />.</param>
         /// <param name="result">When the method completes, contains the linear interpolation of the two vectors.</param>
         /// <remarks>Passing <paramref name="amount" /> a value of 0 will cause <paramref name="start" /> to be returned; a value of 1 will cause <paramref name="end" /> to be returned.</remarks>
-        public static void Lerp(ref Float2 start, ref Float2 end, float amount, out Float2 result)
+        public static void Lerp(in Float2 start, in Float2 end, float amount, out Float2 result)
         {
             result.X = Mathf.Lerp(start.X, end.X, amount);
             result.Y = Mathf.Lerp(start.Y, end.Y, amount);
@@ -909,7 +909,7 @@ namespace FlaxEngine
         /// <remarks>Passing <paramref name="amount" /> a value of 0 will cause <paramref name="start" /> to be returned; a value of 1 will cause <paramref name="end" /> to be returned.</remarks>
         public static Float2 Lerp(Float2 start, Float2 end, float amount)
         {
-            Lerp(ref start, ref end, amount, out Float2 result);
+            Lerp(in start, in end, amount, out Float2 result);
             return result;
         }
 
@@ -921,7 +921,7 @@ namespace FlaxEngine
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end" />.</param>
         /// <param name="result">When the method completes, contains the linear interpolation of the two vectors.</param>
         /// <remarks>Passing <paramref name="amount" /> a value of 0 will cause <paramref name="start" /> to be returned; a value of 1 will cause <paramref name="end" /> to be returned.</remarks>
-        public static void Lerp(ref Float2 start, ref Float2 end, ref Float2 amount, out Float2 result)
+        public static void Lerp(in Float2 start, in Float2 end, in Float2 amount, out Float2 result)
         {
             result.X = Mathf.Lerp(start.X, end.X, amount.X);
             result.Y = Mathf.Lerp(start.Y, end.Y, amount.Y);
@@ -937,7 +937,7 @@ namespace FlaxEngine
         /// <remarks>Passing <paramref name="amount" /> a value of 0 will cause <paramref name="start" /> to be returned; a value of 1 will cause <paramref name="end" /> to be returned.</remarks>
         public static Float2 Lerp(Float2 start, Float2 end, Float2 amount)
         {
-            Lerp(ref start, ref end, ref amount, out Float2 result);
+            Lerp(in start, in end, in amount, out Float2 result);
             return result;
         }
 
@@ -948,10 +948,10 @@ namespace FlaxEngine
         /// <param name="end">End vector.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end" />.</param>
         /// <param name="result">When the method completes, contains the cubic interpolation of the two vectors.</param>
-        public static void SmoothStep(ref Float2 start, ref Float2 end, float amount, out Float2 result)
+        public static void SmoothStep(in Float2 start, in Float2 end, float amount, out Float2 result)
         {
             amount = Mathf.SmoothStep(amount);
-            Lerp(ref start, ref end, amount, out result);
+            Lerp(in start, in end, amount, out result);
         }
 
         /// <summary>
@@ -963,7 +963,7 @@ namespace FlaxEngine
         /// <returns>The cubic interpolation of the two vectors.</returns>
         public static Float2 SmoothStep(Float2 start, Float2 end, float amount)
         {
-            SmoothStep(ref start, ref end, amount, out Float2 result);
+            SmoothStep(in start, in end, amount, out Float2 result);
             return result;
         }
 
@@ -976,7 +976,7 @@ namespace FlaxEngine
         /// <param name="tangent2">Second source tangent vector.</param>
         /// <param name="amount">Weighting factor.</param>
         /// <param name="result">When the method completes, contains the result of the Hermite spline interpolation.</param>
-        public static void Hermite(ref Float2 value1, ref Float2 tangent1, ref Float2 value2, ref Float2 tangent2, float amount, out Float2 result)
+        public static void Hermite(in Float2 value1, in Float2 tangent1, in Float2 value2, in Float2 tangent2, float amount, out Float2 result)
         {
             float squared = amount * amount;
             float cubed = amount * squared;
@@ -999,7 +999,7 @@ namespace FlaxEngine
         /// <returns>The result of the Hermite spline interpolation.</returns>
         public static Float2 Hermite(Float2 value1, Float2 tangent1, Float2 value2, Float2 tangent2, float amount)
         {
-            Hermite(ref value1, ref tangent1, ref value2, ref tangent2, amount, out Float2 result);
+            Hermite(in value1, in tangent1, in value2, in tangent2, amount, out Float2 result);
             return result;
         }
 
@@ -1018,7 +1018,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="inDirection">The in direction.</param>
         /// <param name="result">When the method completes, contains the result of the calculation.</param>
-        public static void Perpendicular(ref Float2 inDirection, out Float2 result)
+        public static void Perpendicular(in Float2 inDirection, out Float2 result)
         {
             result = new Float2(-inDirection.Y, inDirection.X);
         }
@@ -1032,7 +1032,7 @@ namespace FlaxEngine
         /// <param name="value4">The fourth position in the interpolation.</param>
         /// <param name="amount">Weighting factor.</param>
         /// <param name="result">When the method completes, contains the result of the Catmull-Rom interpolation.</param>
-        public static void CatmullRom(ref Float2 value1, ref Float2 value2, ref Float2 value3, ref Float2 value4, float amount, out Float2 result)
+        public static void CatmullRom(in Float2 value1, in Float2 value2, in Float2 value3, in Float2 value4, float amount, out Float2 result)
         {
             float squared = amount * amount;
             float cubed = amount * squared;
@@ -1055,7 +1055,7 @@ namespace FlaxEngine
         /// <returns>A vector that is the result of the Catmull-Rom interpolation.</returns>
         public static Float2 CatmullRom(Float2 value1, Float2 value2, Float2 value3, Float2 value4, float amount)
         {
-            CatmullRom(ref value1, ref value2, ref value3, ref value4, amount, out Float2 result);
+            CatmullRom(in value1, in value2, in value3, in value4, amount, out Float2 result);
             return result;
         }
 
@@ -1065,7 +1065,7 @@ namespace FlaxEngine
         /// <param name="left">The first source vector.</param>
         /// <param name="right">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the largest components of the source vectors.</param>
-        public static void Max(ref Float2 left, ref Float2 right, out Float2 result)
+        public static void Max(in Float2 left, in Float2 right, out Float2 result)
         {
             result.X = left.X > right.X ? left.X : right.X;
             result.Y = left.Y > right.Y ? left.Y : right.Y;
@@ -1079,7 +1079,7 @@ namespace FlaxEngine
         /// <returns>A vector containing the largest components of the source vectors.</returns>
         public static Float2 Max(Float2 left, Float2 right)
         {
-            Max(ref left, ref right, out Float2 result);
+            Max(in left, in right, out Float2 result);
             return result;
         }
 
@@ -1089,7 +1089,7 @@ namespace FlaxEngine
         /// <param name="left">The first source vector.</param>
         /// <param name="right">The second source vector.</param>
         /// <param name="result">When the method completes, contains an new vector composed of the smallest components of the source vectors.</param>
-        public static void Min(ref Float2 left, ref Float2 right, out Float2 result)
+        public static void Min(in Float2 left, in Float2 right, out Float2 result)
         {
             result.X = left.X < right.X ? left.X : right.X;
             result.Y = left.Y < right.Y ? left.Y : right.Y;
@@ -1103,7 +1103,7 @@ namespace FlaxEngine
         /// <returns>A vector containing the smallest components of the source vectors.</returns>
         public static Float2 Min(Float2 left, Float2 right)
         {
-            Min(ref left, ref right, out Float2 result);
+            Min(in left, in right, out Float2 result);
             return result;
         }
 
@@ -1124,7 +1124,7 @@ namespace FlaxEngine
         /// <param name="normal">Normal of the surface.</param>
         /// <param name="result">When the method completes, contains the reflected vector.</param>
         /// <remarks>Reflect only gives the direction of a reflection off a surface, it does not determine whether the original vector was close enough to the surface to hit it.</remarks>
-        public static void Reflect(ref Float2 vector, ref Float2 normal, out Float2 result)
+        public static void Reflect(in Float2 vector, in Float2 normal, out Float2 result)
         {
             float dot = vector.X * normal.X + vector.Y * normal.Y;
             result.X = vector.X - 2.0f * dot * normal.X;
@@ -1140,7 +1140,7 @@ namespace FlaxEngine
         /// <remarks>Reflect only gives the direction of a reflection off a surface, it does not determine whether the original vector was close enough to the surface to hit it.</remarks>
         public static Float2 Reflect(Float2 vector, Float2 normal)
         {
-            Reflect(ref vector, ref normal, out Float2 result);
+            Reflect(in vector, in normal, out Float2 result);
             return result;
         }
 
@@ -1150,7 +1150,7 @@ namespace FlaxEngine
         /// <param name="vector">The vector to rotate.</param>
         /// <param name="rotation">The <see cref="Quaternion" /> rotation to apply.</param>
         /// <param name="result">When the method completes, contains the transformed <see cref="Float2" />.</param>
-        public static void Transform(ref Float2 vector, ref Quaternion rotation, out Float2 result)
+        public static void Transform(in Float2 vector, in Quaternion rotation, out Float2 result)
         {
             float x = rotation.X + rotation.X;
             float y = rotation.Y + rotation.Y;
@@ -1171,7 +1171,7 @@ namespace FlaxEngine
         /// <returns>The transformed <see cref="Float2" />.</returns>
         public static Float2 Transform(Float2 vector, Quaternion rotation)
         {
-            Transform(ref vector, ref rotation, out Float2 result);
+            Transform(in vector, in rotation, out Float2 result);
             return result;
         }
 
@@ -1181,7 +1181,7 @@ namespace FlaxEngine
         /// <param name="vector">The source vector.</param>
         /// <param name="transform">The transformation <see cref="Matrix" />.</param>
         /// <param name="result">When the method completes, contains the transformed <see cref="Float4" />.</param>
-        public static void Transform(ref Float2 vector, ref Matrix transform, out Float4 result)
+        public static void Transform(in Float2 vector, in Matrix transform, out Float4 result)
         {
             result = new Float4(vector.X * transform.M11 + vector.Y * transform.M21 + transform.M41,
                                 vector.X * transform.M12 + vector.Y * transform.M22 + transform.M42,
@@ -1197,7 +1197,7 @@ namespace FlaxEngine
         /// <returns>The transformed <see cref="Float4" />.</returns>
         public static Float4 Transform(Float2 vector, Matrix transform)
         {
-            Transform(ref vector, ref transform, out Float4 result);
+            Transform(in vector, in transform, out Float4 result);
             return result;
         }
 
@@ -1214,7 +1214,7 @@ namespace FlaxEngine
         /// therefore makes the vector homogeneous. The homogeneous vector is often preferred when working
         /// with coordinates as the w component can safely be ignored.
         /// </remarks>
-        public static void TransformCoordinate(ref Float2 coordinate, ref Matrix transform, out Float2 result)
+        public static void TransformCoordinate(in Float2 coordinate, in Matrix transform, out Float2 result)
         {
             var vector = new Float4
             {
@@ -1241,7 +1241,7 @@ namespace FlaxEngine
         /// </remarks>
         public static Float2 TransformCoordinate(Float2 coordinate, Matrix transform)
         {
-            TransformCoordinate(ref coordinate, ref transform, out Float2 result);
+            TransformCoordinate(in coordinate, in transform, out Float2 result);
             return result;
         }
 
@@ -1258,7 +1258,7 @@ namespace FlaxEngine
         /// apply. This is often preferred for normal vectors as normals purely represent direction
         /// rather than location because normal vectors should not be translated.
         /// </remarks>
-        public static void TransformNormal(ref Float2 normal, ref Matrix transform, out Float2 result)
+        public static void TransformNormal(in Float2 normal, in Matrix transform, out Float2 result)
         {
             result = new Float2(normal.X * transform.M11 + normal.Y * transform.M21,
                                 normal.X * transform.M12 + normal.Y * transform.M22);
@@ -1279,7 +1279,7 @@ namespace FlaxEngine
         /// </remarks>
         public static Float2 TransformNormal(Float2 normal, Matrix transform)
         {
-            TransformNormal(ref normal, ref transform, out Float2 result);
+            TransformNormal(in normal, in transform, out Float2 result);
             return result;
         }
 
@@ -1310,7 +1310,7 @@ namespace FlaxEngine
         }
 
         /// <summary>
-        /// Multiplies a vector with another by performing component-wise multiplication equivalent to <see cref="Multiply(ref Float2,ref Float2,out Float2)" />.
+        /// Multiplies a vector with another by performing component-wise multiplication equivalent to <see cref="Multiply(in Float2,in Float2,out Float2)" />.
         /// </summary>
         /// <param name="left">The first vector to multiply.</param>
         /// <param name="right">The second vector to multiply.</param>
@@ -1540,7 +1540,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Float2 left, Float2 right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -1552,7 +1552,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Float2 left, Float2 right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -1656,7 +1656,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Float2" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Float2" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref Float2 other)
+        public bool Equals(in Float2 other)
         {
             return X == other.X && Y == other.Y;
         }
@@ -1664,9 +1664,9 @@ namespace FlaxEngine
         /// <summary>
         /// Determines whether the specified <see cref="Float2"/> are equal.
         /// </summary>
-        public static bool Equals(ref Float2 a, ref Float2 b)
+        public static bool Equals(in Float2 a, in Float2 b)
         {
-            return a.Equals(ref b);
+            return a.Equals(in b);
         }
 
         /// <summary>
@@ -1677,7 +1677,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Float2 other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -1687,7 +1687,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Float2 other && Equals(ref other);
+            return value is Float2 other && Equals(in other);
         }
     }
 }

@@ -169,7 +169,7 @@ namespace FlaxEditor.Surface.Archetypes
                 /// <inheritdoc />
                 public override void OnMouseMove(Float2 location)
                 {
-                    if (_isMoving && Float2.DistanceSquared(ref location, ref _startMovePos) > 25.0f)
+                    if (_isMoving && Float2.DistanceSquared(location, _startMovePos) > 25.0f)
                     {
                         _startMovePos = Float2.Minimum;
                         int index = Node._stops.IndexOf(this);
@@ -1076,12 +1076,12 @@ namespace FlaxEditor.Surface.Archetypes
             }
 
             /// <inheritdoc />
-            protected override bool ShowTooltip => !string.IsNullOrEmpty(TooltipText) && _localBounds.Contains(ref _mousePosition) && !Surface.IsLeftMouseButtonDown && !Surface.IsRightMouseButtonDown && !Surface.IsPrimaryMenuOpened;
+            protected override bool ShowTooltip => !string.IsNullOrEmpty(TooltipText) && _localBounds.Contains(_mousePosition) && !Surface.IsLeftMouseButtonDown && !Surface.IsRightMouseButtonDown && !Surface.IsPrimaryMenuOpened;
 
             /// <inheritdoc />
             public override bool OnTestTooltipOverControl(ref Float2 location)
             {
-                return _localBounds.Contains(ref location) && ShowTooltip;
+                return _localBounds.Contains(location) && ShowTooltip;
             }
 
             /// <inheritdoc />
@@ -1150,7 +1150,7 @@ namespace FlaxEditor.Surface.Archetypes
             /// <inheritdoc />
             public override bool CanSelect(ref Float2 location)
             {
-                return new Rectangle(Location, DefaultSize).Contains(ref location);
+                return new Rectangle(Location, DefaultSize).Contains(location);
             }
 
             /// <inheritdoc />
@@ -1230,7 +1230,7 @@ namespace FlaxEditor.Surface.Archetypes
             /// <inheritdoc />
             public override void OnMouseMove(Float2 location)
             {
-                _isMouseInConnectingBounds = IsMouseOver && _localBounds.MakeExpanded(ConnectingBounds).Contains(ref location); // Inner area for connecting, outer area for moving
+                _isMouseInConnectingBounds = IsMouseOver && _localBounds.MakeExpanded(ConnectingBounds).Contains(location); // Inner area for connecting, outer area for moving
                 if (!_isMouseInConnectingBounds && !_isMouseDown)
                     Cursor = CursorType.SizeAll;
                 else

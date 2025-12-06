@@ -24,11 +24,11 @@ namespace FlaxEngine
         /// </summary>
         public void UpdateCachedData()
         {
-            Matrix.Invert(ref View, out IV);
-            Matrix.Invert(ref Projection, out IP);
-            Matrix.Multiply(ref View, ref Projection, out var viewProjection);
-            Frustum = new BoundingFrustum(ref viewProjection);
-            Matrix.Invert(ref viewProjection, out IVP);
+            Matrix.Invert(View, out IV);
+            Matrix.Invert(Projection, out IP);
+            Matrix.Multiply(View, Projection, out var viewProjection);
+            Frustum = new BoundingFrustum(viewProjection);
+            Matrix.Invert(viewProjection, out IVP);
             CullingFrustum = Frustum;
             NonJitteredProjection = Projection;
         }
@@ -71,7 +71,7 @@ namespace FlaxEngine
             // Create view matrix
             Direction = direction;
             var target = Position + Direction;
-            Matrix.LookAt(ref Position, ref target, ref up, out View);
+            Matrix.LookAt(Position, target, up, out View);
 
             UpdateCachedData();
         }
@@ -117,7 +117,7 @@ namespace FlaxEngine
         public void GetWorldMatrix(ref Transform transform, out Matrix world)
         {
             Float3 translation = transform.Translation - Origin;
-            Matrix.Transformation(ref transform.Scale, ref transform.Orientation, ref translation, out world);
+            Matrix.Transformation(transform.Scale, transform.Orientation, translation, out world);
         }
     }
 }

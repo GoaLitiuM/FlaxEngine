@@ -88,8 +88,8 @@ namespace FlaxEngine
             var maximum = points[0];
             for (var i = 1; i < points.Length; ++i)
             {
-                Vector3.Min(ref minimum, ref points[i], out minimum);
-                Vector3.Max(ref maximum, ref points[i], out maximum);
+                Vector3.Min(minimum, points[i], out minimum);
+                Vector3.Max(maximum, points[i], out maximum);
             }
             Vector3 center = minimum + (maximum - minimum) * 0.5f;
             Extents = maximum - center;
@@ -156,7 +156,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="transform">The transformation.</param>
         /// <remarks>While any kind of transformation can be applied, it is recommended to apply scaling using scale method instead, which scales the Extents and keeps the Transformation for rotation only, and that preserves collision detection accuracy.</remarks>
-        public void Transform(ref Transform transform)
+        public void Transform(in Transform transform)
         {
             Transformation = transform.LocalToWorld(Transformation);
         }
@@ -166,7 +166,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="mat">The transformation matrix.</param>
         /// <remarks>While any kind of transformation can be applied, it is recommended to apply scaling using scale method instead, which scales the Extents and keeps the Transformation matrix for rotation only, and that preserves collision detection accuracy.</remarks>
-        public void Transform(ref Matrix mat)
+        public void Transform(in Matrix mat)
         {
             mat.Decompose(out var transform);
             Transformation = transform.LocalToWorld(Transformation);
@@ -179,14 +179,14 @@ namespace FlaxEngine
         /// <remarks>While any kind of transformation can be applied, it is recommended to apply scaling using scale method instead, which scales the Extents and keeps the Transformation matrix for rotation only, and that preserves collision detection accuracy.</remarks>
         public void Transform(Matrix mat)
         {
-            Transform(ref mat);
+            Transform(in mat);
         }
 
         /// <summary>
         /// Scales the <see cref="OrientedBoundingBox" /> by scaling its Extents without affecting the Transformation matrix, By keeping Transformation matrix scaling-free, the collision detection methods will be more accurate.
         /// </summary>
         /// <param name="scaling"></param>
-        public void Scale(ref Vector3 scaling)
+        public void Scale(in Vector3 scaling)
         {
             Extents *= scaling;
         }
@@ -213,7 +213,7 @@ namespace FlaxEngine
         /// Translates the <see cref="OrientedBoundingBox" /> to a new position using a translation vector;
         /// </summary>
         /// <param name="translation">the translation vector.</param>
-        public void Translate(ref Vector3 translation)
+        public void Translate(in Vector3 translation)
         {
             Transformation.Translation += translation;
         }
@@ -268,10 +268,10 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="point">The point to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref Vector3 point)
+        public ContainmentType Contains(in Vector3 point)
         {
             // Transform the point into the obb coordinates
-            Transformation.WorldToLocal(ref point, out Vector3 locPoint);
+            Transformation.WorldToLocal(point, out Vector3 locPoint);
             locPoint.X = Math.Abs(locPoint.X);
             locPoint.Y = Math.Abs(locPoint.Y);
             locPoint.Z = Math.Abs(locPoint.Z);
@@ -291,7 +291,7 @@ namespace FlaxEngine
         /// <returns>The type of containment the two objects have.</returns>
         public ContainmentType Contains(Vector3 point)
         {
-            return Contains(ref point);
+            return Contains(in point);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace FlaxEngine
         public ContainmentType Contains(BoundingSphere sphere, bool ignoreScale = false)
         {
             // Transform sphere center into the obb coordinates
-            Transformation.WorldToLocal(ref sphere.Center, out Vector3 locCenter);
+            Transformation.WorldToLocal(sphere.Center, out Vector3 locCenter);
 
             Real locRadius;
             if (ignoreScale)
@@ -313,14 +313,14 @@ namespace FlaxEngine
             {
                 // Transform sphere radius into the obb coordinates
                 Vector3 vRadius = Vector3.UnitX * sphere.Radius;
-                Transformation.LocalToWorldVector(ref vRadius, out vRadius);
+                Transformation.LocalToWorldVector(vRadius, out vRadius);
                 locRadius = vRadius.Length;
             }
 
             // Perform regular BoundingBox to BoundingSphere containment check
             Vector3 minusExtens = -Extents;
-            Vector3.Clamp(ref locCenter, ref minusExtens, ref Extents, out Vector3 vector);
-            Real distance = Vector3.DistanceSquared(ref locCenter, ref vector);
+            Vector3.Clamp(locCenter, minusExtens, Extents, out Vector3 vector);
+            Real distance = Vector3.DistanceSquared(locCenter, vector);
 
             if (distance > locRadius * locRadius)
                 return ContainmentType.Disjoint;
@@ -335,20 +335,20 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Vector3 point)
+        public bool Intersects(in Ray ray, out Vector3 point)
         {
             // Put ray in box space
             Ray bRay;
-            Transformation.WorldToLocalVector(ref ray.Direction, out bRay.Direction);
-            Transformation.WorldToLocal(ref ray.Position, out bRay.Position);
+            Transformation.WorldToLocalVector(ray.Direction, out bRay.Direction);
+            Transformation.WorldToLocal(ray.Position, out bRay.Position);
 
             // Perform a regular ray to BoundingBox check
             var bb = new BoundingBox(-Extents, Extents);
-            bool intersects = CollisionsHelper.RayIntersectsBox(ref bRay, ref bb, out point);
+            bool intersects = CollisionsHelper.RayIntersectsBox(bRay, bb, out point);
 
             // Put the result intersection back to world
             if (intersects)
-                Transformation.LocalToWorld(ref point, out point);
+                Transformation.LocalToWorld(point, out point);
 
             return intersects;
         }
@@ -359,11 +359,11 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="distance">When the method completes, contains the distance of intersection from the ray start, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Real distance)
+        public bool Intersects(in Ray ray, out Real distance)
         {
-            if (Intersects(ref ray, out Vector3 point))
+            if (Intersects(in ray, out Vector3 point))
             {
-                Vector3.Distance(ref ray.Position, ref point, out distance);
+                Vector3.Distance(ray.Position, point, out distance);
                 return true;
             }
             distance = 0;
@@ -375,9 +375,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="ray">The ray to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray)
+        public bool Intersects(in Ray ray)
         {
-            return Intersects(ref ray, out Vector3 _);
+            return Intersects(in ray, out Vector3 _);
         }
 
         /// <summary>
@@ -395,7 +395,7 @@ namespace FlaxEngine
         /// <param name="value">The <see cref="Vector4" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Vector4" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref OrientedBoundingBox value)
+        public bool Equals(in OrientedBoundingBox value)
         {
             return Extents == value.Extents && Transformation == value.Transformation;
         }
@@ -408,7 +408,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(OrientedBoundingBox value)
         {
-            return Equals(ref value);
+            return Equals(in value);
         }
 
         /// <summary>
@@ -418,7 +418,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is OrientedBoundingBox other && Equals(ref other);
+            return value is OrientedBoundingBox other && Equals(in other);
         }
 
         /// <summary>
@@ -431,7 +431,7 @@ namespace FlaxEngine
         public static OrientedBoundingBox operator *(OrientedBoundingBox box, Matrix transform)
         {
             OrientedBoundingBox result = box;
-            result.Transform(ref transform);
+            result.Transform(transform);
             return result;
         }
 
@@ -458,7 +458,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(OrientedBoundingBox left, OrientedBoundingBox right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -470,7 +470,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(OrientedBoundingBox left, OrientedBoundingBox right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>

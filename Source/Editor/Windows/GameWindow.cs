@@ -41,7 +41,7 @@ namespace FlaxEditor.Windows
 
             // Draw children with scale
             var scaling = new Float3(ContentScale, ContentScale, 1);
-            Matrix3x3.Scaling(ref scaling, out Matrix3x3 scale);
+            Matrix3x3.Scaling(scaling, out Matrix3x3 scale);
             Render2D.PushTransform(scale);
             if (ClipChildren)
             {

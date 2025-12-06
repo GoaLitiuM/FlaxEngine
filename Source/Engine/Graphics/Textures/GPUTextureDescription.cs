@@ -390,7 +390,7 @@ namespace FlaxEngine
                    MultiSampleLevel == other.MultiSampleLevel &&
                    Flags == other.Flags &&
                    Usage == other.Usage &&
-                   DefaultClearColor.Equals(ref other.DefaultClearColor);
+                   DefaultClearColor.Equals(other.DefaultClearColor);
         }
     };
 }

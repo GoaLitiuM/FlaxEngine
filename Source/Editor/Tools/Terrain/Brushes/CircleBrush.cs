@@ -117,7 +117,7 @@ namespace FlaxEditor.Tools.Terrain.Brushes
         /// <inheritdoc />
         public override float Sample(ref Vector3 brushPosition, ref Vector3 samplePosition)
         {
-            Vector3.DistanceXZ(ref brushPosition, ref samplePosition, out var distanceXZ);
+            Vector3.DistanceXZ(brushPosition, samplePosition, out var distanceXZ);
             float distance = (float)distanceXZ;
             float halfSize = Size * 0.5f;
             float falloff = halfSize * Falloff;

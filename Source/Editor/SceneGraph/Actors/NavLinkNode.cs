@@ -63,7 +63,7 @@ namespace FlaxEditor.SceneGraph.Actors
             {
                 normal = Vector3.Up;
                 var sphere = new BoundingSphere(Transform.Translation, 10.0f);
-                return sphere.Intersects(ref ray.Ray, out distance);
+                return sphere.Intersects(ray.Ray, out distance);
             }
 
             /// <inheritdoc />

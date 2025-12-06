@@ -37,7 +37,7 @@ namespace FlaxEditor.SceneGraph
 
             var center = _actor.Transform.Translation;
             ViewportIconsRenderer.GetBounds(ref center, ref ray.Ray.Position, out var sphere);
-            return CollisionsHelper.RayIntersectsSphere(ref ray.Ray, ref sphere, out distance);
+            return CollisionsHelper.RayIntersectsSphere(ray.Ray, sphere, out distance);
         }
     }
 }

@@ -127,7 +127,7 @@ namespace FlaxEngine
         /// <returns>Rotation matrix</returns>
         public Matrix GetRotation()
         {
-            Matrix.RotationQuaternion(ref Orientation, out var result);
+            Matrix.RotationQuaternion(Orientation, out var result);
             return result;
         }
 
@@ -137,7 +137,7 @@ namespace FlaxEngine
         /// <param name="result">Matrix to set</param>
         public void GetRotation(out Matrix result)
         {
-            Matrix.RotationQuaternion(ref Orientation, out result);
+            Matrix.RotationQuaternion(Orientation, out result);
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace FlaxEngine
         /// <param name="value">Rotation matrix</param>
         public void SetRotation(Matrix value)
         {
-            Quaternion.RotationMatrix(ref value, out Orientation);
+            Quaternion.RotationMatrix(value, out Orientation);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace FlaxEngine
         /// <param name="value">Rotation matrix</param>
         public void SetRotation(ref Matrix value)
         {
-            Quaternion.RotationMatrix(ref value, out Orientation);
+            Quaternion.RotationMatrix(value, out Orientation);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace FlaxEngine
         public Matrix GetWorld()
         {
             Float3 translation = Translation;
-            Matrix.Transformation(ref Scale, ref Orientation, ref translation, out var result);
+            Matrix.Transformation(Scale, Orientation, translation, out var result);
             return result;
         }
 
@@ -178,7 +178,7 @@ namespace FlaxEngine
         public void GetWorld(out Matrix result)
         {
             Float3 translation = Translation;
-            Matrix.Transformation(ref Scale, ref Orientation, ref translation, out result);
+            Matrix.Transformation(Scale, Orientation, translation, out result);
         }
 
         /// <summary>
@@ -190,9 +190,9 @@ namespace FlaxEngine
         public static Transform Add(Transform left, Transform right)
         {
             Transform result;
-            Quaternion.Multiply(ref left.Orientation, ref right.Orientation, out result.Orientation);
-            Float3.Multiply(ref left.Scale, ref right.Scale, out result.Scale);
-            Vector3.Add(ref left.Translation, ref right.Translation, out result.Translation);
+            Quaternion.Multiply(left.Orientation, right.Orientation, out result.Orientation);
+            Float3.Multiply(left.Scale, right.Scale, out result.Scale);
+            Vector3.Add(left.Translation, right.Translation, out result.Translation);
             return result;
         }
 
@@ -205,10 +205,10 @@ namespace FlaxEngine
         public static Transform Subtract(Transform left, Transform right)
         {
             Transform result;
-            Vector3.Subtract(ref left.Translation, ref right.Translation, out result.Translation);
+            Vector3.Subtract(left.Translation, right.Translation, out result.Translation);
             Quaternion invRotation = right.Orientation.Conjugated();
-            Quaternion.Multiply(ref left.Orientation, ref invRotation, out result.Orientation);
-            Float3.Divide(ref left.Scale, ref right.Scale, out result.Scale);
+            Quaternion.Multiply(left.Orientation, invRotation, out result.Orientation);
+            Float3.Divide(left.Scale, right.Scale, out result.Scale);
             return result;
         }
 
@@ -220,8 +220,8 @@ namespace FlaxEngine
         public Transform LocalToWorld(Transform other)
         {
             Transform result;
-            Quaternion.Multiply(ref Orientation, ref other.Orientation, out result.Orientation);
-            Float3.Multiply(ref Scale, ref other.Scale, out result.Scale);
+            Quaternion.Multiply(Orientation, other.Orientation, out result.Orientation);
+            Float3.Multiply(Scale, other.Scale, out result.Scale);
             result.Translation = LocalToWorld(other.Translation);
             return result;
         }
@@ -234,7 +234,7 @@ namespace FlaxEngine
         public Vector3 LocalToWorld(Vector3 point)
         {
             point *= Scale;
-            Vector3.Transform(ref point, ref Orientation, out point);
+            Vector3.Transform(point, Orientation, out point);
             return point + Translation;
         }
 
@@ -246,7 +246,7 @@ namespace FlaxEngine
         public Vector3 LocalToWorldVector(Vector3 vector)
         {
             vector *= Scale;
-            Vector3.Transform(ref vector, ref Orientation, out vector);
+            Vector3.Transform(vector, Orientation, out vector);
             return vector;
         }
 
@@ -257,8 +257,8 @@ namespace FlaxEngine
         /// <param name="result">World space transform</param>
         public void LocalToWorld(ref Transform other, out Transform result)
         {
-            Quaternion.Multiply(ref Orientation, ref other.Orientation, out result.Orientation);
-            Float3.Multiply(ref Scale, ref other.Scale, out result.Scale);
+            Quaternion.Multiply(Orientation, other.Orientation, out result.Orientation);
+            Float3.Multiply(Scale, other.Scale, out result.Scale);
             result.Translation = LocalToWorld(other.Translation);
         }
 
@@ -267,10 +267,10 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="point">Local space point</param>
         /// <param name="result">World space point</param>
-        public void LocalToWorld(ref Vector3 point, out Vector3 result)
+        public void LocalToWorld(in Vector3 point, out Vector3 result)
         {
             Vector3 tmp = point * Scale;
-            Vector3.Transform(ref tmp, ref Orientation, out result);
+            Vector3.Transform(tmp, Orientation, out result);
             result += Translation;
         }
 
@@ -279,10 +279,10 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="vector">The local space vector.</param>
         /// <param name="result">World space vector</param>
-        public void LocalToWorldVector(ref Vector3 vector, out Vector3 result)
+        public void LocalToWorldVector(in Vector3 vector, out Vector3 result)
         {
             Vector3 tmp = vector * Scale;
-            Vector3.Transform(ref tmp, ref Orientation, out result);
+            Vector3.Transform(tmp, Orientation, out result);
         }
 
         /// <summary>
@@ -315,8 +315,8 @@ namespace FlaxEngine
             Transform result;
             result.Orientation = Orientation;
             result.Orientation.Invert();
-            Quaternion.Multiply(ref result.Orientation, ref other.Orientation, out result.Orientation);
-            Float3.Multiply(ref other.Scale, ref invScale, out result.Scale);
+            Quaternion.Multiply(result.Orientation, other.Orientation, out result.Orientation);
+            Float3.Multiply(other.Scale, invScale, out result.Scale);
             result.Translation = WorldToLocal(other.Translation);
             return result;
         }
@@ -337,7 +337,7 @@ namespace FlaxEngine
                 invScale.Z = 1.0f / invScale.Z;
             Quaternion invRotation = Orientation.Conjugated();
             Vector3 result = point - Translation;
-            Vector3.Transform(ref result, ref invRotation, out result);
+            Vector3.Transform(result, invRotation, out result);
             return result * invScale;
         }
 
@@ -356,7 +356,7 @@ namespace FlaxEngine
             if (invScale.Z != 0.0f)
                 invScale.Z = 1.0f / invScale.Z;
             Quaternion invRotation = Orientation.Conjugated();
-            Vector3.Transform(ref vector, ref invRotation, out var result);
+            Vector3.Transform(vector, invRotation, out var result);
             return result * invScale;
         }
 
@@ -366,7 +366,7 @@ namespace FlaxEngine
         /// <param name="point">World space point</param>
         /// <param name="result">When the method completes, contains the local space point.</param>
         /// <returns>Local space point</returns>
-        public void WorldToLocal(ref Vector3 point, out Vector3 result)
+        public void WorldToLocal(in Vector3 point, out Vector3 result)
         {
             var invScale = Scale;
             if (invScale.X != 0.0f)
@@ -377,7 +377,7 @@ namespace FlaxEngine
                 invScale.Z = 1.0f / invScale.Z;
             Quaternion invRotation = Orientation.Conjugated();
             Vector3 tmp = point - Translation;
-            Vector3.Transform(ref tmp, ref invRotation, out result);
+            Vector3.Transform(tmp, invRotation, out result);
             result *= invScale;
         }
 
@@ -386,7 +386,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="vector">World space vector</param>
         /// <param name="result">Local space vector</param>
-        public void WorldToLocalVector(ref Vector3 vector, out Vector3 result)
+        public void WorldToLocalVector(in Vector3 vector, out Vector3 result)
         {
             var invScale = Scale;
             if (invScale.X != 0.0f)
@@ -396,7 +396,7 @@ namespace FlaxEngine
             if (invScale.Z != 0.0f)
                 invScale.Z = 1.0f / invScale.Z;
             Quaternion invRotation = Orientation.Conjugated();
-            Vector3.Transform(ref vector, ref invRotation, out result);
+            Vector3.Transform(vector, invRotation, out result);
             result *= invScale;
         }
 
@@ -418,7 +418,7 @@ namespace FlaxEngine
             for (int i = 0; i < points.Length; i++)
             {
                 result[i] = points[i] - Translation;
-                Vector3.Transform(ref result[i], ref invRotation, out result[i]);
+                Vector3.Transform(result[i], invRotation, out result[i]);
                 result[i] *= invScale;
             }
         }
@@ -431,7 +431,7 @@ namespace FlaxEngine
         /// <returns>The transformed direction vector.</returns>
         public Vector3 TransformDirection(Vector3 direction)
         {
-            Vector3.Transform(ref direction, ref Orientation, out var result);
+            Vector3.Transform(direction, Orientation, out var result);
             return result;
         }
 
@@ -457,9 +457,9 @@ namespace FlaxEngine
         public static Transform Lerp(Transform start, Transform end, float amount)
         {
             Transform result;
-            Vector3.Lerp(ref start.Translation, ref end.Translation, amount, out result.Translation);
-            Quaternion.Slerp(ref start.Orientation, ref end.Orientation, amount, out result.Orientation);
-            Float3.Lerp(ref start.Scale, ref end.Scale, amount, out result.Scale);
+            Vector3.Lerp(start.Translation, end.Translation, amount, out result.Translation);
+            Quaternion.Slerp(start.Orientation, end.Orientation, amount, out result.Orientation);
+            Float3.Lerp(start.Scale, end.Scale, amount, out result.Scale);
             return result;
         }
 
@@ -471,11 +471,11 @@ namespace FlaxEngine
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end" />.</param>
         /// <param name="result">When the method completes, contains the linear interpolation of the two transformations.</param>
         /// <remarks>Passing <paramref name="amount" /> a value of 0 will cause <paramref name="start" /> to be returned; a value of 1 will cause <paramref name="end" /> to be returned.</remarks>
-        public static void Lerp(ref Transform start, ref Transform end, float amount, out Transform result)
+        public static void Lerp(in Transform start, in Transform end, float amount, out Transform result)
         {
-            Vector3.Lerp(ref start.Translation, ref end.Translation, amount, out result.Translation);
-            Quaternion.Slerp(ref start.Orientation, ref end.Orientation, amount, out result.Orientation);
-            Float3.Lerp(ref start.Scale, ref end.Scale, amount, out result.Scale);
+            Vector3.Lerp(start.Translation, end.Translation, amount, out result.Translation);
+            Quaternion.Slerp(start.Orientation, end.Orientation, amount, out result.Orientation);
+            Float3.Lerp(start.Scale, end.Scale, amount, out result.Scale);
         }
 
         /// <summary>
@@ -577,7 +577,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Transform left, Transform right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -589,7 +589,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Transform left, Transform right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -682,7 +682,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if left and right are near another, <c>false</c> otherwise</returns>
         public static bool NearEqual(Transform left, Transform right, float epsilon = Mathf.Epsilon)
         {
-            return NearEqual(ref left, ref right, epsilon);
+            return NearEqual(in left, in right, epsilon);
         }
 
         /// <summary>
@@ -692,9 +692,9 @@ namespace FlaxEngine
         /// <param name="right">The right transform.</param>
         /// <param name="epsilon">The epsilon.</param>
         /// <returns><c>true</c> if left and right are near another, <c>false</c> otherwise</returns>
-        public static bool NearEqual(ref Transform left, ref Transform right, float epsilon = Mathf.Epsilon)
+        public static bool NearEqual(in Transform left, in Transform right, float epsilon = Mathf.Epsilon)
         {
-            return Vector3.NearEqual(ref left.Translation, ref right.Translation, epsilon) && Quaternion.NearEqual(ref left.Orientation, ref right.Orientation, epsilon) && Float3.NearEqual(ref left.Scale, ref right.Scale, epsilon);
+            return Vector3.NearEqual(left.Translation, right.Translation, epsilon) && Quaternion.NearEqual(left.Orientation, right.Orientation, epsilon) && Float3.NearEqual(left.Scale, right.Scale, epsilon);
         }
 
         /// <summary>
@@ -703,7 +703,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Transform" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Transform" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref Transform other)
+        public bool Equals(in Transform other)
         {
             return Translation == other.Translation && Orientation == other.Orientation && Scale == other.Scale;
         }
@@ -716,7 +716,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Transform other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -726,7 +726,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Transform other && Equals(ref other);
+            return value is Transform other && Equals(in other);
         }
     }
 }

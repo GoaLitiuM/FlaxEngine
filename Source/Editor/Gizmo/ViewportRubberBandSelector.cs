@@ -124,7 +124,7 @@ public sealed class ViewportRubberBandSelector
         public void ProjectPoint(Vector3 worldSpaceLocation, out Float2 viewportSpaceLocation)
         {
             worldSpaceLocation -= _origin;
-            _viewport.Project(ref worldSpaceLocation, ref _viewProjection, out var projected);
+            _viewport.Project(worldSpaceLocation, _viewProjection, out var projected);
             viewportSpaceLocation = new Float2((float)projected.X, (float)projected.Y);
         }
 
@@ -132,7 +132,7 @@ public sealed class ViewportRubberBandSelector
         {
             bounds.Minimum -= _origin;
             bounds.Maximum -= _origin;
-            return _frustum.Contains(ref bounds);
+            return _frustum.Contains(bounds);
         }
     }
 

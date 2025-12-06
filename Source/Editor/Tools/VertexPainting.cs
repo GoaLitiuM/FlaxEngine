@@ -440,7 +440,7 @@ namespace FlaxEditor.Tools
                     for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
                     {
                         var pos = instanceTransform.LocalToWorld(positionStream.GetFloat3(vertexIndex));
-                        var dst = Vector3.Distance(ref pos, ref brushSphere.Center);
+                        var dst = Vector3.Distance(pos, brushSphere.Center);
                         if (dst > brushSphere.Radius)
                             continue;
                         float strength = _gizmoMode.BrushStrength * Mathf.Lerp(1.0f, 1.0f - (float)dst / (float)brushSphere.Radius, _gizmoMode.BrushFalloff);
@@ -603,7 +603,7 @@ namespace FlaxEditor.Tools
                             for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
                             {
                                 var pos = instanceTransform.LocalToWorld(positionStream.GetFloat3(vertexIndex));
-                                if (brushSphere.Contains(ref pos) == ContainmentType.Disjoint)
+                                if (brushSphere.Contains(pos) == ContainmentType.Disjoint)
                                     continue;
                                 Matrix transform = modelScaleMatrix * Matrix.Translation(pos - viewOrigin);
                                 _brushModel.Draw(ref renderContext, _verticesPreviewMaterial, ref transform);

@@ -517,8 +517,8 @@ namespace FlaxEditor.Viewport
                     }
                     else
                     {
-                        Matrix.RotationQuaternion(ref trans.Orientation, out var transWorld);
-                        Matrix.RotationQuaternion(ref rotationDelta, out var deltaWorld);
+                        Matrix.RotationQuaternion(trans.Orientation, out var transWorld);
+                        Matrix.RotationQuaternion(rotationDelta, out var deltaWorld);
                         Matrix world = transWorld * Matrix.Translation(pivotOffset) * deltaWorld * Matrix.Translation(-pivotOffset);
                         trans.SetRotation(ref world);
                         trans.Translation += world.TranslationVector;
@@ -540,7 +540,7 @@ namespace FlaxEditor.Viewport
         protected override void OnLeftMouseButtonUp()
         {
             // Skip if was controlling mouse or mouse is not over the area
-            if (_prevInput.IsControllingMouse || !Bounds.Contains(ref _viewMousePos))
+            if (_prevInput.IsControllingMouse || !Bounds.Contains(_viewMousePos))
                 return;
 
             if (TransformGizmo.IsActive)

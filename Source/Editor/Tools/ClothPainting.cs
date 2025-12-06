@@ -191,7 +191,7 @@ namespace FlaxEngine.Tools
             for (int i = 0; i < clothParticles.Length; i++)
             {
                 var pos = instanceTransform.LocalToWorld(clothParticles[i]);
-                var dst = Vector3.Distance(ref pos, ref brushSphere.Center);
+                var dst = Vector3.Distance(pos, brushSphere.Center);
                 if (dst > brushSphere.Radius)
                     continue;
                 float strength = _gizmoMode.BrushStrength * Mathf.Lerp(1.0f, 1.0f - (float)dst / (float)brushSphere.Radius, _gizmoMode.BrushFalloff);

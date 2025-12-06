@@ -129,7 +129,7 @@ namespace FlaxEngine.GUI
             get => _offset;
             set
             {
-                if (!Float2.NearEqual(ref _offset, ref value))
+                if (!Float2.NearEqual(_offset, value))
                 {
                     _offset = value;
                     PerformLayout();

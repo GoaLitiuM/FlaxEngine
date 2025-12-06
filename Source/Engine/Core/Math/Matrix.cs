@@ -644,7 +644,7 @@ namespace FlaxEngine
         /// </summary>
         public void Invert()
         {
-            Invert(ref this, out this);
+            Invert(this, out this);
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace FlaxEngine
         /// </summary>
         public void Transpose()
         {
-            Transpose(ref this, out this);
+            Transpose(this, out this);
         }
 
         /// <summary>
@@ -677,7 +677,7 @@ namespace FlaxEngine
         /// </remarks>
         public void Orthogonalize()
         {
-            Orthogonalize(ref this, out this);
+            Orthogonalize(this, out this);
         }
 
         /// <summary>
@@ -704,7 +704,7 @@ namespace FlaxEngine
         /// </remarks>
         public void Orthonormalize()
         {
-            Orthonormalize(ref this, out this);
+            Orthonormalize(this, out this);
         }
 
         /// <summary>
@@ -716,7 +716,7 @@ namespace FlaxEngine
         {
             Matrix temp = this;
             temp.Transpose();
-            Orthonormalize(ref temp, out Q);
+            Orthonormalize(temp, out Q);
             Q.Transpose();
 
             R = new Matrix
@@ -744,7 +744,7 @@ namespace FlaxEngine
         /// <param name="Q">When the method completes, contains the orthonormalized matrix of the decomposition.</param>
         public void DecomposeLQ(out Matrix L, out Matrix Q)
         {
-            Orthonormalize(ref this, out Q);
+            Orthonormalize(this, out Q);
 
             L = new Matrix
             {
@@ -772,7 +772,7 @@ namespace FlaxEngine
         public void Decompose(out Transform transform)
         {
             Decompose(out transform.Scale, out Matrix3x3 rotationMatrix, out Float3 translation);
-            Quaternion.RotationMatrix(ref rotationMatrix, out transform.Orientation);
+            Quaternion.RotationMatrix(rotationMatrix, out transform.Orientation);
             transform.Translation = translation;
         }
 
@@ -842,7 +842,7 @@ namespace FlaxEngine
         public void Decompose(out Float3 scale, out Quaternion rotation, out Float3 translation)
         {
             Decompose(out scale, out Matrix3x3 rotationMatrix, out translation);
-            Quaternion.RotationMatrix(ref rotationMatrix, out rotation);
+            Quaternion.RotationMatrix(rotationMatrix, out rotation);
         }
 
         /// <summary>
@@ -885,7 +885,7 @@ namespace FlaxEngine
                 M33 = M33 * invScale,
                 M44 = 1f
             };
-            Quaternion.RotationMatrix(ref rotationMatrix, out rotation);
+            Quaternion.RotationMatrix(rotationMatrix, out rotation);
         }
 
         /// <summary>
@@ -989,7 +989,7 @@ namespace FlaxEngine
         /// <param name="left">The first matrix to add.</param>
         /// <param name="right">The second matrix to add.</param>
         /// <param name="result">When the method completes, contains the sum of the two matrices.</param>
-        public static void Add(ref Matrix left, ref Matrix right, out Matrix result)
+        public static void Add(in Matrix left, in Matrix right, out Matrix result)
         {
             result.M11 = left.M11 + right.M11;
             result.M12 = left.M12 + right.M12;
@@ -1017,7 +1017,7 @@ namespace FlaxEngine
         /// <returns>The sum of the two matrices.</returns>
         public static Matrix Add(Matrix left, Matrix right)
         {
-            Add(ref left, ref right, out var result);
+            Add(left, right, out var result);
             return result;
         }
 
@@ -1027,7 +1027,7 @@ namespace FlaxEngine
         /// <param name="left">The first matrix to subtract.</param>
         /// <param name="right">The second matrix to subtract.</param>
         /// <param name="result">When the method completes, contains the difference between the two matrices.</param>
-        public static void Subtract(ref Matrix left, ref Matrix right, out Matrix result)
+        public static void Subtract(in Matrix left, in Matrix right, out Matrix result)
         {
             result.M11 = left.M11 - right.M11;
             result.M12 = left.M12 - right.M12;
@@ -1055,7 +1055,7 @@ namespace FlaxEngine
         /// <returns>The difference between the two matrices.</returns>
         public static Matrix Subtract(Matrix left, Matrix right)
         {
-            Subtract(ref left, ref right, out var result);
+            Subtract(left, right, out var result);
             return result;
         }
 
@@ -1065,7 +1065,7 @@ namespace FlaxEngine
         /// <param name="left">The matrix to scale.</param>
         /// <param name="right">The amount by which to scale.</param>
         /// <param name="result">When the method completes, contains the scaled matrix.</param>
-        public static void Multiply(ref Matrix left, float right, out Matrix result)
+        public static void Multiply(in Matrix left, float right, out Matrix result)
         {
             result.M11 = left.M11 * right;
             result.M12 = left.M12 * right;
@@ -1093,7 +1093,7 @@ namespace FlaxEngine
         /// <returns>The scaled matrix.</returns>
         public static Matrix Multiply(Matrix left, float right)
         {
-            Multiply(ref left, right, out var result);
+            Multiply(left, right, out var result);
             return result;
         }
 
@@ -1103,7 +1103,7 @@ namespace FlaxEngine
         /// <param name="left">The first matrix to multiply.</param>
         /// <param name="right">The second matrix to multiply.</param>
         /// <param name="result">The product of the two matrices.</param>
-        public static void Multiply(ref Matrix left, ref Matrix right, out Matrix result)
+        public static void Multiply(in Matrix left, in Matrix right, out Matrix result)
         {
             result = new Matrix
             {
@@ -1134,7 +1134,7 @@ namespace FlaxEngine
         /// <returns>The product of the two matrices.</returns>
         public static Matrix Multiply(Matrix left, Matrix right)
         {
-            Multiply(ref left, ref right, out var result);
+            Multiply(left, right, out var result);
             return result;
         }
 
@@ -1144,7 +1144,7 @@ namespace FlaxEngine
         /// <param name="left">The matrix to scale.</param>
         /// <param name="right">The amount by which to scale.</param>
         /// <param name="result">When the method completes, contains the scaled matrix.</param>
-        public static void Divide(ref Matrix left, float right, out Matrix result)
+        public static void Divide(in Matrix left, float right, out Matrix result)
         {
             float inv = 1.0f / right;
             result.M11 = left.M11 * inv;
@@ -1173,7 +1173,7 @@ namespace FlaxEngine
         /// <returns>The scaled matrix.</returns>
         public static Matrix Divide(Matrix left, float right)
         {
-            Divide(ref left, right, out var result);
+            Divide(left, right, out var result);
             return result;
         }
 
@@ -1183,7 +1183,7 @@ namespace FlaxEngine
         /// <param name="left">The first matrix to divide.</param>
         /// <param name="right">The second matrix to divide.</param>
         /// <param name="result">When the method completes, contains the quotient of the two matrices.</param>
-        public static void Divide(ref Matrix left, ref Matrix right, out Matrix result)
+        public static void Divide(in Matrix left, in Matrix right, out Matrix result)
         {
             result.M11 = left.M11 / right.M11;
             result.M12 = left.M12 / right.M12;
@@ -1211,7 +1211,7 @@ namespace FlaxEngine
         /// <returns>The quotient of the two matrices.</returns>
         public static Matrix Divide(Matrix left, Matrix right)
         {
-            Divide(ref left, ref right, out var result);
+            Divide(left, right, out var result);
             return result;
         }
 
@@ -1222,7 +1222,7 @@ namespace FlaxEngine
         /// <param name="exponent">The exponent to raise the matrix to.</param>
         /// <param name="result">When the method completes, contains the exponential matrix.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="exponent" /> is negative.</exception>
-        public static void Exponent(ref Matrix value, int exponent, out Matrix result)
+        public static void Exponent(in Matrix value, int exponent, out Matrix result)
         {
             // Source: http://rosettacode.org
             // Reference: http://rosettacode.org/wiki/Matrix-exponentiation_operator
@@ -1268,7 +1268,7 @@ namespace FlaxEngine
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the <paramref name="exponent" /> is negative.</exception>
         public static Matrix Exponent(Matrix value, int exponent)
         {
-            Exponent(ref value, exponent, out var result);
+            Exponent(value, exponent, out var result);
             return result;
         }
 
@@ -1277,7 +1277,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The matrix to be negated.</param>
         /// <param name="result">When the method completes, contains the negated matrix.</param>
-        public static void Negate(ref Matrix value, out Matrix result)
+        public static void Negate(in Matrix value, out Matrix result)
         {
             result.M11 = -value.M11;
             result.M12 = -value.M12;
@@ -1304,7 +1304,7 @@ namespace FlaxEngine
         /// <returns>The negated matrix.</returns>
         public static Matrix Negate(Matrix value)
         {
-            Negate(ref value, out var result);
+            Negate(value, out var result);
             return result;
         }
 
@@ -1319,7 +1319,7 @@ namespace FlaxEngine
         /// Passing <paramref name="amount" /> a value of 0 will cause <paramref name="start" /> to be returned; a value of 1
         /// will cause <paramref name="end" /> to be returned.
         /// </remarks>
-        public static void Lerp(ref Matrix start, ref Matrix end, float amount, out Matrix result)
+        public static void Lerp(in Matrix start, in Matrix end, float amount, out Matrix result)
         {
             result.M11 = Mathf.Lerp(start.M11, end.M11, amount);
             result.M12 = Mathf.Lerp(start.M12, end.M12, amount);
@@ -1352,7 +1352,7 @@ namespace FlaxEngine
         /// </remarks>
         public static Matrix Lerp(Matrix start, Matrix end, float amount)
         {
-            Lerp(ref start, ref end, amount, out var result);
+            Lerp(start, end, amount, out var result);
             return result;
         }
 
@@ -1363,10 +1363,10 @@ namespace FlaxEngine
         /// <param name="end">End matrix.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end" />.</param>
         /// <param name="result">When the method completes, contains the cubic interpolation of the two matrices.</param>
-        public static void SmoothStep(ref Matrix start, ref Matrix end, float amount, out Matrix result)
+        public static void SmoothStep(in Matrix start, in Matrix end, float amount, out Matrix result)
         {
             amount = Mathf.SmoothStep(amount);
-            Lerp(ref start, ref end, amount, out result);
+            Lerp(start, end, amount, out result);
         }
 
         /// <summary>
@@ -1378,7 +1378,7 @@ namespace FlaxEngine
         /// <returns>The cubic interpolation of the two matrices.</returns>
         public static Matrix SmoothStep(Matrix start, Matrix end, float amount)
         {
-            SmoothStep(ref start, ref end, amount, out var result);
+            SmoothStep(start, end, amount, out var result);
             return result;
         }
 
@@ -1387,7 +1387,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The matrix whose transpose is to be calculated.</param>
         /// <param name="result">When the method completes, contains the transpose of the specified matrix.</param>
-        public static void Transpose(ref Matrix value, out Matrix result)
+        public static void Transpose(in Matrix value, out Matrix result)
         {
             result = new Matrix
             {
@@ -1415,7 +1415,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The matrix whose transpose is to be calculated.</param>
         /// <param name="result">When the method completes, contains the transpose of the specified matrix.</param>
-        public static void TransposeByRef(ref Matrix value, ref Matrix result)
+        public static void TransposeByRef(in Matrix value, out Matrix result)
         {
             result.M11 = value.M11;
             result.M12 = value.M21;
@@ -1442,7 +1442,7 @@ namespace FlaxEngine
         /// <returns>The transpose of the specified matrix.</returns>
         public static Matrix Transpose(Matrix value)
         {
-            Transpose(ref value, out var result);
+            Transpose(value, out var result);
             return result;
         }
 
@@ -1451,7 +1451,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The matrix whose inverse is to be calculated.</param>
         /// <param name="result">When the method completes, contains the inverse of the specified matrix.</param>
-        public static void Invert(ref Matrix value, out Matrix result)
+        public static void Invert(in Matrix value, out Matrix result)
         {
             float b0 = value.M31 * value.M42 - value.M32 * value.M41;
             float b1 = value.M31 * value.M43 - value.M33 * value.M41;
@@ -1547,7 +1547,7 @@ namespace FlaxEngine
         ///   input and than transpose the output.
         /// </para>
         /// </remarks>
-        public static void Orthogonalize(ref Matrix value, out Matrix result)
+        public static void Orthogonalize(in Matrix value, out Matrix result)
         {
             //Uses the modified Gram-Schmidt process.
             //q1 = m1
@@ -1592,7 +1592,7 @@ namespace FlaxEngine
         /// </remarks>
         public static Matrix Orthogonalize(Matrix value)
         {
-            Orthogonalize(ref value, out var result);
+            Orthogonalize(value, out var result);
             return result;
         }
 
@@ -1620,7 +1620,7 @@ namespace FlaxEngine
         ///   input and than transpose the output.
         /// </para>
         /// </remarks>
-        public static void Orthonormalize(ref Matrix value, out Matrix result)
+        public static void Orthonormalize(in Matrix value, out Matrix result)
         {
             //Uses the modified Gram-Schmidt process.
             //Because we are making unit vectors, we can optimize the math for orthonormalization
@@ -1674,7 +1674,7 @@ namespace FlaxEngine
         /// </remarks>
         public static Matrix Orthonormalize(Matrix value)
         {
-            Orthonormalize(ref value, out var result);
+            Orthonormalize(value, out var result);
             return result;
         }
 
@@ -1689,7 +1689,7 @@ namespace FlaxEngine
         /// of linear equations, than this often means that either no solution exists or an infinite
         /// number of solutions exist.
         /// </remarks>
-        public static void UpperTriangularForm(ref Matrix value, out Matrix result)
+        public static void UpperTriangularForm(in Matrix value, out Matrix result)
         {
             // Adapted from the row echelon code
             result = value;
@@ -1749,7 +1749,7 @@ namespace FlaxEngine
         /// </remarks>
         public static Matrix UpperTriangularForm(Matrix value)
         {
-            UpperTriangularForm(ref value, out var result);
+            UpperTriangularForm(value, out var result);
             return result;
         }
 
@@ -1764,11 +1764,11 @@ namespace FlaxEngine
         /// of linear equations, than this often means that either no solution exists or an infinite
         /// number of solutions exist.
         /// </remarks>
-        public static void LowerTriangularForm(ref Matrix value, out Matrix result)
+        public static void LowerTriangularForm(in Matrix value, out Matrix result)
         {
             // Adapted from the row echelon code
             Matrix temp = value;
-            Transpose(ref temp, out result);
+            Transpose(temp, out result);
 
             var lead = 0;
             var rowCount = 4;
@@ -1812,7 +1812,7 @@ namespace FlaxEngine
                 lead++;
             }
 
-            Transpose(ref result, out result);
+            Transpose(result, out result);
         }
 
         /// <summary>
@@ -1828,7 +1828,7 @@ namespace FlaxEngine
         /// </remarks>
         public static Matrix LowerTriangularForm(Matrix value)
         {
-            LowerTriangularForm(ref value, out var result);
+            LowerTriangularForm(value, out var result);
             return result;
         }
 
@@ -1837,7 +1837,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The matrix to put into row echelon form.</param>
         /// <param name="result">When the method completes, contains the row echelon form of the matrix.</param>
-        public static void RowEchelonForm(ref Matrix value, out Matrix result)
+        public static void RowEchelonForm(in Matrix value, out Matrix result)
         {
             // Source: Wikipedia pseudo code
             // Reference: http://en.wikipedia.org/wiki/Row_echelon_form#Pseudocode
@@ -1897,7 +1897,7 @@ namespace FlaxEngine
         /// <returns>When the method completes, contains the row echelon form of the matrix.</returns>
         public static Matrix RowEchelonForm(Matrix value)
         {
-            RowEchelonForm(ref value, out var result);
+            RowEchelonForm(value, out var result);
             return result;
         }
 
@@ -1924,7 +1924,7 @@ namespace FlaxEngine
         ///   to analyze both the input and the result to determine if a solution really exists.
         /// </para>
         /// </remarks>
-        public static void ReducedRowEchelonForm(ref Matrix value, ref Float4 augment, out Matrix result, out Float4 augmentResult)
+        public static void ReducedRowEchelonForm(in Matrix value, in Float4 augment, out Matrix result, out Float4 augmentResult)
         {
             // Source: http://rosettacode.org
             // Reference: http://rosettacode.org/wiki/Reduced_row_echelon_form
@@ -2037,7 +2037,7 @@ namespace FlaxEngine
         /// <param name="cameraUpFloat">The up vector of the camera.</param>
         /// <param name="cameraForwardFloat">The forward vector of the camera.</param>
         /// <param name="result">When the method completes, contains the created billboard matrix.</param>
-        public static void Billboard(ref Float3 objectPosition, ref Float3 cameraPosition, ref Float3 cameraUpFloat, ref Float3 cameraForwardFloat, out Matrix result)
+        public static void Billboard(in Float3 objectPosition, in Float3 cameraPosition, in Float3 cameraUpFloat, in Float3 cameraForwardFloat, out Matrix result)
         {
             Float3 difference = cameraPosition - objectPosition;
 
@@ -2047,9 +2047,9 @@ namespace FlaxEngine
             else
                 difference *= (float)(1.0 / Math.Sqrt(lengthSq));
 
-            Float3.Cross(ref cameraUpFloat, ref difference, out var crossed);
+            Float3.Cross(cameraUpFloat, difference, out var crossed);
             crossed.Normalize();
-            Float3.Cross(ref difference, ref crossed, out var final);
+            Float3.Cross(difference, crossed, out var final);
 
             result.M11 = crossed.X;
             result.M12 = crossed.Y;
@@ -2079,7 +2079,7 @@ namespace FlaxEngine
         /// <returns>The created billboard matrix.</returns>
         public static Matrix Billboard(Float3 objectPosition, Float3 cameraPosition, Float3 cameraUpFloat, Float3 cameraForwardFloat)
         {
-            Billboard(ref objectPosition, ref cameraPosition, ref cameraUpFloat, ref cameraForwardFloat, out var result);
+            Billboard(objectPosition, cameraPosition, cameraUpFloat, cameraForwardFloat, out var result);
             return result;
         }
 
@@ -2090,13 +2090,13 @@ namespace FlaxEngine
         /// <param name="target">The camera look-at target.</param>
         /// <param name="up">The camera's up vector.</param>
         /// <param name="result">When the method completes, contains the created look-at matrix.</param>
-        public static void LookAt(ref Float3 eye, ref Float3 target, ref Float3 up, out Matrix result)
+        public static void LookAt(in Float3 eye, in Float3 target, in Float3 up, out Matrix result)
         {
-            Float3.Subtract(ref target, ref eye, out var zaxis);
+            Float3.Subtract(target, eye, out var zaxis);
             zaxis.Normalize();
-            Float3.Cross(ref up, ref zaxis, out var xaxis);
+            Float3.Cross(up, zaxis, out var xaxis);
             xaxis.Normalize();
-            Float3.Cross(ref zaxis, ref xaxis, out var yaxis);
+            Float3.Cross(zaxis, xaxis, out var yaxis);
 
             result = Identity;
             result.M11 = xaxis.X;
@@ -2109,9 +2109,9 @@ namespace FlaxEngine
             result.M23 = zaxis.Y;
             result.M33 = zaxis.Z;
 
-            Float3.Dot(ref xaxis, ref eye, out result.M41);
-            Float3.Dot(ref yaxis, ref eye, out result.M42);
-            Float3.Dot(ref zaxis, ref eye, out result.M43);
+            Float3.Dot(xaxis, eye, out result.M41);
+            Float3.Dot(yaxis, eye, out result.M42);
+            Float3.Dot(zaxis, eye, out result.M43);
 
             result.M41 = -result.M41;
             result.M42 = -result.M42;
@@ -2127,7 +2127,7 @@ namespace FlaxEngine
         /// <returns>The created look-at matrix.</returns>
         public static Matrix LookAt(Float3 eye, Float3 target, Float3 up)
         {
-            LookAt(ref eye, ref target, ref up, out var result);
+            LookAt(eye, target, up, out var result);
             return result;
         }
 
@@ -2309,7 +2309,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="scale">Scaling factor for all three axes.</param>
         /// <param name="result">When the method completes, contains the created scaling matrix.</param>
-        public static void Scaling(ref Float3 scale, out Matrix result)
+        public static void Scaling(in Float3 scale, out Matrix result)
         {
             Scaling(scale.X, scale.Y, scale.Z, out result);
         }
@@ -2321,7 +2321,7 @@ namespace FlaxEngine
         /// <returns>The created scaling matrix.</returns>
         public static Matrix Scaling(Float3 scale)
         {
-            Scaling(ref scale, out var result);
+            Scaling(scale, out var result);
             return result;
         }
 
@@ -2480,7 +2480,7 @@ namespace FlaxEngine
         /// <param name="axis">The axis around which to rotate. This parameter is assumed to be normalized.</param>
         /// <param name="angle">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <param name="result">When the method completes, contains the created rotation matrix.</param>
-        public static void RotationAxis(ref Float3 axis, float angle, out Matrix result)
+        public static void RotationAxis(in Float3 axis, float angle, out Matrix result)
         {
             float x = axis.X;
             float y = axis.Y;
@@ -2514,7 +2514,7 @@ namespace FlaxEngine
         /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationAxis(Float3 axis, float angle)
         {
-            RotationAxis(ref axis, angle, out var result);
+            RotationAxis(axis, angle, out var result);
             return result;
         }
 
@@ -2523,7 +2523,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="rotation">The quaternion to use to build the matrix.</param>
         /// <param name="result">The created rotation matrix.</param>
-        public static void RotationQuaternion(ref Quaternion rotation, out Matrix result)
+        public static void RotationQuaternion(in Quaternion rotation, out Matrix result)
         {
             float xx = rotation.X * rotation.X;
             float yy = rotation.Y * rotation.Y;
@@ -2554,7 +2554,7 @@ namespace FlaxEngine
         /// <returns>The created rotation matrix.</returns>
         public static Matrix RotationQuaternion(Quaternion rotation)
         {
-            RotationQuaternion(ref rotation, out var result);
+            RotationQuaternion(rotation, out var result);
             return result;
         }
 
@@ -2568,7 +2568,7 @@ namespace FlaxEngine
         public static void RotationYawPitchRoll(float yaw, float pitch, float roll, out Matrix result)
         {
             Quaternion.RotationYawPitchRoll(yaw, pitch, roll, out var quaternion);
-            RotationQuaternion(ref quaternion, out result);
+            RotationQuaternion(quaternion, out result);
         }
 
         /// <summary>
@@ -2589,7 +2589,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="value">The offset for all three coordinate planes.</param>
         /// <param name="result">When the method completes, contains the created translation matrix.</param>
-        public static void Translation(ref Float3 value, out Matrix result)
+        public static void Translation(in Float3 value, out Matrix result)
         {
             Translation(value.X, value.Y, value.Z, out result);
         }
@@ -2601,7 +2601,7 @@ namespace FlaxEngine
         /// <returns>The created translation matrix.</returns>
         public static Matrix Translation(Float3 value)
         {
-            Translation(ref value, out var result);
+            Translation(value, out var result);
             return result;
         }
 
@@ -2643,15 +2643,15 @@ namespace FlaxEngine
         /// <param name="rotationVec">The rotation vector</param>
         /// <param name="transVec">The translation vector</param>
         /// <param name="matrix">Contains the created skew/shear matrix. </param>
-        public static void Skew(float angle, ref Float3 rotationVec, ref Float3 transVec, out Matrix matrix)
+        public static void Skew(float angle, in Float3 rotationVec, in Float3 transVec, out Matrix matrix)
         {
             // http://elckerlyc.ewi.utwente.nl/browser/Elckerlyc/Hmi/HmiMath/src/hmi/math/Mat3f.java
             var MINIMAL_SKEW_ANGLE = 0.000001f;
             Float3 e0 = rotationVec;
             Float3 e1 = Float3.Normalize(transVec);
-            Float3.Dot(ref rotationVec, ref e1, out var rv1);
+            Float3.Dot(rotationVec, e1, out var rv1);
             e0 += rv1 * e1;
-            Float3.Dot(ref rotationVec, ref e0, out var rv0);
+            Float3.Dot(rotationVec, e0, out var rv0);
             var cosA = (float)Math.Cos(angle);
             var sinA = (float)Math.Sin(angle);
             float rr0 = rv0 * cosA - rv1 * sinA;
@@ -2678,7 +2678,7 @@ namespace FlaxEngine
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <param name="result">When the method completes, contains the created affine transformation matrix.</param>
-        public static void AffineTransformation(float scaling, ref Quaternion rotation, ref Float3 translation, out Matrix result)
+        public static void AffineTransformation(float scaling, in Quaternion rotation, in Float3 translation, out Matrix result)
         {
             result = Scaling(scaling) * RotationQuaternion(rotation) * Translation(translation);
         }
@@ -2692,7 +2692,7 @@ namespace FlaxEngine
         /// <returns>The created affine transformation matrix.</returns>
         public static Matrix AffineTransformation(float scaling, Quaternion rotation, Float3 translation)
         {
-            AffineTransformation(scaling, ref rotation, ref translation, out var result);
+            AffineTransformation(scaling, rotation, translation, out var result);
             return result;
         }
 
@@ -2704,7 +2704,7 @@ namespace FlaxEngine
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <param name="result">When the method completes, contains the created affine transformation matrix.</param>
-        public static void AffineTransformation(float scaling, ref Float3 rotationCenter, ref Quaternion rotation, ref Float3 translation, out Matrix result)
+        public static void AffineTransformation(float scaling, in Float3 rotationCenter, in Quaternion rotation, in Float3 translation, out Matrix result)
         {
             result = Scaling(scaling) * Translation(-rotationCenter) * RotationQuaternion(rotation) *
                      Translation(rotationCenter) * Translation(translation);
@@ -2720,7 +2720,7 @@ namespace FlaxEngine
         /// <returns>The created affine transformation matrix.</returns>
         public static Matrix AffineTransformation(float scaling, Float3 rotationCenter, Quaternion rotation, Float3 translation)
         {
-            AffineTransformation(scaling, ref rotationCenter, ref rotation, ref translation, out var result);
+            AffineTransformation(scaling, rotationCenter, rotation, translation, out var result);
             return result;
         }
 
@@ -2731,7 +2731,7 @@ namespace FlaxEngine
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <param name="result">When the method completes, contains the created affine transformation matrix.</param>
-        public static void AffineTransformation2D(float scaling, float rotation, ref Float2 translation, out Matrix result)
+        public static void AffineTransformation2D(float scaling, float rotation, in Float2 translation, out Matrix result)
         {
             result = Scaling(scaling, scaling, 1.0f) * RotationZ(rotation) * Translation((Float3)translation);
         }
@@ -2745,7 +2745,7 @@ namespace FlaxEngine
         /// <returns>The created affine transformation matrix.</returns>
         public static Matrix AffineTransformation2D(float scaling, float rotation, Float2 translation)
         {
-            AffineTransformation2D(scaling, rotation, ref translation, out var result);
+            AffineTransformation2D(scaling, rotation, translation, out var result);
             return result;
         }
 
@@ -2757,7 +2757,7 @@ namespace FlaxEngine
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <param name="result">When the method completes, contains the created affine transformation matrix.</param>
-        public static void AffineTransformation2D(float scaling, ref Float2 rotationCenter, float rotation, ref Float2 translation, out Matrix result)
+        public static void AffineTransformation2D(float scaling, in Float2 rotationCenter, float rotation, in Float2 translation, out Matrix result)
         {
             result = Scaling(scaling, scaling, 1.0f) * Translation((Float3)(-rotationCenter)) * RotationZ(rotation) * Translation((Float3)rotationCenter) * Translation((Float3)translation);
         }
@@ -2772,7 +2772,7 @@ namespace FlaxEngine
         /// <returns>The created affine transformation matrix.</returns>
         public static Matrix AffineTransformation2D(float scaling, Float2 rotationCenter, float rotation, Float2 translation)
         {
-            AffineTransformation2D(scaling, ref rotationCenter, rotation, ref translation, out var result);
+            AffineTransformation2D(scaling, rotationCenter, rotation, translation, out var result);
             return result;
         }
 
@@ -2785,7 +2785,7 @@ namespace FlaxEngine
         /// <returns>The created transformation matrix.</returns>
         public static Matrix Transformation(Float3 scaling, Quaternion rotation, Float3 translation)
         {
-            Transformation(ref scaling, ref rotation, ref translation, out var result);
+            Transformation(scaling, rotation, translation, out var result);
             return result;
         }
 
@@ -2796,7 +2796,7 @@ namespace FlaxEngine
         /// <param name="rotation">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>
         /// <param name="scaling">The scaling.</param>
         /// <param name="result">When the method completes, contains the created transformation matrix.</param>
-        public static void Transformation(ref Float3 scaling, ref Quaternion rotation, ref Float3 translation, out Matrix result)
+        public static void Transformation(in Float3 scaling, in Quaternion rotation, in Float3 translation, out Matrix result)
         {
             // Equivalent to:
             //result =
@@ -2858,7 +2858,7 @@ namespace FlaxEngine
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <param name="result">When the method completes, contains the created transformation matrix.</param>
-        public static void Transformation(ref Float3 scalingCenter, ref Quaternion scalingRotation, ref Float3 scaling, ref Float3 rotationCenter, ref Quaternion rotation, ref Float3 translation, out Matrix result)
+        public static void Transformation(in Float3 scalingCenter, in Quaternion scalingRotation, in Float3 scaling, in Float3 rotationCenter, in Quaternion rotation, in Float3 translation, out Matrix result)
         {
             Matrix sr = RotationQuaternion(scalingRotation);
             result = Translation(-scalingCenter) * Transpose(sr) * Scaling(scaling) * sr * Translation(scalingCenter) * Translation(-rotationCenter) * RotationQuaternion(rotation) * Translation(rotationCenter) * Translation(translation);
@@ -2876,7 +2876,7 @@ namespace FlaxEngine
         /// <returns>The created transformation matrix.</returns>
         public static Matrix Transformation(Float3 scalingCenter, Quaternion scalingRotation, Float3 scaling, Float3 rotationCenter, Quaternion rotation, Float3 translation)
         {
-            Transformation(ref scalingCenter, ref scalingRotation, ref scaling, ref rotationCenter, ref rotation, ref translation, out var result);
+            Transformation(scalingCenter, scalingRotation, scaling, rotationCenter, rotation, translation, out var result);
             return result;
         }
 
@@ -2890,7 +2890,7 @@ namespace FlaxEngine
         /// <param name="rotation">The rotation of the transformation.</param>
         /// <param name="translation">The translation factor of the transformation.</param>
         /// <param name="result">When the method completes, contains the created transformation matrix.</param>
-        public static void Transformation2D(ref Float2 scalingCenter, float scalingRotation, ref Float2 scaling, ref Float2 rotationCenter, float rotation, ref Float2 translation, out Matrix result)
+        public static void Transformation2D(in Float2 scalingCenter, float scalingRotation, in Float2 scaling, in Float2 rotationCenter, float rotation, in Float2 translation, out Matrix result)
         {
             result = Translation((Float3)(-scalingCenter)) * RotationZ(-scalingRotation) * Scaling((Float3)scaling) * RotationZ(scalingRotation) * Translation((Float3)scalingCenter) * Translation((Float3)(-rotationCenter)) * RotationZ(rotation) * Translation((Float3)rotationCenter) * Translation((Float3)translation);
             result.M33 = 1f;
@@ -2909,7 +2909,7 @@ namespace FlaxEngine
         /// <returns>The created transformation matrix.</returns>
         public static Matrix Transformation2D(Float2 scalingCenter, float scalingRotation, Float2 scaling, Float2 rotationCenter, float rotation, Float2 translation)
         {
-            Transformation2D(ref scalingCenter, scalingRotation, ref scaling, ref rotationCenter, rotation, ref translation, out var result);
+            Transformation2D(scalingCenter, scalingRotation, scaling, rotationCenter, rotation, translation, out var result);
             return result;
         }
 
@@ -2922,7 +2922,7 @@ namespace FlaxEngine
         /// <returns>The created world matrix of given transformation world</returns>
         public static Matrix CreateWorld(Float3 position, Float3 forward, Float3 up)
         {
-            CreateWorld(ref position, ref forward, ref up, out var result);
+            CreateWorld(position, forward, up, out var result);
             return result;
         }
 
@@ -2933,13 +2933,13 @@ namespace FlaxEngine
         /// <param name="forward">The forward direction of the object.</param>
         /// <param name="up">The upward direction of the object; usually [0, 1, 0].</param>
         /// <param name="result">>When the method completes, contains the created world matrix of given transformation world.</param>
-        public static void CreateWorld(ref Float3 position, ref Float3 forward, ref Float3 up, out Matrix result)
+        public static void CreateWorld(in Float3 position, in Float3 forward, in Float3 up, out Matrix result)
         {
-            Float3.Normalize(ref forward, out var vector3);
+            Float3.Normalize(forward, out var vector3);
             vector3 = vector3.Negative;
             Float3 vector31 = Float3.Cross(up, vector3);
             vector31.Normalize();
-            Float3.Cross(ref vector3, ref vector31, out var vector32);
+            Float3.Cross(vector3, vector31, out var vector32);
             result = new Matrix
             (
              vector31.X,
@@ -2969,7 +2969,7 @@ namespace FlaxEngine
         /// <returns>The created rotation matrix.</returns>
         public static Matrix CreateFromAxisAngle(Float3 axis, float angle)
         {
-            CreateFromAxisAngle(ref axis, angle, out var result);
+            CreateFromAxisAngle(axis, angle, out var result);
             return result;
         }
 
@@ -2979,7 +2979,7 @@ namespace FlaxEngine
         /// <param name="axis">The axis to rotate around.</param>
         /// <param name="angle">The angle to rotate around the vector.</param>
         /// <param name="result">When the method completes, contains the created rotation matrix.</param>
-        public static void CreateFromAxisAngle(ref Float3 axis, float angle, out Matrix result)
+        public static void CreateFromAxisAngle(in Float3 axis, float angle, out Matrix result)
         {
             float x = axis.X;
             float y = axis.Y;
@@ -3021,7 +3021,7 @@ namespace FlaxEngine
         /// <returns>The sum of the two matrices.</returns>
         public static Matrix operator +(Matrix left, Matrix right)
         {
-            Add(ref left, ref right, out var result);
+            Add(left, right, out var result);
             return result;
         }
 
@@ -3043,7 +3043,7 @@ namespace FlaxEngine
         /// <returns>The difference between the two matrices.</returns>
         public static Matrix operator -(Matrix left, Matrix right)
         {
-            Subtract(ref left, ref right, out var result);
+            Subtract(left, right, out var result);
             return result;
         }
 
@@ -3054,7 +3054,7 @@ namespace FlaxEngine
         /// <returns>The negated matrix.</returns>
         public static Matrix operator -(Matrix value)
         {
-            Negate(ref value, out var result);
+            Negate(value, out var result);
             return result;
         }
 
@@ -3066,7 +3066,7 @@ namespace FlaxEngine
         /// <returns>The scaled matrix.</returns>
         public static Matrix operator *(float left, Matrix right)
         {
-            Multiply(ref right, left, out var result);
+            Multiply(right, left, out var result);
             return result;
         }
 
@@ -3078,7 +3078,7 @@ namespace FlaxEngine
         /// <returns>The scaled matrix.</returns>
         public static Matrix operator *(Matrix left, float right)
         {
-            Multiply(ref left, right, out var result);
+            Multiply(left, right, out var result);
             return result;
         }
 
@@ -3090,7 +3090,7 @@ namespace FlaxEngine
         /// <returns>The product of the two matrices.</returns>
         public static Matrix operator *(Matrix left, Matrix right)
         {
-            Multiply(ref left, ref right, out var result);
+            Multiply(left, right, out var result);
             return result;
         }
 
@@ -3102,7 +3102,7 @@ namespace FlaxEngine
         /// <returns>The scaled matrix.</returns>
         public static Matrix operator /(Matrix left, float right)
         {
-            Divide(ref left, right, out var result);
+            Divide(left, right, out var result);
             return result;
         }
 
@@ -3114,7 +3114,7 @@ namespace FlaxEngine
         /// <returns>The quotient of the two matrices.</returns>
         public static Matrix operator /(Matrix left, Matrix right)
         {
-            Divide(ref left, ref right, out var result);
+            Divide(left, right, out var result);
             return result;
         }
 
@@ -3127,7 +3127,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Matrix left, Matrix right)
         {
-            return left.Equals(ref right);
+            return left.Equals(right);
         }
 
         /// <summary>
@@ -3139,7 +3139,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Matrix left, Matrix right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(right);
         }
 
         /// <summary>
@@ -3234,7 +3234,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="other">The <see cref="Matrix" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Matrix" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(ref Matrix other)
+        public bool Equals(in Matrix other)
         {
             return other.M11 == M11 &&
                    other.M12 == M12 &&
@@ -3262,7 +3262,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Matrix other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -3272,7 +3272,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Matrix other && Equals(ref other);
+            return value is Matrix other && Equals(other);
         }
     }
 }

@@ -85,9 +85,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="ray">The ray to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray)
+        public bool Intersects(in Ray ray)
         {
-            return CollisionsHelper.RayIntersectsSphere(ref ray, ref this, out Real _);
+            return CollisionsHelper.RayIntersectsSphere(ray, this, out Real _);
         }
 
         /// <summary>
@@ -96,9 +96,9 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Real distance)
+        public bool Intersects(in Ray ray, out Real distance)
         {
-            return CollisionsHelper.RayIntersectsSphere(ref ray, ref this, out distance);
+            return CollisionsHelper.RayIntersectsSphere(ray, this, out distance);
         }
 
         /// <summary>
@@ -107,9 +107,9 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Vector3 point)
+        public bool Intersects(in Ray ray, out Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsSphere(ref ray, ref this, out point);
+            return CollisionsHelper.RayIntersectsSphere(ray, this, out point);
         }
 
         /// <summary>
@@ -117,9 +117,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="plane">The plane to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public PlaneIntersectionType Intersects(ref Plane plane)
+        public PlaneIntersectionType Intersects(in Plane plane)
         {
-            return CollisionsHelper.PlaneIntersectsSphere(ref plane, ref this);
+            return CollisionsHelper.PlaneIntersectsSphere(plane, this);
         }
 
         /// <summary>
@@ -129,9 +129,9 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public bool Intersects(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
-            return CollisionsHelper.SphereIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
+            return CollisionsHelper.SphereIntersectsTriangle(this, vertex1, vertex2, vertex3);
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingBox box)
+        public bool Intersects(in BoundingBox box)
         {
-            return CollisionsHelper.BoxIntersectsSphere(ref box, ref this);
+            return CollisionsHelper.BoxIntersectsSphere(box, this);
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace FlaxEngine
         /// <returns>Whether the two objects intersected.</returns>
         public bool Intersects(BoundingBox box)
         {
-            return Intersects(ref box);
+            return Intersects(in box);
         }
 
         /// <summary>
@@ -159,9 +159,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingSphere sphere)
+        public bool Intersects(in BoundingSphere sphere)
         {
-            return CollisionsHelper.SphereIntersectsSphere(ref this, ref sphere);
+            return CollisionsHelper.SphereIntersectsSphere(this, sphere);
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace FlaxEngine
         /// <returns>Whether the two objects intersected.</returns>
         public bool Intersects(BoundingSphere sphere)
         {
-            return Intersects(ref sphere);
+            return Intersects(in sphere);
         }
 
         /// <summary>
@@ -179,9 +179,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="point">The point to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref Vector3 point)
+        public ContainmentType Contains(in Vector3 point)
         {
-            return CollisionsHelper.SphereContainsPoint(ref this, ref point);
+            return CollisionsHelper.SphereContainsPoint(this, point);
         }
 
         /// <summary>
@@ -191,9 +191,9 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public ContainmentType Contains(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
-            return CollisionsHelper.SphereContainsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
+            return CollisionsHelper.SphereContainsTriangle(this, vertex1, vertex2, vertex3);
         }
 
         /// <summary>
@@ -201,9 +201,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref BoundingBox box)
+        public ContainmentType Contains(in BoundingBox box)
         {
-            return CollisionsHelper.SphereContainsBox(ref this, ref box);
+            return CollisionsHelper.SphereContainsBox(this, box);
         }
 
         /// <summary>
@@ -211,9 +211,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref BoundingSphere sphere)
+        public ContainmentType Contains(in BoundingSphere sphere)
         {
-            return CollisionsHelper.SphereContainsSphere(ref this, ref sphere);
+            return CollisionsHelper.SphereContainsSphere(this, sphere);
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace FlaxEngine
             // Find the center of all points
             Vector3 center = Vector3.Zero;
             for (int i = start; i < upperEnd; ++i)
-                Vector3.Add(ref points[i], ref center, out center);
+                Vector3.Add(points[i], center, out center);
             center /= (Real)count;
 
             // Find the radius of the sphere
@@ -247,7 +247,7 @@ namespace FlaxEngine
             for (int i = start; i < upperEnd; ++i)
             {
                 // We are doing a relative distance comparison to find the maximum distance from the center of our sphere
-                Vector3.DistanceSquared(ref center, ref points[i], out Real distance);
+                Vector3.DistanceSquared(center, points[i], out Real distance);
                 if (distance > radius)
                     radius = distance;
             }
@@ -285,7 +285,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box that will designate the extents of the sphere.</param>
         /// <param name="result">When the method completes, the newly constructed bounding sphere.</param>
-        public static void FromBox(ref BoundingBox box, out BoundingSphere result)
+        public static void FromBox(in BoundingBox box, out BoundingSphere result)
         {
             var x = box.Maximum.X - box.Minimum.X;
             var y = box.Maximum.Y - box.Minimum.Y;
@@ -303,7 +303,7 @@ namespace FlaxEngine
         /// <returns>The newly constructed bounding sphere.</returns>
         public static BoundingSphere FromBox(BoundingBox box)
         {
-            FromBox(ref box, out var result);
+            FromBox(in box, out var result);
             return result;
         }
 
@@ -314,7 +314,7 @@ namespace FlaxEngine
         /// <param name="value1">The first sphere to merge.</param>
         /// <param name="value2">The second sphere to merge.</param>
         /// <param name="result">When the method completes, contains the newly constructed bounding sphere.</param>
-        public static void Merge(ref BoundingSphere value1, ref BoundingSphere value2, out BoundingSphere result)
+        public static void Merge(in BoundingSphere value1, in BoundingSphere value2, out BoundingSphere result)
         {
             // Pre-exit if one of the bounding sphere by assuming that a merge with an empty sphere is equivalent at taking the non-empty sphere
             if (value1 == Empty)
@@ -365,7 +365,7 @@ namespace FlaxEngine
         /// <returns>The newly constructed bounding sphere.</returns>
         public static BoundingSphere Merge(BoundingSphere value1, BoundingSphere value2)
         {
-            Merge(ref value1, ref value2, out var result);
+            Merge(in value1, in value2, out var result);
             return result;
         }
 
@@ -377,7 +377,7 @@ namespace FlaxEngine
         /// <remarks>The result transformed sphere.</remarks>
         public static BoundingSphere Transform(BoundingSphere sphere, Matrix matrix)
         {
-            Transform(ref sphere, ref matrix, out var result);
+            Transform(in sphere, in matrix, out var result);
             return result;
         }
 
@@ -387,9 +387,9 @@ namespace FlaxEngine
         /// <param name="sphere">The sphere.</param>
         /// <param name="matrix">The matrix.</param>
         /// <param name="result">The result transformed sphere.</param>
-        public static void Transform(ref BoundingSphere sphere, ref Matrix matrix, out BoundingSphere result)
+        public static void Transform(in BoundingSphere sphere, in Matrix matrix, out BoundingSphere result)
         {
-            Vector3.Transform(ref sphere.Center, ref matrix, out result.Center);
+            Vector3.Transform(sphere.Center, matrix, out result.Center);
             result.Radius = sphere.Radius * matrix.ScaleVector.Absolute.MaxValue;
         }
 
@@ -402,7 +402,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(BoundingSphere left, BoundingSphere right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -414,7 +414,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(BoundingSphere left, BoundingSphere right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -490,7 +490,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Vector4" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Vector4" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref BoundingSphere other)
+        public bool Equals(in BoundingSphere other)
         {
             return Center == other.Center && Radius == other.Radius;
         }
@@ -503,7 +503,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(BoundingSphere other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -513,7 +513,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is BoundingSphere other && Equals(ref other);
+            return value is BoundingSphere other && Equals(in other);
         }
     }
 }

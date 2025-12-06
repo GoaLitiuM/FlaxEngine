@@ -147,9 +147,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="ray">The ray to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray)
+        public bool Intersects(in Ray ray)
         {
-            return CollisionsHelper.RayIntersectsBox(ref ray, ref this, out Real _);
+            return CollisionsHelper.RayIntersectsBox(ray, this, out Real _);
         }
 
         /// <summary>
@@ -158,9 +158,9 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Real distance)
+        public bool Intersects(in Ray ray, out Real distance)
         {
-            return CollisionsHelper.RayIntersectsBox(ref ray, ref this, out distance);
+            return CollisionsHelper.RayIntersectsBox(ray, this, out distance);
         }
 
 #if USE_LARGE_WORLDS
@@ -172,9 +172,9 @@ namespace FlaxEngine
         /// <param name="distance">When the method completes, contains the distance of the intersection, or 0 if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
         [Obsolete("Use Intersects with 'out Real distance' parameter instead")]
-        public bool Intersects(ref Ray ray, out float distance)
+        public bool Intersects(in Ray ray, out float distance)
         {
-            var result = CollisionsHelper.RayIntersectsBox(ref ray, ref this, out Real dst);
+            var result = CollisionsHelper.RayIntersectsBox(ray, this, out Real dst);
             distance = (float)dst;
             return result;
         }
@@ -186,9 +186,9 @@ namespace FlaxEngine
         /// <param name="ray">The ray to test.</param>
         /// <param name="point">When the method completes, contains the point of intersection, or <see cref="Vector3.Zero" /> if there was no intersection.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Ray ray, out Vector3 point)
+        public bool Intersects(in Ray ray, out Vector3 point)
         {
-            return CollisionsHelper.RayIntersectsBox(ref ray, ref this, out point);
+            return CollisionsHelper.RayIntersectsBox(ray, this, out point);
         }
 
         /// <summary>
@@ -196,9 +196,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="plane">The plane to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public PlaneIntersectionType Intersects(ref Plane plane)
+        public PlaneIntersectionType Intersects(in Plane plane)
         {
-            return CollisionsHelper.PlaneIntersectsBox(ref plane, ref this);
+            return CollisionsHelper.PlaneIntersectsBox(plane, this);
         }
 
         /* This implementation is wrong
@@ -209,7 +209,7 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public bool Intersects(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
             return Collision.BoxIntersectsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
         }
@@ -220,9 +220,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingBox box)
+        public bool Intersects(in BoundingBox box)
         {
-            return CollisionsHelper.BoxIntersectsBox(ref this, ref box);
+            return CollisionsHelper.BoxIntersectsBox(this, box);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace FlaxEngine
         /// <returns>Whether the two objects intersected.</returns>
         public bool Intersects(BoundingBox box)
         {
-            return Intersects(ref box);
+            return Intersects(in box);
         }
 
         /// <summary>
@@ -240,9 +240,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>Whether the two objects intersected.</returns>
-        public bool Intersects(ref BoundingSphere sphere)
+        public bool Intersects(in BoundingSphere sphere)
         {
-            return CollisionsHelper.BoxIntersectsSphere(ref this, ref sphere);
+            return CollisionsHelper.BoxIntersectsSphere(this, sphere);
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace FlaxEngine
         /// <returns>Whether the two objects intersected.</returns>
         public bool Intersects(BoundingSphere sphere)
         {
-            return Intersects(ref sphere);
+            return Intersects(in sphere);
         }
 
         /// <summary>
@@ -260,9 +260,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="point">The point to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref Vector3 point)
+        public ContainmentType Contains(in Vector3 point)
         {
-            return CollisionsHelper.BoxContainsPoint(ref this, ref point);
+            return CollisionsHelper.BoxContainsPoint(this, point);
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace FlaxEngine
         /// <returns>The type of containment the two objects have.</returns>
         public ContainmentType Contains(Vector3 point)
         {
-            return Contains(ref point);
+            return Contains(in point);
         }
 
         /* This implementation is wrong
@@ -283,7 +283,7 @@ namespace FlaxEngine
         /// <param name="vertex2">The second vertex of the triangle to test.</param>
         /// <param name="vertex3">The third vertex of the triangle to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref Vector3 vertex1, ref Vector3 vertex2, ref Vector3 vertex3)
+        public ContainmentType Contains(in Vector3 vertex1, in Vector3 vertex2, in Vector3 vertex3)
         {
             return Collision.BoxContainsTriangle(ref this, ref vertex1, ref vertex2, ref vertex3);
         }
@@ -294,9 +294,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="box">The box to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref BoundingBox box)
+        public ContainmentType Contains(in BoundingBox box)
         {
-            return CollisionsHelper.BoxContainsBox(ref this, ref box);
+            return CollisionsHelper.BoxContainsBox(this, box);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace FlaxEngine
         /// <returns>The type of containment the two objects have.</returns>
         public ContainmentType Contains(BoundingBox box)
         {
-            return Contains(ref box);
+            return Contains(in box);
         }
 
         /// <summary>
@@ -314,9 +314,9 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere to test.</param>
         /// <returns>The type of containment the two objects have.</returns>
-        public ContainmentType Contains(ref BoundingSphere sphere)
+        public ContainmentType Contains(in BoundingSphere sphere)
         {
-            return CollisionsHelper.BoxContainsSphere(ref this, ref sphere);
+            return CollisionsHelper.BoxContainsSphere(this, sphere);
         }
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace FlaxEngine
         /// <returns>The type of containment the two objects have.</returns>
         public ContainmentType Contains(BoundingSphere sphere)
         {
-            return Contains(ref sphere);
+            return Contains(in sphere);
         }
 
         /// <summary>
@@ -343,8 +343,8 @@ namespace FlaxEngine
             var max = Vector3.Minimum;
             for (var i = 0; i < points.Length; ++i)
             {
-                Vector3.Min(ref min, ref points[i], out min);
-                Vector3.Max(ref max, ref points[i], out max);
+                Vector3.Min(min, points[i], out min);
+                Vector3.Max(max, points[i], out max);
             }
             result = new BoundingBox(min, max);
         }
@@ -375,8 +375,8 @@ namespace FlaxEngine
             var max = Float3.Minimum;
             for (var i = 0; i < points.Length; ++i)
             {
-                Float3.Min(ref min, ref points[i], out min);
-                Float3.Max(ref max, ref points[i], out max);
+                Float3.Min(min, points[i], out min);
+                Float3.Max(max, points[i], out max);
             }
             result = new BoundingBox(min, max);
         }
@@ -386,7 +386,7 @@ namespace FlaxEngine
         /// </summary>
         /// <param name="sphere">The sphere that will designate the extents of the box.</param>
         /// <param name="result">When the method completes, contains the newly constructed bounding box.</param>
-        public static void FromSphere(ref BoundingSphere sphere, out BoundingBox result)
+        public static void FromSphere(in BoundingSphere sphere, out BoundingBox result)
         {
             result.Minimum = new Vector3(sphere.Center.X - sphere.Radius, sphere.Center.Y - sphere.Radius, sphere.Center.Z - sphere.Radius);
             result.Maximum = new Vector3(sphere.Center.X + sphere.Radius, sphere.Center.Y + sphere.Radius, sphere.Center.Z + sphere.Radius);
@@ -411,10 +411,10 @@ namespace FlaxEngine
         /// <param name="value1">The first box to merge.</param>
         /// <param name="value2">The second box to merge.</param>
         /// <param name="result">When the method completes, contains the newly constructed bounding box.</param>
-        public static void Merge(ref BoundingBox value1, ref BoundingBox value2, out BoundingBox result)
+        public static void Merge(in BoundingBox value1, in BoundingBox value2, out BoundingBox result)
         {
-            Vector3.Min(ref value1.Minimum, ref value2.Minimum, out result.Minimum);
-            Vector3.Max(ref value1.Maximum, ref value2.Maximum, out result.Maximum);
+            Vector3.Min(value1.Minimum, value2.Minimum, out result.Minimum);
+            Vector3.Max(value1.Maximum, value2.Maximum, out result.Maximum);
         }
 
         /// <summary>
@@ -426,8 +426,8 @@ namespace FlaxEngine
         public static BoundingBox Merge(BoundingBox value1, BoundingBox value2)
         {
             BoundingBox box;
-            Vector3.Min(ref value1.Minimum, ref value2.Minimum, out box.Minimum);
-            Vector3.Max(ref value1.Maximum, ref value2.Maximum, out box.Maximum);
+            Vector3.Min(value1.Minimum, value2.Minimum, out box.Minimum);
+            Vector3.Max(value1.Maximum, value2.Maximum, out box.Maximum);
             return box;
         }
 
@@ -437,10 +437,10 @@ namespace FlaxEngine
         /// <param name="value1">The box to merge.</param>
         /// <param name="value2">The point to merge.</param>
         /// <param name="result">When the method completes, contains the newly constructed bounding box.</param>
-        public static void Merge(ref BoundingBox value1, ref Vector3 value2, out BoundingBox result)
+        public static void Merge(in BoundingBox value1, in Vector3 value2, out BoundingBox result)
         {
-            Vector3.Min(ref value1.Minimum, ref value2, out result.Minimum);
-            Vector3.Max(ref value1.Maximum, ref value2, out result.Maximum);
+            Vector3.Min(value1.Minimum, value2, out result.Minimum);
+            Vector3.Max(value1.Maximum, value2, out result.Maximum);
         }
 
         /// <summary>
@@ -451,8 +451,8 @@ namespace FlaxEngine
         public BoundingBox Merge(Vector3 value2)
         {
             BoundingBox result;
-            Vector3.Min(ref Minimum, ref value2, out result.Minimum);
-            Vector3.Max(ref Maximum, ref value2, out result.Maximum);
+            Vector3.Min(Minimum, value2, out result.Minimum);
+            Vector3.Max(Maximum, value2, out result.Maximum);
             return result;
         }
 
@@ -464,7 +464,7 @@ namespace FlaxEngine
         /// <returns>The result of the transformation.</returns>
         public static BoundingBox Transform(BoundingBox box, Matrix transform)
         {
-            Transform(ref box, ref transform, out BoundingBox result);
+            Transform(box, transform, out BoundingBox result);
             return result;
         }
 
@@ -474,7 +474,7 @@ namespace FlaxEngine
         /// <param name="box">The bounding box to transform.</param>
         /// <param name="transform">The transformation matrix.</param>
         /// <param name="result">The result of the transformation.</param>
-        public static void Transform(ref BoundingBox box, ref Matrix transform, out BoundingBox result)
+        public static void Transform(in BoundingBox box, in Matrix transform, out BoundingBox result)
         {
             // Reference: http://dev.theomader.com/transform-bounding-boxes/
 
@@ -504,7 +504,7 @@ namespace FlaxEngine
         /// <returns>The result of the transformation.</returns>
         public static BoundingBox Transform(BoundingBox box, Transform transform)
         {
-            Transform(ref box, ref transform, out BoundingBox result);
+            Transform(box, transform, out BoundingBox result);
             return result;
         }
 
@@ -514,7 +514,7 @@ namespace FlaxEngine
         /// <param name="box">The bounding box to transform.</param>
         /// <param name="transform">The transformation.</param>
         /// <param name="result">The result of the transformation.</param>
-        public static void Transform(ref BoundingBox box, ref Transform transform, out BoundingBox result)
+        public static void Transform(in BoundingBox box, in Transform transform, out BoundingBox result)
         {
             // Reference: http://dev.theomader.com/transform-bounding-boxes/
 
@@ -543,8 +543,8 @@ namespace FlaxEngine
         public BoundingBox MakeOffsetted(Vector3 offset)
         {
             BoundingBox result;
-            Vector3.Add(ref Minimum, ref offset, out result.Minimum);
-            Vector3.Add(ref Maximum, ref offset, out result.Maximum);
+            Vector3.Add(Minimum, offset, out result.Minimum);
+            Vector3.Add(Maximum, offset, out result.Maximum);
             return result;
         }
 
@@ -554,11 +554,11 @@ namespace FlaxEngine
         /// <param name="box">The box.</param>
         /// <param name="offset">The bounds offset.</param>
         /// <returns>The offsetted bounds.</returns>
-        public static BoundingBox MakeOffsetted(ref BoundingBox box, ref Vector3 offset)
+        public static BoundingBox MakeOffsetted(in BoundingBox box, in Vector3 offset)
         {
             BoundingBox result;
-            Vector3.Add(ref box.Minimum, ref offset, out result.Minimum);
-            Vector3.Add(ref box.Maximum, ref offset, out result.Maximum);
+            Vector3.Add(box.Minimum, offset, out result.Minimum);
+            Vector3.Add(box.Maximum, offset, out result.Maximum);
             return result;
         }
 
@@ -568,9 +568,9 @@ namespace FlaxEngine
         /// <param name="box">The box.</param>
         /// <param name="scale">The bounds scale.</param>
         /// <returns>The scaled bounds.</returns>
-        public static BoundingBox MakeScaled(ref BoundingBox box, Real scale)
+        public static BoundingBox MakeScaled(in BoundingBox box, Real scale)
         {
-            Vector3.Subtract(ref box.Maximum, ref box.Minimum, out var size);
+            Vector3.Subtract(box.Maximum, box.Minimum, out var size);
             Vector3 sizeHalf = size * 0.5f;
             Vector3 center = box.Minimum + sizeHalf;
             sizeHalf *= scale;
@@ -586,7 +586,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static BoundingBox operator *(BoundingBox box, Matrix transform)
         {
-            Transform(ref box, ref transform, out BoundingBox result);
+            Transform(box, transform, out BoundingBox result);
             return result;
         }
 
@@ -599,7 +599,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(BoundingBox left, BoundingBox right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -611,7 +611,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(BoundingBox left, BoundingBox right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -676,7 +676,7 @@ namespace FlaxEngine
         /// <param name="other">The <see cref="Vector4" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Vector4" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(ref BoundingBox other)
+        public bool Equals(in BoundingBox other)
         {
             return Minimum == other.Minimum && Maximum == other.Maximum;
         }
@@ -689,7 +689,7 @@ namespace FlaxEngine
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(BoundingBox other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -699,7 +699,7 @@ namespace FlaxEngine
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is BoundingBox other && Equals(ref other);
+            return value is BoundingBox other && Equals(in other);
         }
     }
 }

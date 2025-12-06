@@ -154,7 +154,7 @@ namespace FlaxEngine.GUI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Margin left, Margin right)
         {
-            return left.Equals(ref right);
+            return left.Equals(in right);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace FlaxEngine.GUI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Margin left, Margin right)
         {
-            return !left.Equals(ref right);
+            return !left.Equals(in right);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace FlaxEngine.GUI
         /// </summary>
         /// <param name="other">The <see cref="Margin" /> to compare with this instance.</param>
         /// <returns><c>true</c> if the specified <see cref="Margin" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(ref Margin other)
+        public bool Equals(in Margin other)
         {
             return Mathf.NearEqual(other.Left, Left) &&
                    Mathf.NearEqual(other.Right, Right) &&
@@ -261,9 +261,9 @@ namespace FlaxEngine.GUI
         /// Determines whether the specified <see cref="Margin"/> are equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Equals(ref Margin a, ref Margin b)
+        public static bool Equals(in Margin a, in Margin b)
         {
-            return a.Equals(ref b);
+            return a.Equals(in b);
         }
 
         /// <summary>
@@ -274,7 +274,7 @@ namespace FlaxEngine.GUI
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Margin other)
         {
-            return Equals(ref other);
+            return Equals(in other);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace FlaxEngine.GUI
         /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         public override bool Equals(object value)
         {
-            return value is Margin margin && Equals(ref margin);
+            return value is Margin margin && Equals(in margin);
         }
     }
 }

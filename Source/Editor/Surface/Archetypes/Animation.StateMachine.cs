@@ -213,7 +213,7 @@ namespace FlaxEditor.Surface.Archetypes
                 if (base.OnMouseDoubleClick(location, button))
                     return true;
 
-                if (_headerRect.Contains(ref location))
+                if (_headerRect.Contains(location))
                 {
                     StartRenaming();
                     return true;
@@ -382,13 +382,13 @@ namespace FlaxEditor.Surface.Archetypes
             /// <inheritdoc />
             public override bool CanSelect(ref Float2 location)
             {
-                return _dragAreaRect.MakeOffsetted(Location).Contains(ref location);
+                return _dragAreaRect.MakeOffsetted(Location).Contains(location);
             }
 
             /// <inheritdoc />
             public override bool OnMouseDown(Float2 location, MouseButton button)
             {
-                if (button == MouseButton.Left && !_dragAreaRect.Contains(ref location))
+                if (button == MouseButton.Left && !_dragAreaRect.Contains(location))
                 {
                     _isMouseDown = true;
                     Cursor = CursorType.Hand;
@@ -687,7 +687,7 @@ namespace FlaxEditor.Surface.Archetypes
                 var upperLeft = bounds.UpperLeft;
                 var bottomRight = bounds.BottomRight;
                 bounds = Rectangle.FromPoints(PointToParent(ref upperLeft), PointToParent(ref bottomRight));
-                CollisionsHelper.ClosestPointRectanglePoint(ref bounds, ref startPos, out endPos);
+                CollisionsHelper.ClosestPointRectanglePoint(bounds, startPos, out endPos);
             }
 
             /// <inheritdoc />
@@ -731,15 +731,15 @@ namespace FlaxEditor.Surface.Archetypes
 
                 // Check click over the connection
                 var mousePosition = Surface.SurfaceRoot.PointFromParent(ref mouse);
-                if (!TransitionsRectangle.Contains(ref mousePosition))
+                if (!TransitionsRectangle.Contains(mousePosition))
                     return;
                 for (int i = 0; i < Transitions.Count; i++)
                 {
                     var t = Transitions[i];
-                    if (t.Bounds.Contains(ref mousePosition))
+                    if (t.Bounds.Contains(mousePosition))
                     {
-                        CollisionsHelper.ClosestPointPointLine(ref mousePosition, ref t.StartPos, ref t.EndPos, out var point);
-                        if (Float2.DistanceSquared(ref mousePosition, ref point) < 25.0f)
+                        CollisionsHelper.ClosestPointPointLine(mousePosition, t.StartPos, t.EndPos, out var point);
+                        if (Float2.DistanceSquared(mousePosition, point) < 25.0f)
                         {
                             OnTransitionClicked(t, ref mouse, ref mousePosition, buttons);
                             handled = true;
@@ -756,15 +756,15 @@ namespace FlaxEditor.Surface.Archetypes
 
                 // Check double click over the connection
                 var mousePosition = Surface.SurfaceRoot.PointFromParent(ref mouse);
-                if (!TransitionsRectangle.Contains(ref mousePosition))
+                if (!TransitionsRectangle.Contains(mousePosition))
                     return;
                 for (int i = 0; i < Transitions.Count; i++)
                 {
                     var t = Transitions[i];
-                    if (t.Bounds.Contains(ref mousePosition))
+                    if (t.Bounds.Contains(mousePosition))
                     {
-                        CollisionsHelper.ClosestPointPointLine(ref mousePosition, ref t.StartPos, ref t.EndPos, out var point);
-                        if (Float2.DistanceSquared(ref mousePosition, ref point) < 25.0f)
+                        CollisionsHelper.ClosestPointPointLine(mousePosition, t.StartPos, t.EndPos, out var point);
+                        if (Float2.DistanceSquared(mousePosition, point) < 25.0f)
                         {
                             t.EditRule();
                             handled = true;
@@ -1007,7 +1007,7 @@ namespace FlaxEditor.Surface.Archetypes
                         var offset = diff ? -6.0f : 6.0f;
                         var dir = startPos - endPos;
                         dir.Normalize();
-                        Float2.Perpendicular(ref dir, out var nrm);
+                        Float2.Perpendicular(dir, out var nrm);
                         nrm *= offset;
                         startPos += nrm;
                         endPos += nrm;
@@ -1031,7 +1031,7 @@ namespace FlaxEditor.Surface.Archetypes
 
                     t.StartPos = startPos;
                     t.EndPos = endPos;
-                    Rectangle.FromPoints(ref startPos, ref endPos, out t.Bounds);
+                    Rectangle.FromPoints(startPos, endPos, out t.Bounds);
                     t.Bounds.Expand(10.0f);
                 }
 
@@ -1040,7 +1040,7 @@ namespace FlaxEditor.Surface.Archetypes
                     TransitionsRectangle = Transitions[0].Bounds;
                     for (int i = 1; i < Transitions.Count; i++)
                     {
-                        Rectangle.Union(ref TransitionsRectangle, ref Transitions[i].Bounds, out TransitionsRectangle);
+                        Rectangle.Union(TransitionsRectangle, Transitions[i].Bounds, out TransitionsRectangle);
                     }
                 }
                 else
@@ -1120,7 +1120,7 @@ namespace FlaxEditor.Surface.Archetypes
             /// <inheritdoc />
             public override bool CanSelect(ref Float2 location)
             {
-                return _dragAreaRect.MakeOffsetted(Location).Contains(ref location);
+                return _dragAreaRect.MakeOffsetted(Location).Contains(location);
             }
 
             /// <inheritdoc />
@@ -1129,7 +1129,7 @@ namespace FlaxEditor.Surface.Archetypes
                 if (base.OnMouseDoubleClick(location, button))
                     return true;
 
-                if (_renameButtonRect.Contains(ref location) || _closeButtonRect.Contains(ref location))
+                if (_renameButtonRect.Contains(location) || _closeButtonRect.Contains(location))
                     return true;
 
                 return false;
@@ -1138,7 +1138,7 @@ namespace FlaxEditor.Surface.Archetypes
             /// <inheritdoc />
             public override bool OnMouseDown(Float2 location, MouseButton button)
             {
-                if (button == MouseButton.Left && !_dragAreaRect.Contains(ref location))
+                if (button == MouseButton.Left && !_dragAreaRect.Contains(location))
                 {
                     _isMouseDown = true;
                     Cursor = CursorType.Hand;
@@ -1271,11 +1271,11 @@ namespace FlaxEditor.Surface.Archetypes
                 for (int i = 0; i < Transitions.Count; i++)
                 {
                     var t = Transitions[i];
-                    var isMouseOver = t.Bounds.Contains(ref mousePosition);
+                    var isMouseOver = t.Bounds.Contains(mousePosition);
                     if (isMouseOver)
                     {
-                        CollisionsHelper.ClosestPointPointLine(ref mousePosition, ref t.StartPos, ref t.EndPos, out var point);
-                        isMouseOver = Float2.DistanceSquared(ref mousePosition, ref point) < 25.0f;
+                        CollisionsHelper.ClosestPointPointLine(mousePosition, t.StartPos, t.EndPos, out var point);
+                        isMouseOver = Float2.DistanceSquared(mousePosition, point) < 25.0f;
                     }
                     var color = isMouseOver ? Color.Wheat : t.LineColor;
                     SurfaceStyle.DrawStraightConnection(t.StartPos, t.EndPos, color);
@@ -1474,7 +1474,7 @@ namespace FlaxEditor.Surface.Archetypes
                     return true;
 
                 // Rename
-                if (_renameButtonRect.Contains(ref location))
+                if (_renameButtonRect.Contains(location))
                 {
                     StartRenaming();
                     return true;

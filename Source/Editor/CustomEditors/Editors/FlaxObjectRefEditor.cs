@@ -321,11 +321,11 @@ namespace FlaxEditor.CustomEditors.Editors
             var button2Rect = new Rectangle(button1Rect.Right + 2, 1, 14, 14);
 
             // Deselect
-            if (_value != null && button1Rect.Contains(ref location))
+            if (_value != null && button1Rect.Contains(location))
                 Value = null;
 
             // Picker dropdown menu
-            if (_supportsPickDropDown && (isSelected ? button2Rect : button1Rect).Contains(ref location))
+            if (_supportsPickDropDown && (isSelected ? button2Rect : button1Rect).Contains(location))
             {
                 ShowDropDownMenu();
                 return true;

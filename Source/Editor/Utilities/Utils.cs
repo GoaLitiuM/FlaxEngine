@@ -1041,7 +1041,7 @@ namespace FlaxEditor.Utilities
             Vector3 up = Vector3.Up * orientation;
             Matrix world = Matrix.CreateWorld(min + vec * 0.5f, dir, up);
             world.Decompose(out box.Transformation);
-            Matrix.Invert(ref world, out Matrix invWorld);
+            Matrix.Invert(world, out Matrix invWorld);
             Vector3 vecLocal = Vector3.TransformNormal(vec * 0.5f, invWorld);
             box.Extents.X = margin;
             box.Extents.Y = margin;
@@ -1062,24 +1062,24 @@ namespace FlaxEditor.Utilities
             var corners = stackalloc Vector3[8];
             box.GetCorners(corners);
 
-            var minDistance = Vector3.DistanceSquared(ref viewPosition, ref corners[0]);
+            var minDistance = Vector3.DistanceSquared(viewPosition, corners[0]);
             for (int i = 1; i < 8; i++)
-                minDistance = Mathf.Min(minDistance, Vector3.DistanceSquared(ref viewPosition, ref corners[i]));
+                minDistance = Mathf.Min(minDistance, Vector3.DistanceSquared(viewPosition, corners[i]));
             minDistance = Mathf.Sqrt(minDistance);
             var margin = Mathf.Clamp(minDistance / 80.0f, 0.1f, 100.0f);
 
-            if (GetWriteBox(ref corners[0], ref corners[1], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[0], ref corners[3], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[0], ref corners[4], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[1], ref corners[2], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[1], ref corners[5], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[2], ref corners[3], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[2], ref corners[6], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[3], ref corners[7], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[4], ref corners[5], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[4], ref corners[7], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[5], ref corners[6], margin).Intersects(ref ray, out distance) ||
-                GetWriteBox(ref corners[6], ref corners[7], margin).Intersects(ref ray, out distance))
+            if (GetWriteBox(ref corners[0], ref corners[1], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[0], ref corners[3], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[0], ref corners[4], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[1], ref corners[2], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[1], ref corners[5], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[2], ref corners[3], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[2], ref corners[6], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[3], ref corners[7], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[4], ref corners[5], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[4], ref corners[7], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[5], ref corners[6], margin).Intersects(ray, out distance) ||
+                GetWriteBox(ref corners[6], ref corners[7], margin).Intersects(ray, out distance))
                 return true;
 
             distance = 0;

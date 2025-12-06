@@ -137,7 +137,7 @@ namespace FlaxEngine
                 };
                 canvasRoot.Canvas.GetWorldMatrix(out Matrix world);
                 Matrix.Translation(min.X + size.X * 0.5f, min.Y + size.Y * 0.5f, 0, out Matrix offset);
-                Matrix.Multiply(ref offset, ref world, out var boxWorld);
+                Matrix.Multiply(offset, world, out var boxWorld);
                 boxWorld.Decompose(out bounds.Transformation);
                 return bounds;
             }
